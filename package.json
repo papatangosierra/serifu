@@ -1,0 +1,24 @@
+{
+  "name": "serifu2",
+  "version": "0.0.1",
+  "description": "",
+  "private": "true",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "watch": "npx lezer-generator serifu.grammar --output rc/serifu-parser/serifu-parser.js && webpack --watch",
+    "build": "npx lezer-generator serifu.grammar --output rc/serifu-parser/serifu-parser.js && webpack"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "clean-webpack-plugin": "^3.0.0",
+    "html-webpack-plugin": "^4.5.0",
+    "webpack": "^5.9.0",
+    "webpack-cli": "^4.2.0"
+  },
+  "dependencies": {
+    "@codemirror/next": "^0.14.0",
+    "lezer-generator": "^0.12.0"
+  }
+}
