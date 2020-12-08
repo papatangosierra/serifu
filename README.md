@@ -50,7 +50,7 @@ As with pages, blank panels are marked by simply starting the next panel. In thi
     	- 9.3
     	Keiichi: Hi, do you have such as a way to deal with real bad senpais.
 
-Because text after the `-` or `#` characters but _before_ the next newline is ignored, the expectation is that a good Serifu editor will automatically place appropriate page and panel number labels there, updating them as necessary and freeing the translator from the need to do so manually.
+Because text after the `-` or `#` characters but _before_ the next newline is ignored, the expectation is that well-behaved Serifu editing software will automatically place appropriate page and panel number labels there, updating them as necessary as the script changes and freeing the translator from the need to do so manually.
 
 Blank lines are ignored.
 
@@ -59,7 +59,6 @@ A sound effect translation is indicated by a line starting with a `*` character.
     	*crash
     	* tikka tikka
     	* BOOOM (dokaaan)
-
 
 An editorial note meant to clarify something for the benefit of the letterer or editor, but which does not represent any text on the page, is indicated by a line beginning with "!".
 
@@ -82,7 +81,6 @@ A Dialogue Line must have a Speaker and Text, separated by a single colon: ":".
 A Dialogue Line may be given an optional style, which is indicated by a forward slash character after the Speaker, before the colon:
 
     	Kyosuke/Excited: A-Ayukawa...!
-
 
 A dialogue style is meant to indicate e.g. an alternate font or typographical style. Different publishers have different levels of specificity they require, and Serifu's dialogue style field is meant to be open and un-opinionated enough to accommodate a wide variety of editorial needs.
 
@@ -107,7 +105,6 @@ Italics are indicated with underscores:
 Bold italics are indicated with two asterisks:
 
     	Tomoko: I **swear to god**, Nanako.
-
 
 Note that these are mutually exclusive and cannot be nested, i.e. you **should not** specify bold italics by combining the bold and italics tokens:
 
