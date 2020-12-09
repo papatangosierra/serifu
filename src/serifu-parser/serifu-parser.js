@@ -2,15 +2,15 @@
 import {Parser} from "lezer"
 export const parser = Parser.deserialize({
   version: 12,
-  states: "'hOVQPOOO_QPO'#C^OdQPO'#CjOOQO'#Cl'#ClQVQPOOOiQPO,58xOwQPO,59UOOQO-E6j-E6jO!VQPO'#C`OOQO'#Cm'#CmO![QPO1G.dO!jQPO1G.pO!xQPO,58zOOQO-E6k-E6kO#aQQO'#CbOOQO'#Co'#CoO#fQPO'#CdO#qQQO'#CiOOQO'#Cn'#CnO#vQPO1G.fOOQO'#Cc'#CcO$_QPO,58|OOQO-E6m-E6mO$gQQO,59OO$uQPO,59OO$zQPO,59TOOQO-E6l-E6lOOQO1G.h1G.hO#aQQO1G.hO%PQQO'#CfO%UQQO'#CgO#aQQO'#ChOOQO'#Cp'#CpO%ZQQO1G.jO%lQPO1G.jOOQO1G.o1G.oO%tQPO7+$SO%yQQO,59QO&OQQO,59RO&TQQO,59SOOQO-E6n-E6nOOQO7+$U7+$UO$gQQO7+$UO&YQPO<<GnOOQO1G.l1G.lOOQO1G.m1G.mOOQO1G.n1G.nO&_QQO<<GpOOQOAN=YAN=YOOQOAN=[AN=[",
-  stateData: "&s~OgOS~ORPO_QO~OhTO~OhUO~OTWORQa_QaeQa~OTWOR^a_^ae^a~Oh[O~OTWORQi_QieQi~OTWOR^i_^ie^i~OX_Oi^OraORSaTSa_SaeSa~OjdO~OX_OmhOngO~OjiO~OX_Oi^OraORSiTSi_SieSi~OhkOklO~OjdOomOpnOqoO~OX_O~OhsO~OjuO~OjvO~OhyOjdOomOpnOqoO~OX_OnzO~Ol{O~Oo|O~Op}O~Oq!OO~Oh!QO~Oh!ROjdOomOpnOqoO~O_R~",
-  goto: "#WePPfPjPptpP!T!T!TpfP!Z!a!k!q!|TROSXXTUYZTb[cQe^Wpgqz!PQtlRwoXpgqz!PQSORVSQYTQZUT]YZQc[RjcS`[cSf`rRrhQqgSxq!PR!Pz",
-  nodeNames: "⚠ Script Page PageToken Panel PanelToken Sfx Text Line Word Ital Bold BoldItal Note Spread SpreadToken",
-  maxTerm: 34,
+  states: "!dOVQPOOO[QPO'#C^OOQO'#Cb'#CbQVQPOOOaQPO,58xOOQO-E6`-E6`OlQPO'#C`OOQO'#Cc'#CcOqQPO1G.dOOQO,58z,58zOOQO-E6a-E6a",
+  stateData: "|~OYOS~ORPO~OZSO~OTUORQaWQa~OZXO~OTUORQiWQi~O",
+  goto: "mWPPXP]PagTQORTVSWQRORTRQWSRYW",
+  nodeNames: "⚠ Script Page PageToken Panel PanelToken",
+  maxTerm: 11,
   skippedNodes: [0],
-  repeatNodeCount: 5,
-  tokenData: ",t~RkOX!vXY#[YZ#aZp!vpq#[qr#frs!vst#|tu&xux!vxy(yyz)az{)w{}!v}!O*W!O!P!v!P!Q+V!Q![&x![!]+m!]!c!v!c!}&x!}#R!v#R#S,T#S#T!v#T#o&x#o$g!v$g~&xQ!{TjQOX!vZp!vqz!v{#R!v#S~!v~#aOg~~#fOh~R#mTjQrPOX!vZp!vqz!v{#R!v#S~!vR$TZjQRPOX$vXY%jZp$vpq%jqs$vst%utz$vz{%j{#R$v#R#S%j#S~$vR$}XjQRPOX$vXY%jZp$vpq%jqz$vz{%j{#R$v#R#S%j#S~$vP%oQRPOY%jZ~%jR&OXjQ_PRPOX%uXY&kZp%upq&kqz%uz{&k{#R%u#R#S&k#S~%uP&rQ_PRPOY&kZ~&kR'PcXPjQOX!vZp!vqt!vtu&xuw!vwx&xxz!v{}!v}!O&x!O!Q!v!Q![&x![!c!v!c!}&x!}#R!v#R#S([#S#T!v#T#o&x#o$g!v$g~&xP(aWXPtu([wx([}!O([!Q![([!c!}([#R#S([#T#o([$g~([R)QTjQkPOX!vZp!vqz!v{#R!v#S~!vR)hTjQlPOX!vZp!vqz!v{#R!v#S~!vR*OPiPpQz{*RQ*WOqQR*_XTPjQOX*WXY*zZp*Wpq*zqz*Wz{*z{#R*W#R#S*z#S~*WP+PQTPOY*zZ~*zR+^TmPjQOX!vZp!vqz!v{#R!v#S~!vR+tTnPjQOX!vZp!vqz!v{#R!v#S~!vR,[WXPoQtu([wx([}!O([!Q![([!c!}([#R#S([#T#o([$g~([",
-  tokenizers: [0, 1],
+  repeatNodeCount: 2,
+  tokenData: "!S~RTXYbYZgpqbstl}!Ow~gOY~~lOZ~~qQR~OYlZ~l~|QT~OYwZ~w",
+  tokenizers: [0],
   topRules: {"Script":[0,1]},
-  tokenPrec: 262
+  tokenPrec: 0
 })

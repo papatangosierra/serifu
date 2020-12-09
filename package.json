@@ -5,8 +5,8 @@
   "private": "true",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "watch": "npx lezer-generator serifu.grammar --output rc/serifu-parser/serifu-parser.js && webpack --watch",
-    "build": "npx lezer-generator serifu.grammar --output rc/serifu-parser/serifu-parser.js && webpack"
+    "watch": "lezer-generator serifu.grammar --output src/serifu-parser/serifu-parser.js && webpack --watch",
+    "build": "lezer-generator serifu.grammar --output src/serifu-parser/serifu-parser.js && webpack"
   },
   "keywords": [],
   "author": "",

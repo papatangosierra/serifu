@@ -1,45 +1,13 @@
-@precedence {italToken, boldToken, boldItalToken, linetext}
+@precedence {italToken, boldToken, boldItalToken, PanelToken, linetext}
 
-@top Script { (Page | Spread)+ }
-
-Spread {
-	SpreadToken newline Panel*
-}
+@top Script { Page+ }
 
 Page {
 	PageToken newline Panel*
 }
 
 Panel {
-	PanelToken newline (Sfx | Line | Note)*
-}
-
-Sfx {
-	"*" Text ( sfxOpenToken Text sfxCloseToken )? newline
-}
-
-Line {
-	Word+ ("/" Word+)? ":" (Text | Ital | Bold | BoldItal )+ newline
-}
-
-Note {
-	noteToken linetext newline
-}
-
-Ital {
-	italToken linetext italToken
-}
-
-Bold {
-	boldToken linetext boldToken
-}
-
-BoldItal {
-	boldItalToken Text boldItalToken
-}
-
-Text {
-	linetext
+	PanelToken newline
 }
 
 @skip { space }
