@@ -17,6 +17,8 @@ I am currently working on a Javascript-based parser for the Serifu language, whi
 
 Once the parser and editor are approximately duplicating the functionality of [my first attempt at Serifu](https://serifu-prototype.glitch.me), I will move on to a rewrite of [the InDesign extension](https://www.youtube.com/watch?v=yGyYkDYovlY) that enables automatic sequential text placement of script lines, which is one of the main raisons d'être of this project.
 
+The markup rules described in this document are not yet set in stone, and there is still considerable latitude for adjustment. **If you are a manga translator, letterer, or editor, and you have feedback or thoughts on Serifu, please feel free to get in touch.**
+
 ## The current Serifu rules
 
 A new page is indicated by any line that begins with an octothorpe: `#`. Text after the `#`, e.g. `Page 3`, may be added for readability, but is ignored during parsing.
