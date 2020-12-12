@@ -1,4 +1,4 @@
-@precedence {italToken, boldToken, boldItalToken, linetext}
+@precedence {italToken, boldToken, boldItalToken, Text, Source, Style, linetext}
 
 @top Script { (Page | Spread)+ }
 
@@ -19,11 +19,23 @@ Sfx {
 }
 
 Line {
-	Word+ ("/" Word+)? ":" (Text | Ital | Bold | BoldItal )+ newline
+	Source ("/" Style)? ":" Content
+}
+
+Source {
+	Word+
+}
+
+Style {
+	Word+
+}
+
+Content {
+	(Text | Ital | Bold | BoldItal )+ newline
 }
 
 Note {
-	noteToken linetext newline
+	noteToken Text+ newline
 }
 
 Ital {
@@ -51,7 +63,7 @@ Text {
     SpreadToken { "##" ![\n]*}
 	@precedence {SpreadToken, PageToken}
 	PanelToken { "-" ![\n]*}
-	linetext { ![\n*_\t ]+ }
+	linetext { ![\n*_\t]+ }
 	wordChar { std.asciiLetter | $[_$\u{a1}-\u{10ffff}] | std.digit | "-" | "'"}
 	Word { (std.asciiLetter | $[_$\u{a1}-\u{10ffff}] | std.digit) wordChar* }
 	italToken { "_" }

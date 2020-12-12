@@ -3,4 +3,14 @@ export const
   Page = 2,
   PageToken = 3,
   Panel = 4,
-  PanelToken = 5
+  PanelToken = 5,
+  Sfx = 6,
+  Line = 7,
+  Source = 8,
+  Style = 9,
+  Ital = 10,
+  Bold = 11,
+  BoldItal = 12,
+  Note = 13,
+  Spread = 14,
+  SpreadToken = 15

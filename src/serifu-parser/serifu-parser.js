@@ -2,15 +2,15 @@
 import {Parser} from "lezer"
 export const parser = Parser.deserialize({
   version: 12,
-  states: "!dOVQPOOO[QPO'#C^OOQO'#Cb'#CbQVQPOOOaQPO,58xOOQO-E6`-E6`OlQPO'#C`OOQO'#Cc'#CcOqQPO1G.dOOQO,58z,58zOOQO-E6a-E6a",
-  stateData: "|~OYOS~ORPO~OZSO~OTUORQaWQa~OZXO~OTUORQiWQi~O",
-  goto: "mWPPXP]PagTQORTVSWQRORTRQWSRYW",
-  nodeNames: "⚠ Script Page PageToken Panel PanelToken",
-  maxTerm: 11,
+  states: "'nOVQPOOO_QPO'#C^OdQPO'#CjOOQO'#Cl'#ClQVQPOOOiQPO,58xOwQPO,59UOOQO-E6j-E6jO!VQPO'#C`OOQO'#Cm'#CmO![QPO1G.dO!jQPO1G.pO!xQPO,58zOOQO-E6k-E6kO#aQQO'#CbOOQO'#Co'#CoO#fQPO'#CdO#qQPO'#CcO#yQQO'#CiOOQO'#Cn'#CnO$OQPO1G.fO$gQPO,58|OOQO-E6m-E6mO$oQQO,58}O$}QPO,58}O%SQPO,59TOOQO-E6l-E6lOOQO1G.h1G.hO%XQQO1G.hO%^QQO'#CfO%cQQO'#CgO%hQQO'#ChOOQO'#Cp'#CpO%mQQO1G.iO&OQPO'#CeO&WQPO1G.iOOQO1G.o1G.oO&]QPO7+$SO&bQQO,59QO&gQQO,59RO&lQQO,59SOOQO-E6n-E6nOOQO7+$T7+$TO$oQQO7+$TO&qQPO<<GnOOQO1G.l1G.lOOQO1G.m1G.mOOQO1G.n1G.nO&vQQO<<GoOOQOAN=YAN=YOOQOAN=ZAN=Z",
+  stateData: "'[~OgOS~ORPO_QO~OhTO~OhUO~OTWORQa_QaeQa~OTWOR^a_^ae^a~Oh[O~OTWORQi_QieQi~OTWOR^i_^ie^i~Oi^Om_OsbORSaTSa_SaeSa~OjeO~Om_OnWXoWX~OnhOogO~OjiO~Oi^Om_OsbORSiTSi_SieSi~OhkOklO~OjpOpmOqnOroO~Om_O~OhtO~OjuO~OjvO~OjwO~OjxO~OhzOjpOpmOqnOroO~Om_OoXX~Oo{O~Ol|O~Op}O~Oq!OO~Or!PO~Oh!RO~Oh!SOjpOpmOqnOroO~O_R~",
+  goto: "#OePPfPjPpptx{{{pfP!R!X!c!i!tTROSXXTUYZTc[dTa[dRshXpgq{!QQSORVSQYTQZUT]YZQd[RjdS`[dSf`rRrhQqgSyq!QR!Q{",
+  nodeNames: "⚠ Script Page PageToken Panel PanelToken Sfx Line Source Style Ital Bold BoldItal Note Spread SpreadToken",
+  maxTerm: 35,
   skippedNodes: [0],
-  repeatNodeCount: 2,
-  tokenData: "!S~RTXYbYZgpqbstl}!Ow~gOY~~lOZ~~qQR~OYlZ~l~|QT~OYwZ~w",
-  tokenizers: [0],
+  repeatNodeCount: 5,
+  tokenData: ",z~RkOX!vXY#[YZ#gZp!vpq#[qr#lrs!vst$Stu'Oux!vxy)Pyz)gz{)}{}!v}!O*^!O!P!v!P!Q+]!Q!['O![!]+s!]!c!v!c!}'O!}#R!v#R#S,Z#S#T!v#T#o'O#o$g!v$g~'OQ!{TjQOX!vZp!vqz!v{#R!v#S~!v~#aQg~XY#[pq#[~#lOh~R#sTjQsPOX!vZp!vqz!v{#R!v#S~!vR$ZZjQRPOX$|XY%pZp$|pq%pqs$|st%{tz$|z{%p{#R$|#R#S%p#S~$|R%TXjQRPOX$|XY%pZp$|pq%pqz$|z{%p{#R$|#R#S%p#S~$|P%uQRPOY%pZ~%pR&UXjQ_PRPOX%{XY&qZp%{pq&qqz%{z{&q{#R%{#R#S&q#S~%{P&xQ_PRPOY&qZ~&qR'VcjQmPOX!vZp!vqt!vtu'Ouw!vwx'Oxz!v{}!v}!O'O!O!Q!v!Q!['O![!c!v!c!}'O!}#R!v#R#S(b#S#T!v#T#o'O#o$g!v$g~'OP(gWmPtu(bwx(b}!O(b!Q![(b!c!}(b#R#S(b#T#o(b$g~(bR)WTjQkPOX!vZp!vqz!v{#R!v#S~!vR)nTjQlPOX!vZp!vqz!v{#R!v#S~!vR*UPiPqQz{*XQ*^OrQR*eXTPjQOX*^XY+QZp*^pq+Qqz*^z{+Q{#R*^#R#S+Q#S~*^P+VQTPOY+QZ~+QR+dTnPjQOX!vZp!vqz!v{#R!v#S~!vR+zToPjQOX!vZp!vqz!v{#R!v#S~!vR,bWpQmPtu(bwx(b}!O(b!Q![(b!c!}(b#R#S(b#T#o(b$g~(b",
+  tokenizers: [0, 1],
   topRules: {"Script":[0,1]},
-  tokenPrec: 0
+  tokenPrec: 285
 })

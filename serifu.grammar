@@ -1,27 +1,63 @@
-@precedence {italToken, boldToken, boldItalToken, PanelToken, linetext}
+@precedence {italToken, boldToken, boldItalToken, Note, linetext}
 
-@top Script { Page+ }
+@top Script { (Page | Spread)+ }
+
+Spread {
+	SpreadToken newline Panel*
+}
 
 Page {
 	PageToken newline Panel*
 }
 
 Panel {
-	PanelToken newline
+	PanelToken newline (Sfx | Line | Note)*
+}
+
+Sfx {
+	"*" linetext ( sfxOpenToken linetext sfxCloseToken )? newline
+}
+
+Line {
+	Source ("/" Style)? ":" (linetext | Ital | Bold | BoldItal )+ newline
+}
+
+Source {
+	word+
+}
+
+Style {
+	word+
+}
+
+Note {
+	noteToken linetext newline
+}
+
+Ital {
+	italToken linetext italToken
+}
+
+Bold {
+	boldToken linetext boldToken
+}
+
+BoldItal {
+	boldItalToken linetext boldItalToken
 }
 
 @skip { space }
 
 @tokens {
-	space { " " | "\t" }
+	space { (" " | "\t")+ }
 	newline { "\n" }
-    PageToken { "#" ![\n]*}
-    SpreadToken { "##" ![\n]*}
+	PageToken { "#" ![\n]*}
+	SpreadToken { "##" ![\n]*}
 	@precedence {SpreadToken, PageToken}
 	PanelToken { "-" ![\n]*}
 	linetext { ![\n*_\t ]+ }
 	wordChar { std.asciiLetter | $[_$\u{a1}-\u{10ffff}] | std.digit | "-" | "'"}
-	Word { (std.asciiLetter | $[_$\u{a1}-\u{10ffff}] | std.digit) wordChar* }
+	word { (std.asciiLetter | $[_$\u{a1}-\u{10ffff}] | std.digit) wordChar* }
 	italToken { "_" }
 	boldToken { "*" }
 	boldItalToken { "**" }

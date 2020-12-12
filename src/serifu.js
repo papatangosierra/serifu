@@ -36,38 +36,48 @@ const serifuSyntax = LezerSyntax.define(
   // "configure" in the Lezer documentation.
   parser.withProps(
     styleTags({
-      "PageToken SpreadToken": "className",
+      "PageToken SpreadToken": "heading",
       PanelToken: "labelName",
-      // Sfx: "sfx",
-      // Line: "line",
-      // Note: "note",
-      // Ital: "ital",
-      // Bold: "bold",
-      // BoldItal: "boldital",
+      Sfx: "keyword",
+      Line: "literal",
+      Source: "variableName",
+      Style: "propertyName",
+      Note: "comment",
+      Ital: "string",
+      Bold: "number",
+      BoldItal: "regexp",
     })
   )
 );
 
 // adapted from highlight/dist/index.js
+// possible attributes:
+// {
+// 	textDecoration: ""
+// 	fontWeight:
+// 	fontStyle:
+// 	color:
+// }
 const serifuHighlighter = highlighter({
-  deleted: { textDecoration: "line-through" },
-  inserted: { textDecoration: "underline" },
-  link: { textDecoration: "underline" },
-  strong: { fontWeight: "bold" },
-  emphasis: { fontStyle: "italic" },
-  keyword: { color: "#708" },
-  "atom, bool": { color: "#219" },
-  number: { color: "#164" },
-  string: { color: "#a11" },
-  "regexp, escape, string#2": { color: "#e40" },
-  "variableName definition": { color: "#00f" },
-  typeName: { color: "#085" },
-  className: { fontWeight: "bold", fontStyle: "italic" },
-  "name#2": { color: "#256" },
-  "propertyName definition": { color: "#00c" },
-  comment: { color: "#940" },
-  meta: { color: "#555" },
-  invalid: { color: "#f00" },
+  heading: {
+    borderRadius: "3px",
+    borderWidth: "3px",
+    borderStyle: "solid",
+    borderColor: "darkblue",
+    backgroundColor: "darkblue",
+    fontWeight: "bold",
+    fontStyle: "italic",
+    color: "lightblue",
+  }, // Page Tags
+  labelName: { fontWeight: "bold", color: "purple" }, // Panel tags
+  keyword: { textDecoration: "underline", color: "darknavyblue" }, // SFX lines
+  literal: {}, // dialogue lines
+  variableName: { backgroundColor: "mediumOrchid", color: "white" }, // dialogue sources
+  propertyName: { color: "magenta", fontWeight: "bold" }, // dialogue styles
+  comment: { fontStyle: "italic", color: "darkgray" }, // notes
+  string: { fontStyle: "italic" }, // ital
+  number: { fontWeight: "bold" }, // bold
+  regexp: { fontStyle: "italic", fontWeight: "bold" }, // bold ital
 });
 
 // returns the extension for Serifu support
