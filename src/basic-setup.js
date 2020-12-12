@@ -9,7 +9,6 @@ import { EditorState } from "@codemirror/next/state";
 export { EditorState } from "@codemirror/next/state";
 import { history, historyKeymap } from "@codemirror/next/history";
 import { foldGutter, foldKeymap } from "@codemirror/next/fold";
-import { lineNumbers } from "@codemirror/next/gutter";
 import { defaultKeymap } from "@codemirror/next/commands";
 import { bracketMatching } from "@codemirror/next/matchbrackets";
 import {
@@ -67,7 +66,6 @@ import { lintKeymap } from "@codemirror/next/lint";
 /// an array literal), copy it into your own code, and adjust it as
 /// desired.
 const basicSetup = [
-  lineNumbers(),
   highlightSpecialChars(),
   history(),
   foldGutter(),

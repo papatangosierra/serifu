@@ -80,11 +80,11 @@ A Dialogue Line must have a Speaker and Text, separated by a single colon: ":".
 
     	Ayukawa: Hmm.
 
-A Dialogue Line may be given an optional style, which is indicated by a forward slash character after the Speaker, before the colon:
+A Dialogue Line may be given an optional Style, which is indicated by a forward slash character after the Speaker, before the colon:
 
     	Kyosuke/Excited: A-Ayukawa...!
 
-A dialogue style is meant to indicate e.g. an alternate font or typographical style. Different publishers have different levels of specificity they require, and Serifu's dialogue style field is meant to be open and un-opinionated enough to accommodate a wide variety of editorial needs.
+A Dialogue Style is meant to indicate e.g. an alternate font or typographical style. Different publishers have different levels of specificity they require, and Serifu's dialogue style field is meant to be open and un-opinionated enough to accommodate a wide variety of editorial needs.
 
 Spaces or tabs immediately before or after the colon are ignored, so the following Dialogue Lines are equivalent:
 
@@ -112,7 +112,7 @@ Note that these are mutually exclusive and cannot be nested, i.e. you **should n
 
     	Mariko: It's _*box-cutter time*_, pal!
 
-This limitation is meant to reflect the reality that not every combination of bold and italic variants is available in every font a letterer might use, and
+This limitation is meant to reflect the reality that not every combination of bold and italic variants is available in every font a letterer might use, and in such cases it would be better to fail obviously than subtly.
 
 As stated before, Dialogue Lines are ended with a newline character. **There is one one exception to this rule:** Three equals signs (`===`) immediately after the colon begins a preformatted section. This is useful for composing translations where formatting like newlines and tabs are important--signs, menus, documents, etc. Three equals signs on a line by themselves ends the preformatted section:
 
