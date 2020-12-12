@@ -63,7 +63,7 @@ Text {
     SpreadToken { "##" ![\n]*}
 	@precedence {SpreadToken, PageToken}
 	PanelToken { "-" ![\n]*}
-	linetext { ![\n*_\t]+ }
+	linetext { ![\n*_\t]* }
 	wordChar { std.asciiLetter | $[_$\u{a1}-\u{10ffff}] | std.digit | "-" | "'"}
 	Word { (std.asciiLetter | $[_$\u{a1}-\u{10ffff}] | std.digit) wordChar* }
 	italToken { "_" }

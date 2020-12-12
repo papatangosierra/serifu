@@ -19,7 +19,7 @@ Sfx {
 }
 
 Line {
-	Source ("/" Style)? ":" (linetext | Ital | Bold | BoldItal )+ newline
+	Source ("/" Style)? space* ":" space* Content
 }
 
 Source {
@@ -28,6 +28,10 @@ Source {
 
 Style {
 	word+
+}
+
+Content {
+	 notspace (linetext | Ital | Bold | BoldItal )+ newline
 }
 
 Note {
@@ -46,17 +50,16 @@ BoldItal {
 	boldItalToken linetext boldItalToken
 }
 
-@skip { space }
-
 @tokens {
 	space { (" " | "\t")+ }
+	notspace { ![*_\t ] }
 	newline { "\n" }
 	PageToken { "#" ![\n]*}
 	SpreadToken { "##" ![\n]*}
 	@precedence {SpreadToken, PageToken}
 	PanelToken { "-" ![\n]*}
-	linetext { ![\n*_\t ]+ }
-	wordChar { std.asciiLetter | $[_$\u{a1}-\u{10ffff}] | std.digit | "-" | "'"}
+	linetext { ![\n*_]+ }
+	wordChar { std.asciiLetter | $[_$\u{a1}-\u{10ffff}] | std.digit | "-" | "'" | " "}
 	word { (std.asciiLetter | $[_$\u{a1}-\u{10ffff}] | std.digit) wordChar* }
 	italToken { "_" }
 	boldToken { "*" }

@@ -2,15 +2,15 @@
 import {Parser} from "lezer"
 export const parser = Parser.deserialize({
   version: 12,
-  states: "'nOVQPOOO_QPO'#C^OdQPO'#CjOOQO'#Cl'#ClQVQPOOOiQPO,58xOwQPO,59UOOQO-E6j-E6jO!VQPO'#C`OOQO'#Cm'#CmO![QPO1G.dO!jQPO1G.pO!xQPO,58zOOQO-E6k-E6kO#aQQO'#CbOOQO'#Co'#CoO#fQPO'#CdO#qQPO'#CcO#yQQO'#CiOOQO'#Cn'#CnO$OQPO1G.fO$gQPO,58|OOQO-E6m-E6mO$oQQO,58}O$}QPO,58}O%SQPO,59TOOQO-E6l-E6lOOQO1G.h1G.hO%XQQO1G.hO%^QQO'#CfO%cQQO'#CgO%hQQO'#ChOOQO'#Cp'#CpO%mQQO1G.iO&OQPO'#CeO&WQPO1G.iOOQO1G.o1G.oO&]QPO7+$SO&bQQO,59QO&gQQO,59RO&lQQO,59SOOQO-E6n-E6nOOQO7+$T7+$TO$oQQO7+$TO&qQPO<<GnOOQO1G.l1G.lOOQO1G.m1G.mOOQO1G.n1G.nO&vQQO<<GoOOQOAN=YAN=YOOQOAN=ZAN=Z",
-  stateData: "'[~OgOS~ORPO_QO~OhTO~OhUO~OTWORQa_QaeQa~OTWOR^a_^ae^a~Oh[O~OTWORQi_QieQi~OTWOR^i_^ie^i~Oi^Om_OsbORSaTSa_SaeSa~OjeO~Om_OnWXoWX~OnhOogO~OjiO~Oi^Om_OsbORSiTSi_SieSi~OhkOklO~OjpOpmOqnOroO~Om_O~OhtO~OjuO~OjvO~OjwO~OjxO~OhzOjpOpmOqnOroO~Om_OoXX~Oo{O~Ol|O~Op}O~Oq!OO~Or!PO~Oh!RO~Oh!SOjpOpmOqnOroO~O_R~",
-  goto: "#OePPfPjPpptx{{{pfP!R!X!c!i!tTROSXXTUYZTc[dTa[dRshXpgq{!QQSORVSQYTQZUT]YZQd[RjdS`[dSf`rRrhQqgSyq!QR!Q{",
-  nodeNames: "⚠ Script Page PageToken Panel PanelToken Sfx Line Source Style Ital Bold BoldItal Note Spread SpreadToken",
-  maxTerm: 35,
+  states: ")fOQOPOOOYOPO'#C^O_OPO'#CkOOOO'#Cm'#CmQQOPOOOdOPO,58xOrOPO,59VOOOO-E6k-E6kO!QOPO'#C`OOOO'#Cn'#CnO!VOPO1G.dO!eOPO1G.qO!sOPO,58zOOOO-E6l-E6lO#[OQO'#CbOOOO'#Cp'#CpO#aOPO'#CdO#oOPO'#CcO#zOQO'#CjOOOO'#Co'#CoO$POPO1G.fO$hOPO,58|OOOO-E6n-E6nOOOO'#Cq'#CqO$pOPO,58}O$xOSO,58}O%QOPO,58}O%VOPO,59UOOOO-E6m-E6mOOOO1G.h1G.hO%[OQO1G.hOOOO-E6o-E6oO$xOSO1G.iO$xOSO1G.iO%aOQO'#CfOOOO1G.i1G.iO%oOPO'#CeO%zOPO1G.iOOOO1G.p1G.pO&SOPO7+$SO$xOSO7+$TOOOO7+$T7+$TO&XOQO'#CgO&^OQO'#ChO&cOQO'#CiOOOO'#Cr'#CrO&hOQO,59QO&yOPO7+$TO$xOSO7+$TO'ROPO<<GnOOOO<<Go<<GoO'WOQO,59RO']OQO,59SO'bOQO,59TOOOO-E6p-E6pOOOO1G.l1G.lO$xOSO<<GoO$xOSO<<GoOOOOAN=YAN=YOOOO1G.m1G.mOOOO1G.n1G.nOOOO1G.o1G.oO$xOSOAN=ZOOOOAN=ZAN=ZOOOOG22uG22u",
+  stateData: "'j~ORPO`QO~OhTO~OhUO~OTWORQa`QagQa~OTWOR_a`_ag_a~Oh[O~OTWORQi`QigQi~OTWOR_i`_ig_i~Oi^Om_OubORSaTSa`SagSa~OjeO~Om_OnWXoWXpWX~OnjOogOpiO~OjkO~Oi^Om_OubORSiTSi`SigSi~OhmOknO~OogOppO~OogOqrO~Om_O~OhvO~OjwO~Oj}OrzOs{Ot|O~Om_OoXXpXX~OogOp!QO~Ol!RO~Oj!TO~Oj!UO~Oj!VO~Oh!XOj}OrzOs{Ot|O~OogOp!YO~Oh![O~Or!]O~Os!^O~Ot!_O~O`R~",
+  goto: "#xgPPhPlPrrvz}!a!a!arhP!e!k!u!{#W#rTROSXXTUYZTc[dTa[dRujQsiSypqS!Sx!QS!a!Y!ZR!b!`T}r!OQSORVSQYTQZUT]YZQd[RldS`[dSf`tRtjQha[ohqx!P!Z!`QqiQxpQ!PuQ!Z!QR!`!YQ!OrR!W!O",
+  nodeNames: "⚠ Script Page PageToken Panel PanelToken Sfx Line Source Style Content Ital Bold BoldItal Note Spread SpreadToken",
+  maxTerm: 37,
   skippedNodes: [0],
-  repeatNodeCount: 5,
-  tokenData: ",z~RkOX!vXY#[YZ#gZp!vpq#[qr#lrs!vst$Stu'Oux!vxy)Pyz)gz{)}{}!v}!O*^!O!P!v!P!Q+]!Q!['O![!]+s!]!c!v!c!}'O!}#R!v#R#S,Z#S#T!v#T#o'O#o$g!v$g~'OQ!{TjQOX!vZp!vqz!v{#R!v#S~!v~#aQg~XY#[pq#[~#lOh~R#sTjQsPOX!vZp!vqz!v{#R!v#S~!vR$ZZjQRPOX$|XY%pZp$|pq%pqs$|st%{tz$|z{%p{#R$|#R#S%p#S~$|R%TXjQRPOX$|XY%pZp$|pq%pqz$|z{%p{#R$|#R#S%p#S~$|P%uQRPOY%pZ~%pR&UXjQ_PRPOX%{XY&qZp%{pq&qqz%{z{&q{#R%{#R#S&q#S~%{P&xQ_PRPOY&qZ~&qR'VcjQmPOX!vZp!vqt!vtu'Ouw!vwx'Oxz!v{}!v}!O'O!O!Q!v!Q!['O![!c!v!c!}'O!}#R!v#R#S(b#S#T!v#T#o'O#o$g!v$g~'OP(gWmPtu(bwx(b}!O(b!Q![(b!c!}(b#R#S(b#T#o(b$g~(bR)WTjQkPOX!vZp!vqz!v{#R!v#S~!vR)nTjQlPOX!vZp!vqz!v{#R!v#S~!vR*UPiPqQz{*XQ*^OrQR*eXTPjQOX*^XY+QZp*^pq+Qqz*^z{+Q{#R*^#R#S+Q#S~*^P+VQTPOY+QZ~+QR+dTnPjQOX!vZp!vqz!v{#R!v#S~!vR+zToPjQOX!vZp!vqz!v{#R!v#S~!vR,bWpQmPtu(bwx(b}!O(b!Q![(b!c!}(b#R#S(b#T#o(b$g~(b",
-  tokenizers: [0, 1],
+  repeatNodeCount: 6,
+  tokenData: "/TVRkOX!vXY#lYZ$YZp!vpq#lqr$ars!vst$vtu'Xux!vxy*wyz+^z{+s{}!v}!O,S!O!P!v!P!Q-e!Q!['X![!]-z!]!c!v!c!}'X!}#R!v#R#S.a#S#T!v#T#o'X#o$g!v$g~'XU!}SjQqSOY#ZZz#Z{#R#Z#S~#ZQ#`SjQOY#ZZz#Z{#R#Z#S~#ZV#sVjQoTOX#ZXY#lZp#Zpq#lqz#Z{#R#Z#S~#ZV$aOhRqSV$jSjQuPqSOY#ZZz#Z{#R#Z#S~#ZV%PWjQqSRPOY%iZs%ist&_tz%iz{&S{#R%i#R#S&S#S~%iR%pUjQRPOY%iZz%iz{&S{#R%i#R#S&S#S~%iP&XQRPOY&SZ~&SR&hUjQ`PRPOY&_Zz&_z{&z{#R&_#R#S&z#S~&_P'RQ`PRPOY&zZ~&zV'bdjQqSmPOY#ZZp#Zpq(pqt#Ztu(puw#Zwx(pxz#Z{}#Z}!O(p!O!Q#Z!Q![(p![!c#Z!c!}(p!}#R#Z#R#S*V#S#T#Z#T#o(p#o$g#Z$g~(pR(wdjQmPOY#ZZp#Zpq(pqt#Ztu(puw#Zwx(pxz#Z{}#Z}!O(p!O!Q#Z!Q![(p![!c#Z!c!}(p!}#R#Z#R#S*V#S#T#Z#T#o(p#o$g#Z$g~(pP*[XmPpq*Vtu*Vwx*V}!O*V!Q![*V!c!}*V#R#S*V#T#o*V$g~*VV+QSjQqSkPOY#ZZz#Z{#R#Z#S~#ZV+gSjQqSlPOY#ZZz#Z{#R#Z#S~#ZR+zPiPsQz{+}Q,SOtQV,]UTPjQqSOY,oZz,oz{-Y{#R,o#R#S-Y#S~,oR,vUTPjQOY,oZz,oz{-Y{#R,o#R#S-Y#S~,oP-_QTPOY-YZ~-YV-nSnPjQqSOY#ZZz#Z{#R#Z#S~#ZV.TSpPjQqSOY#ZZz#Z{#R#Z#S~#ZR.hXrQmPpq*Vtu*Vwx*V}!O*V!Q![*V!c!}*V#R#S*V#T#o*V$g~*V",
+  tokenizers: [0, 1, 2],
   topRules: {"Script":[0,1]},
-  tokenPrec: 285
+  tokenPrec: 299
 })

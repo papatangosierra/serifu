@@ -8,9 +8,10 @@ export const
   Line = 7,
   Source = 8,
   Style = 9,
-  Ital = 10,
-  Bold = 11,
-  BoldItal = 12,
-  Note = 13,
-  Spread = 14,
-  SpreadToken = 15
+  Content = 10,
+  Ital = 11,
+  Bold = 12,
+  BoldItal = 13,
+  Note = 14,
+  Spread = 15,
+  SpreadToken = 16
