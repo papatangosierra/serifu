@@ -29,7 +29,7 @@ import { TagSystem, styleTags, highlighter } from "@codemirror/next/highlight";
 // adapted from highlight/dist/index.js
 // const styleTags = (tags) => serifuTags.add(tags);
 
-// Set up our interface Serifu parser and tie it into the highlighter
+// Set up our interface's Serifu parser and tie it into the highlighter
 // adapted from lang-javascript/dist/index.js
 const serifuSyntax = LezerSyntax.define(
   // I believe withProps is incorrectly called

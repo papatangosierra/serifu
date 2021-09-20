@@ -50,6 +50,14 @@ BoldItal {
 	boldItalToken linetext boldItalToken
 }
 
+BlockText {
+	blockTextToken linetext+ blockTextToken 
+}
+
+@skip {
+	
+}
+
 @tokens {
 	space { (" " | "\t")+ }
 	notspace { ![*_\t ] }
@@ -67,4 +75,5 @@ BoldItal {
 	noteToken { "!" }
 	sfxOpenToken { "(" }
 	sfxCloseToken { ")" }
+	blockTextToken { "===" ![\n]*}
 }
