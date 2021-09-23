@@ -9,15 +9,7 @@ There are several reasons one might want to do this:
 - A translator can compose all of their scripts, regardless of the client publisher, in Serifu, and let software translate it into a given publisher's style sheet prior to submission.
 - Any of the considerable breadth of tools available for text editing can easily be used for Serifu.
 - A specialized Serifu text editor--coming soon--can take advantage of the predictable structure to offer features like automatic page and panel numbering, character name autocomplete, and lots more.
-- The rigorously predictable format allows script text to be presented to the letterer or book designer in a variety of vastly more convenient ways than a word processing document.
-
-## The Serifu Roadmap
-
-I am currently working on a Javascript-based parser for the Serifu language, which I will first be integrating into a web-based editor. I'm using Marijn Haverbeke's [Lezer](https://lezer.codemirror.net) to implement the parser, and [CodeMirror](https://codemirror.net/6/) to build the editor.
-
-Once the parser and editor are approximately duplicating the functionality of [my first attempt at Serifu](https://serifu-prototype.glitch.me), I will move on to a rewrite of [the InDesign extension](https://www.youtube.com/watch?v=yGyYkDYovlY) that enables automatic sequential text placement of script lines, which is one of the main raisons d'être of this project.
-
-The markup rules described in this document are not yet set in stone, and there is still considerable latitude for adjustment. **If you are a manga translator, letterer, or editor, and you have feedback or thoughts on Serifu, please feel free to get in touch.**
+- The rigorously predictable format allows script text to be presented to the letterer or book designer in a variety of more convenient ways than a word-processing document.
 
 ## The current Serifu rules
 
@@ -52,7 +44,23 @@ As with pages, blank panels are marked by simply starting the next panel. In thi
     	- 9.3
     	Keiichi: Hi, do you have such as a way to deal with real bad senpais.
 
-Because text after the `-` or `#` characters but _before_ the next newline is ignored, the expectation is that well-behaved Serifu editing software will automatically place appropriate page and panel number labels there, updating them as necessary as the script changes and freeing the translator from the need to do so manually.
+Serifu is meant to be relatively un-opinionated, but one opinion its author does hold is that page and panel numbering should be tracked automatically. When accurate page or panel numbers are necessary, they can be derived at parse time.
+
+Text after the `-` or `#` characters but _before_ the next newline is ignored. This means that from the parser's perspective,
+
+    # Page One Billion
+        - 888.123
+        Deunan: There's something screwy about these numbers, Bri.
+
+followed by
+
+    #
+        -
+        Briareos: What numbers?
+
+would be perfectly valid.
+
+The expectation is that well-behaved Serifu editing software will automatically insert page and panel numbers, updating them as necessary when the script changes and freeing the translator or editor from the need to do so manually.
 
 Blank lines are ignored.
 
@@ -74,19 +82,21 @@ The `!` notation is _not_ meant to be used for text that should be included on t
 
 Customarily, a note is meant to apply to the line or SFX immediately before it.
 
-Any line _not_ beginning with an `#`, `-`, `*`, or `!` is interpreted as a Dialogue Line.
+Any line _not_ beginning with an `#`, `-`, `*`, or `!` is interpreted as a Text Line.
 
-A Dialogue Line must have a Source and Text, separated by a single colon: ":".
+A Text Line must have a Source and Text, separated by a single colon: ":".
 
     	Ayukawa: Hmm.
 
-Dialogue Lines are meant to be used for any and all text in the script that's not an onomatopoetic sound effect. Character dialogue and asides,
+Text Lines are meant to be used for any and all text in the script that's not an onomatopoetic sound effect. Character dialogue and asides, narration, captions, diegetic text appearing in the artwork itself (e.g. signs, labels, etc.) would all be represented by
 
-A Dialogue Line may be given an optional Style, which is indicated by a forward slash character after the Source, before the colon:
+A Text Line may be given an optional Style, which is indicated by a forward slash character after the Source, before the colon:
 
     	Kyosuke/Excited: A-Ayukawa...!
 
-A Dialogue Style is meant to indicate e.g. an alternate font or typographical style. Different publishers have different levels of specificity they require, and Serifu's dialogue style field is meant to be open and un-opinionated enough to accommodate a wide variety of editorial needs.
+A Text Style would typically be used to indicate an alternate font or typographical style from the way a given Text Line would normally appear.
+
+Different projects have different levels of specificity they require in a script, and Serifu's Label and Style fields are meant to be freeform enough to accommodate a wide variety of editorial needs.
 
 Spaces or tabs immediately before or after the colon are ignored, so the following Dialogue Lines are equivalent:
 
@@ -129,3 +139,11 @@ As stated before, Dialogue Lines are ended with a newline character. **There is 
 Note that without the `===` tokens, the `Menu:` would be interpreted as a line with a speaker named `Menu` but with no content, and two lines beneath it would be interpreted as new panels, since they both begin with `-`. Placing all this text between `===` marks ensures that it's included verbatim in the `Sign` line.
 
 Because any text between `===` tokens is interpreted verbatim, the `*`, `_`, and `**` tokens for indicating boldface and italics do not apply there.
+
+## The Serifu Roadmap
+
+I am currently working on a Javascript-based parser for the Serifu language, which I will first be integrating into a web-based editor. I'm using Marijn Haverbeke's [Lezer](https://lezer.codemirror.net) to implement the parser, and [CodeMirror](https://codemirror.net/6/) to build the editor.
+
+Once the parser and editor are approximately duplicating the functionality of [my first attempt at Serifu](https://serifu-prototype.glitch.me), I will move on to a rewrite of [the InDesign extension](https://www.youtube.com/watch?v=yGyYkDYovlY) that enables automatic sequential text placement of script lines, which is one of the main raisons d'être of this project.
+
+The markup rules described in this document are not yet set in stone, and there is still considerable latitude for adjustment. **If you are a manga translator, letterer, or editor, and you have feedback or thoughts on Serifu, please feel free to get in touch.**

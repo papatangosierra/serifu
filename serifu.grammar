@@ -19,7 +19,15 @@ Line {
 }
 
 Sfx {
-	sfxToken linetext ( sfxOpenToken linetext sfxCloseToken )?
+	sfxToken SfxTranslation ( sfxOpenToken SfxSource sfxCloseToken )?
+}
+
+SfxTranslation {
+	linetext
+}
+
+SfxSource {
+	linetext
 }
 
 Dialogue {

@@ -38,7 +38,7 @@ const serifuSyntax = LezerSyntax.define(
     styleTags({
       "PageToken SpreadToken": "heading",
       PanelToken: "labelName",
-      Sfx: "keyword",
+      "Sfx SfxTranslation SfxSource": "keyword",
       Dialogue: "literal",
       Source: "variableName",
       Style: "propertyName",
