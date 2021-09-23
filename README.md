@@ -1,4 +1,4 @@
-m# The Serifu Markup Language
+## The Serifu Markup Language
 
 ## What it is
 
@@ -79,7 +79,6 @@ Any line _not_ beginning with an `#`, `-`, `*`, or `!` is interpreted as a Dialo
 A Dialogue Line must have a Source and Text, separated by a single colon: ":".
 
     	Ayukawa: Hmm.
-
 
 Dialogue Lines are meant to be used for any and all text in the script that's not an onomatopoetic sound effect. Character dialogue and asides,
 
