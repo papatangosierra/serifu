@@ -1,4 +1,4 @@
-@precedence {italToken, boldToken, boldItalToken, Note, linetext}
+@precedence {blockTextToken, italToken, boldToken, boldItalToken, Note, linetext}
 
 @top Script { (Page | Spread)+ }
 
@@ -11,15 +11,19 @@ Page {
 }
 
 Panel {
-	PanelToken newline (Sfx | Line | Note)*
-}
-
-Sfx {
-	"*" linetext ( sfxOpenToken linetext sfxCloseToken )? newline
+	PanelToken newline Line*
 }
 
 Line {
-	Source ("/" Style)? space* ":" space* Content
+	space? (Sfx | Dialogue | Note) newline
+}
+
+Sfx {
+	sfxToken linetext ( sfxOpenToken linetext sfxCloseToken )?
+}
+
+Dialogue {
+	(Source ("/" Style)? space? ":" space? Content)
 }
 
 Source {
@@ -31,11 +35,11 @@ Style {
 }
 
 Content {
-	 notspace (linetext | Ital | Bold | BoldItal )+ newline
+	 BlockText | (notspace (linetext | Ital | Bold | BoldItal )+ newline)
 }
 
 Note {
-	noteToken linetext newline
+	noteToken linetext
 }
 
 Ital {
@@ -51,7 +55,7 @@ BoldItal {
 }
 
 BlockText {
-	blockTextToken linetext+ blockTextToken 
+	blockTextToken (notspace | space)+ blockTextToken 
 }
 
 @skip {
@@ -73,7 +77,8 @@ BlockText {
 	boldToken { "*" }
 	boldItalToken { "**" }
 	noteToken { "!" }
+	sfxToken { "*" }	
 	sfxOpenToken { "(" }
 	sfxCloseToken { ")" }
-	blockTextToken { "===" ![\n]*}
+	blockTextToken { "\n===\n"}
 }

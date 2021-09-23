@@ -14,7 +14,7 @@ import { testDoc } from "./testDoc.js";
 import { parser, serifu, serifuSyntax, serifuHighlighter } from "./serifu.js";
 
 console.log("starting with test doc:");
-console.log(testDoc);
+// console.log(testDoc);
 
 let view = new EditorView({
   state: EditorState.create({
@@ -31,5 +31,11 @@ cursor.firstChild(); // This moves the cursor from the beginning of the tree to 
 
 // This iterates over the parse tree and prints out every node
 do {
-  console.log(`Node ${cursor.name} from ${cursor.from} to ${cursor.to}`);
+  //  console.log(`Node ${cursor.name} from ${cursor.from} to ${cursor.to}`);
+  if (cursor.name === "PageToken") {
+    console.log(testDoc.substring(cursor.from, cursor.to));
+  }
+  if (cursor.name === "Content" || cursor.name === "Sfx") {
+    console.log(testDoc.substring(cursor.from, cursor.to));
+  }
 } while (cursor.next());

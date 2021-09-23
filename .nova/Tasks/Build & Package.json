@@ -1,0 +1,11 @@
+{
+  "actions" : {
+    "build" : {
+      "command" : "\/bin\/bash",
+      "enabled" : true,
+      "script" : "#!\/bin\/bash\nnpm run build\n"
+    }
+  },
+  "identifier" : "0F1A8B0A-E2A2-4E45-A748-A57B64EF3AF5",
+  "openLogOnRun" : "fail"
+}

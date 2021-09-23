@@ -1,4 +1,4 @@
-# The Serifu Markup Language
+m# The Serifu Markup Language
 
 ## What it is
 
@@ -9,7 +9,7 @@ There are several reasons one might want to do this:
 - A translator can compose all of their scripts, regardless of the client publisher, in Serifu, and let software translate it into a given publisher's style sheet prior to submission.
 - Any of the considerable breadth of tools available for text editing can easily be used for Serifu.
 - A specialized Serifu text editor--coming soon--can take advantage of the predictable structure to offer features like automatic page and panel numbering, character name autocomplete, and lots more.
-- The rigorously predictable format allows script text to be presented to the letterer or book designer in a variety of vastly more conveninent ways than a word processing document.
+- The rigorously predictable format allows script text to be presented to the letterer or book designer in a variety of vastly more convenient ways than a word processing document.
 
 ## The Serifu Roadmap
 
@@ -76,11 +76,14 @@ Customarily, a note is meant to apply to the line or SFX immediately before it.
 
 Any line _not_ beginning with an `#`, `-`, `*`, or `!` is interpreted as a Dialogue Line.
 
-A Dialogue Line must have a Speaker and Text, separated by a single colon: ":".
+A Dialogue Line must have a Source and Text, separated by a single colon: ":".
 
     	Ayukawa: Hmm.
 
-A Dialogue Line may be given an optional Style, which is indicated by a forward slash character after the Speaker, before the colon:
+
+Dialogue Lines are meant to be used for any and all text in the script that's not an onomatopoetic sound effect. Character dialogue and asides,
+
+A Dialogue Line may be given an optional Style, which is indicated by a forward slash character after the Source, before the colon:
 
     	Kyosuke/Excited: A-Ayukawa...!
 
@@ -114,9 +117,10 @@ Note that these are mutually exclusive and cannot be nested, i.e. you **should n
 
 This limitation is meant to reflect the reality that not every combination of bold and italic variants is available in every font a letterer might use, and in such cases it would be better to fail obviously than subtly.
 
-As stated before, Dialogue Lines are ended with a newline character. **There is one one exception to this rule:** Three equals signs (`===`) immediately after the colon begins a preformatted section. This is useful for composing translations where formatting like newlines and tabs are important--signs, menus, documents, etc. Three equals signs on a line by themselves ends the preformatted section:
+As stated before, Dialogue Lines are ended with a newline character. **There is one one exception to this rule:** Three equals signs (`===`) on a line by themselves, after a a preformatted section. This is useful for composing translations where formatting like newlines and tabs are important--signs, menus, documents, etc. Three equals signs on a line by themselves ends the preformatted section:
 
-    Sign:===
+    Sign:
+    ===
     Menu:
     - Pizza: 50 Yen
     - Okonomiyaki: 100 Yen

@@ -39,13 +39,14 @@ const serifuSyntax = LezerSyntax.define(
       "PageToken SpreadToken": "heading",
       PanelToken: "labelName",
       Sfx: "keyword",
-      Line: "literal",
+      Dialogue: "literal",
       Source: "variableName",
       Style: "propertyName",
       Note: "comment",
       Ital: "string",
       Bold: "number",
       BoldItal: "regexp",
+      BlockText: "blockComment",
     })
   )
 );
@@ -78,6 +79,7 @@ const serifuHighlighter = highlighter({
   string: { fontStyle: "italic" }, // ital
   number: { fontWeight: "bold" }, // bold
   regexp: { fontStyle: "italic", fontWeight: "bold" }, // bold ital
+  blockComment: { color: "red" }, // block Text Lines
 });
 
 // returns the extension for Serifu support
