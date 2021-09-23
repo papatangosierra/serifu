@@ -13,6 +13,8 @@ There are several reasons one might want to do this:
 
 ## The current Serifu rules
 
+### Pages and Panels
+
 A new page is indicated by any line that begins with an octothorpe: `#`. Text after the `#`, e.g. `Page 3`, may be added for readability, but is ignored during parsing.
 
 A new panel is indicated by any line that begins with a single dash: `-`. Like to the page marker, the `-` can be followed by other text, (e.g. `3.1` to indicate "page three, panel one") for readability, but this text is ignored by the parser.
@@ -62,25 +64,9 @@ would be perfectly valid.
 
 The expectation is that well-behaved Serifu editing software will automatically insert page and panel numbers, updating them as necessary when the script changes and freeing the translator or editor from the need to do so manually.
 
-Blank lines are ignored.
+### Translation Text
 
-A sound effect translation is indicated by a line starting with a `*` character. A sound effect may have an optional transliteration in parentheses. Space between the initial `*` and the text of the sound effect is ignored.
-
-    	*crash
-    	* tikka tikka
-    	* BOOOM (dokaaan)
-
-An editorial note meant to clarify something for the benefit of the letterer or editor, but which does not represent any text on the page, is indicated by a line beginning with "!".
-
-    	Haruhi: Look, just show me where the cryptid is and nobody gets hurt!
-    	! Haruhi says ウーマー, a wasei eigo construction from the acronym "UMA," or "Unidentified Mysterious Animal." "Cryptid" is more idiomatic English.
-
-The `!` notation is _not_ meant to be used for text that should be included on the page as a note to the reader. That would be better indicated by something like:
-
-    	Light: Heh... just according to _keikaku._
-    	Translation note: "Keikaku" means "plan."
-
-Customarily, a note is meant to apply to the line or SFX immediately before it.
+#### Text Lines
 
 Any line _not_ beginning with an `#`, `-`, `*`, or `!` is interpreted as a Text Line.
 
@@ -126,7 +112,29 @@ Note that these are mutually exclusive and cannot be nested, i.e. you **should n
 
 This limitation is meant to reflect the reality that not every combination of bold and italic variants is available in every font a letterer might use, and in such cases it would be better to fail obviously than subtly.
 
-As stated before, Dialogue Lines are ended with a newline character. **There is one one exception to this rule:** Three equals signs (`===`) on a line by themselves, after a a preformatted section. This is useful for composing translations where formatting like newlines and tabs are important--signs, menus, documents, etc. Three equals signs on a line by themselves ends the preformatted section:
+#### Sound Effects / Onomatopoeia
+
+A sound effect translation is indicated by a line starting with a `*` character. A sound effect may have an optional transliteration in parentheses. Space between the initial `*` and the text of the sound effect is ignored.
+
+        *crash
+        * tikka tikka
+        * BOOOM (dokaaan)
+
+#### Side Notes
+
+A side note meant to clarify something for the benefit of someone else reading the she script (e.g., the letterer or editor), but which does not represent any text on the page of the book itself, is indicated by a line beginning with "!".
+
+        Haruhi: Look, just show me where the cryptid is and nobody gets hurt!
+        ! Haruhi says ウーマー, a wasei eigo construction from the acronym "UMA," or "Unidentified Mysterious Animal." "Cryptid" is more idiomatic English.
+
+The `!` notation is _not_ meant to be used for text that should be included on the page as a note to the reader. That would be better indicated by something like:
+
+        Light: Heh... just according to _keikaku._
+        Translation note: "Keikaku" means "plan."
+
+#### Pre-formatted Text Blocks
+
+As stated before, Dialogue Lines are ended with a newline character. **There is one one exception to this rule:** Following a Text Line's attribution label with three equals signs (`===`) on a line by themselves, begins a pre-formatted text block. This is useful for composing translations where formatting like newlines and tabs are important--signs, menus, documents, etc. Three equals signs on a line by themselves ends the pre-formatted section:
 
     Sign:
     ===
@@ -136,9 +144,9 @@ As stated before, Dialogue Lines are ended with a newline character. **There is 
     - Beer: 200 Yen
     ===
 
-Note that without the `===` tokens, the `Menu:` would be interpreted as a line with a speaker named `Menu` but with no content, and two lines beneath it would be interpreted as new panels, since they both begin with `-`. Placing all this text between `===` marks ensures that it's included verbatim in the `Sign` line.
+Note that without the `===` tokens, the `Menu:` would be interpreted as a line with a source called `Menu` but with no content, and two lines beneath it would be interpreted as new panels, since they both begin with `-`. Placing all this text between `===` marks ensures that it's included verbatim in the `Sign` line.
 
-Because any text between `===` tokens is interpreted verbatim, the `*`, `_`, and `**` tokens for indicating boldface and italics do not apply there.
+Any text between `===` tokens is interpreted verbatim, so the `*`, `_`, and `**` tokens for indicating boldface and italics do not apply there.
 
 ## The Serifu Roadmap
 
