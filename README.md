@@ -6,22 +6,22 @@ Serifu is a simple markup language for composing comic book scripts (in particul
 
 There are several reasons one might want to do this:
 
-- A translator can compose all of their scripts, regardless of the client publisher, in Serifu, and let software translate it into a given publisher's style sheet prior to submission.
+- A translator could compose all of their scripts, regardless of the client publisher, in Serifu, and let software translate it into a given publisher's style sheet prior to submission.
 - Any of the considerable breadth of tools available for text editing can easily be used for Serifu.
-- A specialized Serifu text editor--coming soon--can take advantage of the predictable structure to offer features like automatic page and panel numbering, character name autocomplete, and lots more.
+- A specialized Serifu text editor--coming soon--can take advantage of the format's predictable structure to offer features like automatic page and panel numbering, character name autocomplete, and lots more.
 - The rigorously predictable format allows script text to be presented to the letterer or book designer in a variety of more convenient ways than a word-processing document.
 
 ## The current Serifu rules
 
 ### Pages and Panels
 
-A new page is indicated by any line that begins with an octothorpe: `#`. Text after the `#`, e.g. `Page 3`, may be added for readability, but is ignored during parsing.
+A **page** is indicated by any line that begins with an octothorpe: `#`. Text after the `#`, e.g. `Page 3`, may be added for readability, but is ignored during parsing.
 
-A new panel is indicated by any line that begins with a single dash: `-`. Like to the page marker, the `-` can be followed by other text, (e.g. `3.1` to indicate "page three, panel one") for readability, but this text is ignored by the parser.
+A **panel** is indicated by any line that begins with a single dash: `-`. Like to the page marker, the `-` can be followed by other text, (e.g. `3.1` to indicate "page three, panel one") for readability, but this text is not meaningful to the parser (more on this later).
 
 Whitespace at the beginning of any line is ignored, so any Serifu line may be indented however the user prefers. The examples here indent panel and dialogue lines by a single tab stop.
 
-Blank pages and lines are indicated by simply starting the next page or panel. In the following example, the middle of the three pages is blank:
+Not every page in a comic necessarily has text on it. It might be blank, or contain only artwork. Such pages are indicated by simply starting the next page or panel. In the following example, the second page has no text:
 
     # PAGE 1
     	- 1.1
@@ -46,43 +46,45 @@ As with pages, blank panels are marked by simply starting the next panel. In thi
     	- 9.3
     	Keiichi: Hi, do you have such as a way to deal with real bad senpais.
 
-Serifu is meant to be relatively un-opinionated, but one opinion its author does hold is that page and panel numbering should be tracked automatically. When accurate page or panel numbers are necessary, they can be derived at parse time.
+Serifu is meant to be relatively un-opinionated, but one opinion its author does hold is that page and panel numbering should be tracked automatically. The structure of Serifu is such that accurate page and panel numbers can be derived at parse time, freeing the translator from entering and tracking them manually.
 
-Text after the `-` or `#` characters but _before_ the next newline is ignored. This means that from the parser's perspective,
+As such, text after the `#` or `-` characters but _before_ the next newline is ignored. This means that from the parser's perspective,
 
     # Page One Billion
         - 888.123
         Deunan: There's something screwy about these numbers, Bri.
-
-followed by
-
-    #
+    # Page -666
+        - 666.???
+        * tick tick tick
+        - π
+        Deunan: They don't make sense.
+    # Page
         -
         Briareos: What numbers?
 
-would be perfectly valid.
+would be perfectly valid, and would refer to three sequential pages, the second of which has two panels. Text following `#` or `-` characters is meant as a convenience to make scripts more readable.
 
 The expectation is that well-behaved Serifu editing software will automatically insert page and panel numbers, updating them as necessary when the script changes and freeing the translator or editor from the need to do so manually.
 
-### Translation Text
+### Script Text
 
 #### Text Lines
 
-Any line _not_ beginning with an `#`, `-`, `*`, or `!` is interpreted as a Text Line.
+Any line _not_ beginning with an `#`, `-`, `*`, or `!` is interpreted as a **Text Line**.
 
-A Text Line must have a Source and Text, separated by a single colon: ":".
+A Text Line consists of a Source and Content, separated by a single colon: ":".
 
     	Ayukawa: Hmm.
 
-Text Lines are meant to be used for any and all text in the script that's not an onomatopoetic sound effect. Character dialogue and asides, narration, captions, diegetic text appearing in the artwork itself (e.g. signs, labels, etc.) would all be represented by
+Text Lines are meant to be used for any and all text in the script that's not an onomatopoetic sound effect. Character dialogue and asides, narration, captions, diegetic text appearing in the artwork itself (e.g. signs, labels, etc.) would all be represented by Text Lines.
 
-A Text Line may be given an optional Style, which is indicated by a forward slash character after the Source, before the colon:
+A Text Line may be given an optional **Style**, which is indicated by a forward slash character after the Source, before the colon:
 
     	Kyosuke/Excited: A-Ayukawa...!
 
 A Text Style would typically be used to indicate an alternate font or typographical style from the way a given Text Line would normally appear.
 
-Different projects have different levels of specificity they require in a script, and Serifu's Label and Style fields are meant to be freeform enough to accommodate a wide variety of editorial needs.
+Different projects have different levels of specificity they require in a script, and Serifu's Source and Style fields are meant to be freeform enough to accommodate a wide variety of editorial needs.
 
 Spaces or tabs immediately before or after the colon are ignored, so the following Dialogue Lines are equivalent:
 
@@ -116,16 +118,23 @@ This limitation is meant to reflect the reality that not every combination of bo
 
 A sound effect translation is indicated by a line starting with a `*` character. A sound effect may have an optional transliteration in parentheses. Space between the initial `*` and the text of the sound effect is ignored.
 
+These are all valid sound effect lines:
+
         *crash
         * tikka tikka
         * BOOOM (dokaaan)
 
 #### Side Notes
 
-A side note meant to clarify something for the benefit of someone else reading the she script (e.g., the letterer or editor), but which does not represent any text on the page of the book itself, is indicated by a line beginning with "!".
+A side note contains text for the benefit of someone else reading the script (e.g., the letterer or editor), but which does _not_ represent any text on the page of the comic itself, is indicated by a line beginning with "!".
 
         Haruhi: Look, just show me where the cryptid is and nobody gets hurt!
         ! Haruhi says ウーマー, a wasei eigo construction from the acronym "UMA," or "Unidentified Mysterious Animal." "Cryptid" is more idiomatic English.
+
+Or
+
+        * WOOOOOOOO!!
+        ! Crowd cheering sound effect continues across all panels on page.
 
 The `!` notation is _not_ meant to be used for text that should be included on the page as a note to the reader. That would be better indicated by something like:
 
@@ -134,9 +143,9 @@ The `!` notation is _not_ meant to be used for text that should be included on t
 
 #### Pre-formatted Text Blocks
 
-As stated before, Dialogue Lines are ended with a newline character. **There is one one exception to this rule:** Following a Text Line's attribution label with three equals signs (`===`) on a line by themselves, begins a pre-formatted text block. This is useful for composing translations where formatting like newlines and tabs are important--signs, menus, documents, etc. Three equals signs on a line by themselves ends the pre-formatted section:
+As stated before, Text Lines are ended with a newline character. **There is one one exception to this rule:** Following a Text Line's Source with three equals signs (`===`) on a line by themselves begins a pre-formatted text block. This is useful for composing translations where formatting like newlines and tabs are important--signs, menus, documents, etc. Three equals signs on a line by themselves ends the pre-formatted section:
 
-    Sign:
+        Sign:
     ===
     Menu:
     - Pizza: 50 Yen
@@ -144,7 +153,7 @@ As stated before, Dialogue Lines are ended with a newline character. **There is 
     - Beer: 200 Yen
     ===
 
-Note that without the `===` tokens, the `Menu:` would be interpreted as a line with a source called `Menu` but with no content, and two lines beneath it would be interpreted as new panels, since they both begin with `-`. Placing all this text between `===` marks ensures that it's included verbatim in the `Sign` line.
+Note that without the `===` tokens, the `Menu:` would be interpreted as a line with a Source called `Menu` but with no Content, while two lines beneath it would be interpreted as new panels, since they both begin with `-`. Placing all this text between `===` marks ensures that all four lines are understood as as the Content for the `Sign` Line.
 
 Any text between `===` tokens is interpreted verbatim, so the `*`, `_`, and `**` tokens for indicating boldface and italics do not apply there.
 
