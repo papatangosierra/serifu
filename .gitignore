@@ -4,3 +4,4 @@ package-lock.json
 webpack.config.js
 .DS_Store
 build.sh
+/.nova

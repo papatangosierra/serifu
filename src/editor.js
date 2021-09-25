@@ -1,15 +1,11 @@
-import {
-  EditorState,
-  EditorView,
-  basicSetup,
-} from "@codemirror/next/basic-setup";
-import { serifu } from "./serifu-setup.js";
+import { EditorState, EditorView, basicSetup } from "@codemirror/basic-setup";
+import { serifu, serifuHighlighter } from "./serifu-setup.js";
 import { testDoc } from "./testDoc.js";
 
 let view = new EditorView({
   state: EditorState.create({
     doc: testDoc,
-    extensions: [basicSetup, serifu()],
+    extensions: [basicSetup, serifu(), serifuHighlighter],
   }),
   parent: document.getElementById("editor-pane"),
   lineWrapping: true,
