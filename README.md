@@ -9,7 +9,7 @@ There are several reasons one might want to do this:
 - A translator could compose all of their scripts, regardless of the client publisher, in Serifu, and let software translate it into a given publisher's style sheet prior to submission.
 - Any of the considerable breadth of tools available for text editing can easily be used for Serifu.
 - A specialized Serifu text editor--coming soon--can take advantage of the format's predictable structure to offer features like automatic page and panel numbering, character name autocomplete, and lots more.
-- The rigorously predictable format allows script text to be presented to the letterer or book designer in a variety of more convenient ways than a word-processing document.
+- The rigorously predictable format allows script text to be presented to the letterer or book designer in a variety of more convenient ways than a word-processing document can be.
 
 ## The current Serifu rules
 
@@ -17,7 +17,7 @@ There are several reasons one might want to do this:
 
 A **page** is indicated by any line that begins with an octothorpe: `#`. Text after the `#`, e.g. `Page 3`, may be added for readability, but is ignored during parsing.
 
-A **panel** is indicated by any line that begins with a single dash: `-`. Like to the page marker, the `-` can be followed by other text, (e.g. `3.1` to indicate "page three, panel one") for readability, but this text is not meaningful to the parser (more on this later).
+A **panel** is indicated by any line that begins with a single dash: `-`. Like to the page marker, the `-` can be followed by other text, (e.g. `3.1` to indicate "page three, panel one") for readability, but this text is not inherently meaningful (more on this later).
 
 Whitespace at the beginning of any line is ignored, so any Serifu line may be indented however the user prefers. The examples here indent panel and dialogue lines by a single tab stop.
 
@@ -48,7 +48,7 @@ As with pages, blank panels are marked by simply starting the next panel. In thi
 
 Serifu is meant to be relatively un-opinionated, but one opinion its author does hold is that page and panel numbering should be tracked automatically. The structure of Serifu is such that accurate page and panel numbers can be derived at parse time, freeing the translator from entering and tracking them manually.
 
-As such, text after the `#` or `-` characters but _before_ the next newline is ignored. This means that from the parser's perspective,
+Text following `#` or `-` characters is meant as a convenience to make scripts more readable. As such, text after the `#` or `-` characters but _before_ the next newline is not inherently meaningful. This means that from Serifu's perspective,
 
     # Page One Billion
         - 888.123
@@ -62,9 +62,9 @@ As such, text after the `#` or `-` characters but _before_ the next newline is i
         -
         Briareos: What numbers?
 
-would be perfectly valid, and would refer to three sequential pages, the second of which has two panels. Text following `#` or `-` characters is meant as a convenience to make scripts more readable.
+would be a perfectly valid way to describe three sequential pages, the second of which has two panels.
 
-The expectation is that well-behaved Serifu editing software will automatically insert page and panel numbers, updating them as necessary when the script changes and freeing the translator or editor from the need to do so manually.
+The expectation is that well-behaved Serifu editing software will automatically insert page and panel numbers, updating them as necessary when the script changes and freeing the translator or editor from the error-prone process of doing so manually.
 
 ### Script Text
 

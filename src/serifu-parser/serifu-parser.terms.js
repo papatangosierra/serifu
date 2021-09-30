@@ -9,7 +9,7 @@ export const
   Sfx = 7,
   SfxTranslation = 8,
   SfxSource = 9,
-  Dialogue = 10,
+  Text = 10,
   Source = 11,
   Style = 12,
   Content = 13,

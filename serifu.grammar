@@ -15,7 +15,7 @@ Panel {
 }
 
 Line {
-	space? (Sfx | Dialogue | Note) newline
+	space? (Sfx | Text | Note) newline
 }
 
 Sfx {
@@ -30,7 +30,7 @@ SfxSource {
 	linetext
 }
 
-Dialogue {
+Text {
 	(Source ("/" Style)? space? ":" space? Content)
 }
 
