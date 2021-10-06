@@ -17,8 +17,8 @@ import { syntaxTree } from "@codemirror/language";
 function hashStringToRGB(str) {
   function hashChar(char) {
     let seed = char.charCodeAt(0);
-    let xor1 = char.charCodeAt(0) * Math.E * 1e11;
-    let xor2 = char.charCodeAt(0) * Math.PI * 1e11;
+    let xor1 = seed * Math.E * 1e11;
+    let xor2 = seed * Math.PI * 1e11;
     let munge = Math.abs(seed ^ xor1 ^ (seed ^ xor2));
     return munge % 256;
   }
@@ -26,9 +26,9 @@ function hashStringToRGB(str) {
   for (let i = 0; i < str.length; i++) {
     let gchar = String.fromCharCode(Math.floor(str.charCodeAt(i) * 1.5));
     let bchar = String.fromCharCode(Math.floor(str.charCodeAt(i) * 1.8));
-    rgb[0] = (rgb[0] ^ hashChar(str.charAt(i))) % 256;
-    rgb[1] = (rgb[1] ^ hashChar(gchar)) % 256;
-    rgb[2] = (rgb[2] ^ hashChar(bchar)) % 256;
+    rgb[0] = rgb[0] ^ hashChar(str.charAt(i));
+    rgb[1] = rgb[1] ^ hashChar(gchar);
+    rgb[2] = rgb[2] ^ hashChar(bchar);
   }
   return rgb;
 }
@@ -53,7 +53,8 @@ export class SourceWidget extends WidgetType {
     let wrap = document.createElement("span");
     let rgb = hashStringToRGB(this.sourceName); // compute a color hash for this Source
     wrap.setAttribute("aria-hidden", "true"); // hide widget from screen readers; it won't be useful to them
-    wrap.className = `cm-source-label cm-source-label-${this.sourceName}`; // give it a predictable class name we can use elsewhere if necessary, along with the base cm-source-label class
+    wrap.className += `cm-source-label`; // give it the generic classname
+    wrap.className += ` cm-source-label-${this.sourceName}`; // give it a predictable class name we can use elsewhere if necessary, along with the base cm-source-label class
     wrap.style.borderColor = `rgb(${rgb[0]} ${rgb[1]} ${rgb[2]})`;
     return wrap;
   }
@@ -74,7 +75,7 @@ export function sourceLabels(view) {
         if (type.name === "Source") {
           // when we find a Source node
           let theName = view.state.doc.sliceString(from, to);
-          console.log(`SOURCE NODE??? ${theName}`);
+          // console.log(`SOURCE NODE??? ${theName}`);
           let deco = Decoration.widget({
             widget: new SourceWidget(theName),
             side: 0,

@@ -1,8 +1,9 @@
-export let testDoc = `
-# Page 1
+export let testDoc = `# Page 1
   - 1.1
   Mysterious Figure: Welcome, my friends.
-  
+  * Ka-blam!!
+  ! This didn't really happen.
+  Mysterious Figure: *Nice* one, Paul.
   - 1.2
   Mysterious Figure: I imagine you're wondering why I've called you here today.
   Mysterious Figure/Aside: That's understandable.

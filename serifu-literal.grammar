@@ -1,0 +1,117 @@
+@precedence {}
+
+@top Script { (Page | Spread)+ }
+
+// A spread contains one or more panels
+Spread {
+	newlineToken SpreadToken Panel+
+}
+
+// A page contains one or more panels
+Page {
+	newlineToken PageToken Panel+
+}
+
+// A panel starts with a line beginning with a PanelToken and contains zero or more Lines
+Panel {
+	newlineToken PanelToken Line?
+}
+
+// A line begins with a newline, and is either an Sfx, a Text, or a Note
+Line {
+	newlineToken (Sfx | Text | Note)
+}
+
+// An Sfx starts with * and has an SfxTranslation after it, followed by an optional SfxSource
+Sfx {
+	sfxToken space? SfxTranslation ( sfxOpenToken SfxSource sfxCloseToken )?
+}
+
+// An SfxTranslation can have any characters that aren't parenthesis or newlines.
+SfxTranslation {
+	!("(" | ")" | "\n")+
+}
+
+// an SfxSource has the same rules.
+SfxSource {
+	!("(" | ")" | "\n")+
+}
+
+// a Text has a Source, an optional Style, and uses either
+// a colon followed by text that can be styled with * and _, or
+// an equals sign followed by text that is literal and contains no style.
+Text {
+	(Source ("/" Style)? space?) ((":" space? Content) | "=" space? Literal) 
+}
+
+// a Source is any number of anything besides a : or /
+Source {
+	!(":" | "/")+
+}
+
+// a Style is anything besides a ":"
+Style {
+	!":"+
+}
+
+// a Literal is any amount of anything that's not a newline.
+Literal {
+	"\n"+
+}
+
+// a Content is any number of instances of Bold, Ital, BoldItal, or Unstyled text, OR
+// a BlockText
+Content {
+  ( (Bold | BoldItal | Ital | unstyled)* | BlockText )
+}
+
+// unstyled text is anything that's not a *, _, or newline.
+unstyled {
+	!("*" | "_" | "\n")
+}
+
+// Ital text is anything between _ that's not itself or a newline
+Ital {
+	italToken !(italToken | "\n")* italToken
+}
+
+// Bold text is anything between * that's not itself or a newline
+Bold {
+	boldToken !(boldToken | "\n")* boldToken
+}
+
+// BoldItal text is anything between ** that's not an asterisk or a newline
+BoldItal {
+	boldItalToken !(boldToken | "\n")* boldItalToken
+}
+
+BlockText {
+	blockTextToken !blockTextToken* blockTextToken
+}
+
+// a Note begins with a ! and is anything that's not a newline
+Note {
+	noteToken !"\n"*
+}
+
+@skip {
+	
+}
+
+@tokens {
+	space { (" " | "\t")+ }
+	newlineToken { "\n"* $[ \t]? }
+	PageToken { "#" ![\n]*}
+	SpreadToken { "##" ![\n]*}
+	@precedence {SpreadToken, PageToken}
+	PanelToken { "-" ![\n]*}
+	italToken { "_" }
+	boldToken { "*" }
+	boldItalToken { "**" }
+	@precedence {boldItalToken, boldToken}	
+	noteToken { "!" }
+	sfxToken { "*" }	
+	sfxOpenToken { "(" }
+	sfxCloseToken { ")" }
+	blockTextToken { "\n===\n"}
+}

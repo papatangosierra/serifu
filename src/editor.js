@@ -1,3 +1,5 @@
+import "./css/tailwind.css"; // This is what gets us tailwind!!
+
 import { EditorState, basicSetup } from "@codemirror/basic-setup";
 import { syntaxTree } from "@codemirror/language";
 import {
@@ -17,6 +19,8 @@ import {
   sourceLabelsPlugin,
 } from "./sourcewidget.js";
 
+import { nodeInspector } from "./nodeinspector.js";
+
 // // build a decoration list of all syntax tree nodes that need Source labels
 
 /* Open doc and instantiate editor */
@@ -25,8 +29,13 @@ let theDoc = new SerifuDoc(testDoc);
 let view = new EditorView({
   state: EditorState.create({
     doc: testDoc,
-    extensions: [basicSetup, serifu(), serifuHighlighter, sourceLabelsPlugin],
-    // extensions: [basicSetup, serifu(), serifuHighlighter, sourceLabelsPlugin],
+    extensions: [
+      basicSetup,
+      serifu(),
+      serifuHighlighter,
+      sourceLabelsPlugin,
+      nodeInspector(),
+    ],
   }),
   parent: document.getElementById("editor-pane"),
   lineWrapping: true,

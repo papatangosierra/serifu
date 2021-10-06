@@ -1,0 +1,100 @@
+@top Script { (Page | Spread)+ }
+
+Spread {
+	spreadToken newlineToken Panel* 
+}
+
+Page {
+	pageToken newlineToken Panel* 
+}
+
+Panel {
+	panelToken newlineToken Line* 
+}
+
+Line {
+	(Sfx | Text | Note) newlineToken
+}
+
+Sfx {
+	sfxToken space? SfxTranslation ( sfxOpenToken SfxSource sfxCloseToken )?
+}
+
+SfxTranslation {
+	sfxText
+}
+
+SfxSource {
+	sfxText
+}
+
+Text {
+	Source ("/" Style)? space? ( (":" space? Content) | ("=" space? Literal) )
+}
+
+Source {
+	word+
+}
+
+Style {
+	word+
+}
+
+Literal {
+	notnewline
+}
+
+Content {
+  ( (Bold | BoldItal | Ital | Unstyled)+ | BlockText )
+}
+
+Unstyled {
+	styleText
+}
+
+Ital {
+	italToken styleText italToken
+}
+
+Bold {
+	boldToken styleText boldToken
+}
+
+BoldItal {
+	boldItalToken styleText boldItalToken
+}
+
+BlockText {
+	blockTextToken (space | notspace)* blockTextToken
+}
+
+Note {
+	noteToken notnewline
+}
+
+@skip {
+
+}
+
+@tokens {
+	space { (" " | "\t")+ }
+  notspace { ![\t ]+ }
+	notnewline { ![\n]+ }
+	newlineToken { "\n"+ space? }
+	pageToken { "#" ![\n]*}
+	spreadToken { "##" ![\n]*}
+	panelToken { "-" ![\n]*}
+	italToken { "_" }
+	boldToken { "*" }
+	boldItalToken { "**" }
+	noteToken { "!" }
+	sfxToken { "*" }	
+	sfxOpenToken { "(" }
+	sfxCloseToken { ")" }
+	sfxText { ![)(]+ }
+	wordChar { std.asciiLetter | $[_$\u{a1}-\u{10ffff}] | std.digit | "-" | "'" | " " | "&"}
+	word { (std.asciiLetter | $[_$\u{a1}-\u{10ffff}] | std.digit) wordChar* }	
+	styleText { ![*_\n]+ }
+	blockTextToken { "\n===\n"}
+	@precedence {blockTextToken, sfxToken, sfxText, styleText, notnewline, boldItalToken, boldToken, italToken, spreadToken, pageToken, notspace, space}	
+}

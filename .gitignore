@@ -5,3 +5,4 @@ webpack.config.js
 .DS_Store
 build.sh
 /.nova
+/test

@@ -1,4 +1,4 @@
-@precedence {blockTextToken, italToken, boldToken, boldItalToken, Note, linetext}
+@precedence {Note}
 
 @top Script { (Page | Spread)+ }
 
@@ -43,7 +43,7 @@ Style {
 }
 
 Content {
-	 BlockText | (notspace (linetext | Ital | Bold | BoldItal )+ newline)
+	 BlockText | ((linetext | Ital | Bold | BoldItal )+ newline)
 }
 
 Note {
@@ -76,7 +76,6 @@ BlockText {
 	newline { "\n" }
 	PageToken { "#" ![\n]*}
 	SpreadToken { "##" ![\n]*}
-	@precedence {SpreadToken, PageToken}
 	PanelToken { "-" ![\n]*}
 	linetext { ![\n*_]+ }
 	wordChar { std.asciiLetter | $[_$\u{a1}-\u{10ffff}] | std.digit | "-" | "'" | " "}
@@ -88,5 +87,6 @@ BlockText {
 	sfxToken { "*" }	
 	sfxOpenToken { "(" }
 	sfxCloseToken { ")" }
-	blockTextToken { "\n===\n"}
+	blockTextToken { "\n===\n" (space | notspace) "\n===\n"}
+  @precedence {SpreadToken, PageToken, blockTextToken, italToken, boldToken, boldItalToken, linetext, space}	
 }
