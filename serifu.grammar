@@ -1,92 +1,90 @@
-@precedence {Note}
-
-@top Script { (Page | Spread)+ }
-
-Spread {
-	SpreadToken newline Panel*
-}
+@top Doc { (Page | Spread)+ }
 
 Page {
-	PageToken newline Panel*
+	PageToken Panel*
+}
+
+Spread { 
+	SpreadToken Panel*
 }
 
 Panel {
-	PanelToken newline Line*
+	PanelToken Line*
 }
 
 Line {
-	space? (Sfx | Text | Note) newline
+	(Text | Note | Sfx)
 }
 
 Sfx {
-	sfxToken SfxTranslation ( sfxOpenToken SfxSource sfxCloseToken )?
-}
-
-SfxTranslation {
-	linetext
-}
-
-SfxSource {
-	linetext
-}
-
-Text {
-	(Source ("/" Style)? space? ":" space? Content)
-}
-
-Source {
-	word+
-}
-
-Style {
-	word+
-}
-
-Content {
-	 BlockText | ((linetext | Ital | Bold | BoldItal )+ newline)
+	Star SfxTranslation SfxSource? newlines
 }
 
 Note {
-	noteToken linetext
+	NoteToken content newlines
 }
 
-Ital {
-	italToken linetext italToken
+Text {
+	Source ("/" Style)? ":" content newlines
 }
 
-Bold {
-	boldToken linetext boldToken
+Source {
+	word
 }
 
-BoldItal {
-	boldItalToken linetext boldItalToken
+Style {
+	word
 }
 
-BlockText {
-	blockTextToken (notspace | space)+ blockTextToken 
+content {
+	( unstyledText | Bold | BoldItal | Ital | Star | Colon | DoubleStar | Underscore )* |	BlockText
 }
 
-@skip {
-	
+unstyledText {
+	anyText
 }
+
+@skip { spaces }
 
 @tokens {
-	space { (" " | "\t")+ }
-	notspace { ![*_\t ] }
-	newline { "\n" }
-	PageToken { "#" ![\n]*}
-	SpreadToken { "##" ![\n]*}
-	PanelToken { "-" ![\n]*}
-	linetext { ![\n*_]+ }
-	wordChar { std.asciiLetter | $[_$\u{a1}-\u{10ffff}] | std.digit | "-" | "'" | " "}
-	word { (std.asciiLetter | $[_$\u{a1}-\u{10ffff}] | std.digit) wordChar* }
-	italToken { "_" }
-	boldToken { "*" }
-	boldItalToken { "**" }
-	noteToken { "!" }
-	sfxToken { "*" }	
-	sfxOpenToken { "(" }
-	sfxCloseToken { ")" }
-	blockTextToken { "\n===\n" (space | notspace) "\n===\n"}
-  @precedence {SpreadToken, PageToken, blockTextToken, italToken, boldToken, boldItalToken, linetext, space}	
+	spaces { $[\u0009 \u000b\u00a0\u1680\u2000-\u200a\u202f\u205f\u3000\ufeff]+ }
+	newlines { $[\r\n\u2028\u2029]+ }
+
+	PageToken { "#" ![\n#]* newlines}
+	SpreadToken { "##" ![\n]* newlines}
+	@precedence { SpreadToken, PageToken }
+
+	PanelToken { "-" ![\n]* newlines}
+
+	wordChar { std.asciiLetter | $[_$\u{a1}-\u{10ffff}] | std.digit | "-" | "'" | "&" | " "}
+	word { (std.asciiLetter | $[\u{a1}-\u{10ffff}] | std.digit) (wordChar* (std.asciiLetter | $[\u{a1}-\u{10ffff}] | std.digit))? }
+
+
+	anychar { ![\u0009:*_\u000b\u00a0\u1680\u2000-\u200a\u202f\u205f\u3000\ufeff\r\n\u2028\u2029] }
+	anyText { anychar+ }
+
+	Star { "*" }
+	Bold {
+		Star anychar* Star
+	}
+
+	DoubleStar { Star Star }
+	BoldItal {
+		DoubleStar anychar* DoubleStar
+	}
+
+	Underscore { "_" }
+	Ital { Underscore anychar* Underscore }
+
+	Colon { ":" }
+
+	NoteToken { "!" }
+	SfxTranslation { ![\n)(]+ }
+	SfxSource { "(" ![\n)(]+ ")"}
+
+	BlockText { "/=" BlockTextRest }
+	BlockTextRest { ![=] BlockTextRest | "=" BlockTextAfterEquals}
+	BlockTextAfterEquals { "/" | "=" BlockTextAfterEquals | ![/=] BlockTextRest }
+
+	@precedence { BlockText, SpreadToken, PageToken, PanelToken, SfxSource, SfxTranslation, BoldItal, DoubleStar, Star, Bold, Underscore, Ital, anyText, word, spaces }
 }

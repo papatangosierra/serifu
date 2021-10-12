@@ -1,67 +1,36 @@
 export let testDoc = `# Page 1
   - 1.1
-  Mysterious Figure: Welcome, my friends.
-  * Ka-blam!!
-  ! This didn't really happen.
-  Mysterious Figure: *Nice* one, Paul.
+    Hoshi: I don't know about this, Doc.
+    * tunk (ton)
+    Doc Sensei: I ever lead you astray, friend?
   - 1.2
-  Mysterious Figure: I imagine you're wondering why I've called you here today.
-  Mysterious Figure/Aside: That's understandable.
+    Nadeshiko/Aside: ...So is that a rhetorical question, or...?
+    Kazuma/Aside: Yeah, I wasn't going to say anything.
+    * chuckle (kusu)
   
   - 1.3
-  Roboco: No, I definitely already know.
-  Bondo: You _definitely_ don't.
-  Sign:
-===
-Do we crash here?
-===
+    Hoshi: All I'm saying is, maybe we shouldn't've stolen _all_ the beer.
+    Doc Sensei: I'd love to hear how much of this **crispy grolsch** you think we should've left with those _nerds._*
+    ! JP says さっぱりしたラガー, but I can't resist a little Achewood shoutout.
+    Caption: *They were professional foosball players.
   
   - 1.4
-  Gorilla: Whatever, man! Just tell us what the ookin' deal is!
-  
-  -1.5
-  Mysterious Figure: Heh heh...
-  Mysterious Figure: Allow me to introduce...
+    Doc Sensei: Now if y'all are finished _busting_ a fellow's _balls_, I think I'm gonna have a look at the menu.
+    Menu:/=
+  ~Old Timey Izakaya~
+Arabiki Wienier.......a dollar
+Okonomiyaki...........a dollar
+Katsu Curry...........coupla bucks
+Nama..................one buck
+Sake, for the weebs...some yen
+=/
 
 ## Pages 2-3
   - 2-3.1
-  Paul/Big: *...Serifu.*
-  * Ka-boooom (dokaaaan)
-  ! Despite the "mysterious figure's" grand gesturing, this project is only just  getting started.
-  - 2-3.2
-  Paul/Silly: Pretty cool, right?
-
+    Hoshi/Aside: I don't like the look of this place.
+  
 # Page 4
   - 4.1
-  Paul: Here's what's coming soon for sure!
-  Sign:
-===
-- The tab key will work
-- The colors won't look like garbage
-- Automatic, dynamically updated page and panel numbers
-- Selectable indentation preferences
-- Character name and style name autocomplete
-- Per-publisher style sheet export
-- Much prettier UI than this, optimized for input speed and accuracy
-- Indesign Plugin for sequential placement of Serifu-formatted text
-===
-  - 4.2
-  Paul: Also eventually some of this stuff!
-Sign:
-===
-- Customizable color themes
-- Cool minimap
-- Import & export of autocomplete term lists
-- Terminology list integration
-- Text Search constrainable by speaking character/style type
-===
-  - 4.3
-  Paul: And if this really gets out of hand...
-Sign:
-===
-- Multi-script search
-- Change tracking/document history
-- Extra-script comments
-- Real-time collaborative editing
-===
+    Kazuma: It'll be fine.
+    Kazuma/Thought: It is absolutely not going to be fine.
 `;
