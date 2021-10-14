@@ -18,7 +18,7 @@ export let testDoc = `# Page 1
     Doc Sensei: Now if y'all are finished _busting_ a fellow's _balls_, I think I'm gonna have a look at the menu.
     Menu:/=
   ~Old Timey Izakaya~
-Arabiki Wienier.......a dollar
+Arabiki Wiener........a dollar
 Okonomiyaki...........a dollar
 Katsu Curry...........coupla bucks
 Nama..................one buck
@@ -28,6 +28,7 @@ Sake, for the weebs...some yen
 ## Pages 2-3
   - 2-3.1
     Hoshi/Aside: I don't like the look of this place.
+    Nadeshiko/Cute: You don't like the look of most places, though.
   
 # Page 4
   - 4.1
