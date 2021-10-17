@@ -1,18 +1,18 @@
-@top Doc { (Page | Spread)+ }
+@top Doc { (Page | Spread | newlines)+ }
 
-Page {
+Page[group="Pages"] {
 	PageToken Panel*
 }
 
-Spread { 
+Spread[group="Pages"] { 
 	SpreadToken Panel*
 }
 
-Panel {
+Panel[group="Panels"] {
 	PanelToken Line*
 }
 
-Line {
+Line[group="Lines"] {
 	(Text | Note | Sfx)
 }
 
@@ -48,10 +48,11 @@ unstyledText {
 
 @tokens {
 	spaces { $[\u0009 \u000b\u00a0\u1680\u2000-\u200a\u202f\u205f\u3000\ufeff]+ }
+	newline { $[\r\n\u2028\u2029] }
 	newlines { $[\r\n\u2028\u2029]+ }
 
-	PageToken { "#" ![\n#]* newlines}
-	SpreadToken { "##" ![\n]* newlines}
+	PageToken { "#" ![\n#]* newline}
+	SpreadToken { "##" ![\n]* newline}
 	@precedence { SpreadToken, PageToken }
 
 	PanelToken { "-" ![\n]* newlines}
@@ -86,5 +87,5 @@ unstyledText {
 	BlockTextRest { ![=] BlockTextRest | "=" BlockTextAfterEquals}
 	BlockTextAfterEquals { "/" | "=" BlockTextAfterEquals | ![/=] BlockTextRest }
 
-	@precedence { BlockText, SpreadToken, PageToken, PanelToken, SfxSource, SfxTranslation, BoldItal, DoubleStar, Star, Bold, Underscore, Ital, anyText, word, spaces }
+	@precedence { BlockText, SpreadToken, PageToken, PanelToken, SfxSource, SfxTranslation, BoldItal, DoubleStar, Star, Bold, Underscore, Ital, anyText, word, spaces, newlines }
 }

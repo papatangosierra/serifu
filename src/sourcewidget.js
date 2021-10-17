@@ -58,7 +58,6 @@ export class SourceWidget extends WidgetType {
     wrap.style.borderColor = `rgb(${rgb[0]} ${rgb[1]} ${rgb[2]})`;
     return wrap;
   }
-
   ignoreEvent() {
     return false;
   }
@@ -97,18 +96,12 @@ export const sourceLabelsPlugin = ViewPlugin.fromClass(
     }
     update(update) {
       if (update.docChanged || update.viewportChanged) {
-        console.log("updating");
+        // console.log("updating view with new labels");
         return (this.decorations = sourceLabels(update.view));
       }
     }
   },
   {
-    // update: (update) => {
-    //   if (update.docChanged || update.viewportChanged) {
-    //     console.log("updating");
-    //     return (this.decorations = sourceLabels(update.view));
-    //   }
-    // },
     decorations: (v) => v.decorations,
   }
 );

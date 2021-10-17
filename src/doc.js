@@ -35,3 +35,37 @@ export class SerifuDoc {
     console.log(`Unique styles found: ${JSON.stringify(this.styles)}`);
   }
 }
+
+class Squeezer {
+  constructor(str) {
+    this.squeezeObj = this.squeeze(str);
+  }
+  squeeze(str) {
+    let origtext = str.split(/\b/); // split text on word/nonword boundary
+    let uniques = origtext.filter(trueIfUnique); // build uniques list
+    let seq = [];
+
+    function trueIfUnique(val, i, self) {
+      return self.indexOf(val) === i; // true if this is the first time
+    } // we've seen val, false otherwise
+
+    for (let i = 0; i < origtext.length; i++) {
+      // TODO: replace with forEach
+      seq.push(String.fromCodePoint(uniques.indexOf(origtext[i])));
+    }
+    return { uniques, seq };
+  }
+  // *inflate() returns an ITERATABLE that yields the next uncompressed element
+  // in the given string. To get the entire uncompressed text as a single
+  // string, use [...Squeeze.inflate()].join("")
+  *inflate() {
+    let i = 0;
+    // this.squeezeObj.seq.forEach((curVal, i, arr) => {
+    //   this.str =  this.squeezeObj.uniques[arr[i].charCodeAt(0)];
+    // });
+    while (i < this.squeezeObj.seq.length) {
+      yield this.squeezeObj.uniques[this.squeezeObj.seq[i].charCodeAt(0)];
+      i++;
+    }
+  }
+}

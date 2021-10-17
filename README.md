@@ -62,9 +62,9 @@ Text following `#` or `-` characters is meant as a convenience to make scripts m
         -
         Briareos: What numbers?
 
-would be a perfectly valid way to describe three sequential pages, the second of which has two panels.
+would be a valid (albeit perverse) way to describe three sequential pages, the second of which has two panels.
 
-The expectation is that well-behaved Serifu editing software will automatically insert page and panel numbers, updating them as necessary when the script changes and freeing the translator or editor from the error-prone process of doing so manually.
+The expectation is that well-behaved Serifu editing software will automatically insert page and panel numbers, keeping them updated as necessary when the script changes and freeing the translator or editor from the error-prone process of doing so manually.
 
 ### Script Text
 
@@ -106,13 +106,25 @@ Italics are indicated with underscores:
 
 Bold italics are indicated with two asterisks:
 
-    	Tomoko: I **swear to god**, Nanako.
+    	Mariko: It's **box-cutter time**, pal.
 
-Note that these are mutually exclusive and cannot be nested, i.e. you **should not** specify bold italics by combining the bold and italics tokens:
+The bold, italics, and bold italics notations should not be combined or nested.
 
-    	Mariko: It's _*box-cutter time*_, pal!
+If a single asterisk (`*`) or underscore (`_`) is needed verbatim in the text itself, they may be included as-is, e.g.
 
-This limitation is meant to reflect the reality that not every combination of bold and italic variants is available in every font a letterer might use, and in such cases it would be better to fail obviously than subtly.
+        Footnote: *Qifrey is a licensed witch. Do not try this at home.
+
+or
+
+        Computer Screen: Username: major_kusanagi
+
+A single `*` or `_` will not engage bold or italics—there must be two of a given style marker to apply the style to a piece of text. In the case of odd numbers of markers, pairs are assembled starting with the first marker, so in a line like
+
+        Lupin: I *promise* not to steal *any* of these priceless works of art!*
+
+the words "promise" and "any" will be boldface, and the final asterisk will be interpreted as a literal asterisk.
+
+If more complicated arrangements of special characters are necessary, see the section below on pre-formatted text blocks.
 
 #### Sound Effects / Onomatopoeia
 
@@ -136,31 +148,32 @@ Or
         * WOOOOOOOO!!
         ! Crowd cheering sound effect continues across all panels on page.
 
-The `!` notation is _not_ meant to be used for text that should be included on the page as a note to the reader. That would be better indicated by something like:
+The `!` notation is not meant to be used for text that should be included on the page as a note to the reader. That would be better indicated by something like:
 
         Light: Heh... just according to _keikaku._
         Translation note: "Keikaku" means "plan."
 
 #### Pre-formatted Text Blocks
 
-As stated before, Text Lines are ended with a newline character. **There is one one exception to this rule:** Following a Text Line's Source with three equals signs (`===`) on a line by themselves begins a pre-formatted text block. This is useful for composing translations where formatting like newlines and tabs are important--signs, menus, documents, etc. Three equals signs on a line by themselves ends the pre-formatted section:
+As stated before, Text Lines are normally ended with a newline character. **There is one exception to this rule:** Immediately following a Text Line's Source with a forward slash and an equals sign (`/=`) begins a pre-formatted text block. This is useful for composing translations where formatting like newlines and tabs are important--signs, menus, documents, etc. An equals sign followed by a forward slash (`=/`) ends the block.
 
-        Sign:
-    ===
+        Sign:/=
     Menu:
     - Pizza: 50 Yen
     - Okonomiyaki: 100 Yen
     - Beer: 200 Yen
-    ===
+    =/
 
-Note that without the `===` tokens, the `Menu:` would be interpreted as a line with a Source called `Menu` but with no Content, while two lines beneath it would be interpreted as new panels, since they both begin with `-`. Placing all this text between `===` marks ensures that all four lines are understood as as the Content for the `Sign` Line.
+Note that without the being enclosed by the `/=` `=/` markers, the `Menu:` would be interpreted as a line with a Source called `Menu` but with no Content, while the three lines beneath it would be interpreted as new panels, since they both begin with `-`. Placing all this text between `/=` `=/` marks ensures that all four lines are included as the Content for the `Sign` Text Line.
 
-Any text between `===` tokens is interpreted verbatim, so the `*`, `_`, and `**` tokens for indicating boldface and italics do not apply there.
+The opening `/=` marker must immediately follow its Source, without any spaces.
 
-## The Serifu Roadmap
+Any text between `/=` `=/` tokens is interpreted verbatim, so the `*`, `_`, and `**` tokens for indicating boldface and italics do not apply there.
 
-I am currently working on a Javascript-based parser for the Serifu language, which I will first be integrating into a web-based editor. I'm using Marijn Haverbeke's [Lezer](https://lezer.codemirror.net) to implement the parser, and [CodeMirror](https://codemirror.net/6/) to build the editor.
+If a line requires multiple underscores or asterisks to be represented literally, a one-line Text Block is the best way to accomplish this:
 
-Once the parser and editor are approximately duplicating the functionality of [my first attempt at Serifu](https://serifu-prototype.glitch.me), I will move on to a rewrite of [the InDesign extension](https://www.youtube.com/watch?v=yGyYkDYovlY) that enables automatic sequential text placement of script lines, which is one of the main raisons d'être of this project.
+        Contract Text:/= The undersigned* agrees to sell his soul** for a thousand                      berries.***=/
 
-The markup rules described in this document are not yet set in stone, and there is still considerable latitude for adjustment. **If you are a manga translator, letterer, or editor, and you have feedback or thoughts on Serifu, please feel free to get in touch.**
+## Etc.
+
+The markup rules described in this document are not yet set in stone, and there is still latitude for adjustment. **If you are a comics writer, manga translator, letterer, or editor, and you have feedback or thoughts on Serifu, please feel free to get in touch.**
