@@ -1,19 +1,19 @@
-@top Doc { (Page | Spread)+ }
+@top Doc { (Page | Spread | newlines)+ }
 
-Page {
+Page[group="Pages"] {
 	PageToken Panel*
 }
 
-Spread { 
+Spread[group="Pages"] { 
 	SpreadToken Panel*
 }
 
-Panel {
+Panel[group="Panels"] {
 	PanelToken Line*
 }
 
-Line {
-	(Text | Note | Sfx)
+Line[group="Lines"] {
+	(Text | Note | Sfx) | newline
 }
 
 Sfx {
@@ -21,11 +21,11 @@ Sfx {
 }
 
 Note {
-	NoteToken content newlines
+	NoteToken contentText newlines
 }
 
 Text {
-	Source ("/" Style)? ":" content newlines
+	Source ("/" Style)? ":" Content newline
 }
 
 Source {
@@ -36,8 +36,12 @@ Style {
 	word
 }
 
-content {
-	( unstyledText | Bold | BoldItal | Ital | Star | Colon | DoubleStar | Underscore )* |	BlockText
+Content {
+	contentText
+}
+
+contentText {
+	( unstyledText | Bold | BoldItal | Ital | Star | Colon | DoubleStar | Underscore )* | BlockText
 }
 
 unstyledText {
@@ -48,13 +52,14 @@ unstyledText {
 
 @tokens {
 	spaces { $[\u0009 \u000b\u00a0\u1680\u2000-\u200a\u202f\u205f\u3000\ufeff]+ }
+	newline { $[\r\n\u2028\u2029] }
 	newlines { $[\r\n\u2028\u2029]+ }
 
-	PageToken { "#" ![\n#]* newlines}
-	SpreadToken { "##" ![\n]* newlines}
+	PageToken { spaces? "#" ![\n#]* newline}
+	SpreadToken { "##" ![\n]* newline}
 	@precedence { SpreadToken, PageToken }
 
-	PanelToken { "-" ![\n]* newlines}
+	PanelToken { spaces? "-" ![\n]* newlines}
 
 	wordChar { std.asciiLetter | $[_$\u{a1}-\u{10ffff}] | std.digit | "-" | "'" | "&" | " "}
 	word { (std.asciiLetter | $[\u{a1}-\u{10ffff}] | std.digit) (wordChar* (std.asciiLetter | $[\u{a1}-\u{10ffff}] | std.digit))? }
@@ -80,11 +85,11 @@ unstyledText {
 
 	NoteToken { "!" }
 	SfxTranslation { ![\n)(]+ }
-	SfxSource { "(" ![\n)(]+ ")"}
+	SfxSource { "(" ![\n)(]+ ")"? }
 
 	BlockText { "/=" BlockTextRest }
 	BlockTextRest { ![=] BlockTextRest | "=" BlockTextAfterEquals}
 	BlockTextAfterEquals { "/" | "=" BlockTextAfterEquals | ![/=] BlockTextRest }
 
-	@precedence { BlockText, SpreadToken, PageToken, PanelToken, SfxSource, SfxTranslation, BoldItal, DoubleStar, Star, Bold, Underscore, Ital, anyText, word, spaces }
+	@precedence { BlockText, SpreadToken, PageToken, PanelToken, SfxSource, SfxTranslation, BoldItal, DoubleStar, Star, Bold, Underscore, Ital, anyText, word, spaces, newlines, newline }
 }

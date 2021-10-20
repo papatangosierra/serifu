@@ -55,10 +55,9 @@ export class SourceWidget extends WidgetType {
     wrap.setAttribute("aria-hidden", "true"); // hide widget from screen readers; it won't be useful to them
     wrap.className += `cm-source-label`; // give it the generic classname
     wrap.className += ` cm-source-label-${this.sourceName}`; // give it a predictable class name we can use elsewhere if necessary, along with the base cm-source-label class
-    wrap.style.borderColor = `rgb(${rgb[0]} ${rgb[1]} ${rgb[2]})`;
+    wrap.style.backgroundColor = `rgb(${rgb[0]} ${rgb[1]} ${rgb[2]})`;
     return wrap;
   }
-
   ignoreEvent() {
     return false;
   }
@@ -97,18 +96,12 @@ export const sourceLabelsPlugin = ViewPlugin.fromClass(
     }
     update(update) {
       if (update.docChanged || update.viewportChanged) {
-        console.log("updating");
+        // console.log("updating view with new labels");
         return (this.decorations = sourceLabels(update.view));
       }
     }
   },
   {
-    // update: (update) => {
-    //   if (update.docChanged || update.viewportChanged) {
-    //     console.log("updating");
-    //     return (this.decorations = sourceLabels(update.view));
-    //   }
-    // },
     decorations: (v) => v.decorations,
   }
 );
