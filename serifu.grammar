@@ -21,11 +21,11 @@ Sfx {
 }
 
 Note {
-	NoteToken Content newlines
+	NoteToken contentText newlines
 }
 
 Text {
-	Source ("/" Style)? ":" Content newlines
+	Source ("/" Style)? ":" Content newline
 }
 
 Source {
@@ -37,7 +37,11 @@ Style {
 }
 
 Content {
-	( unstyledText | Bold | BoldItal | Ital | Star | Colon | DoubleStar | Underscore )* |	BlockText
+	contentText
+}
+
+contentText {
+	( unstyledText | Bold | BoldItal | Ital | Star | Colon | DoubleStar | Underscore )* | BlockText
 }
 
 unstyledText {
@@ -81,7 +85,7 @@ unstyledText {
 
 	NoteToken { "!" }
 	SfxTranslation { ![\n)(]+ }
-	SfxSource { "(" ![\n)(]+ ")"}
+	SfxSource { "(" ![\n)(]+ ")"? }
 
 	BlockText { "/=" BlockTextRest }
 	BlockTextRest { ![=] BlockTextRest | "=" BlockTextAfterEquals}

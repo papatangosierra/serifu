@@ -1,4 +1,29 @@
 export let testDoc = `# Page 1
+- 1.1
+Hoshi: Well, ain't this a pretty little layout.
+Kazuma: It ain't _vim_, if that's what you're suggesting.
+- 1.2
+* thwap (pochi)
+Kazuma: Ouch!
+Doc Sensei: Reckon you had that coming.
+- 1.3
+Nadeshiko: I _do_ love a man with big, strong opinions about software design.
+Hoshi: Don't. Don't you--
+* twitch (biku)
+Nadeshiko: Why, I don't suppose you have any thoughts about _Infinite Jest?_
+- 1.4
+Hoshi: I'm in the middle of a reread and *you know it.*
+* giggle
+Doc Sensei: Haw haw haw haw
+Kazuma: Shoulda used vim.
+
+# Page 2
+- 2.1
+Hoshi/Large: What's *that* got to do with anything?!
+
+`;
+
+let testDoc2 = `# Page 1
     - 1.1
     Hoshi: I don't know about this, Doc.
     * tunk (ton)
@@ -10,13 +35,13 @@ export let testDoc = `# Page 1
 
     - 1.3
     Hoshi: All I'm saying is, maybe we shouldn't've stolen _all_ the beer.
-    Doc Sensei: I'd love to hear how much of this **crispy grolsch** you think we should've left with those_nerds._*
+    Doc Sensei: I'd love to hear how much of this **crispy grolsch** you think we should've left with those _nerds._*
     ! JP says さっぱりしたラガー, but I can't resist a little Achewood shoutout.
     Caption: *They were professional foosball players.
 
         - 1.4
-    Doc Sensei: Now if y'all are finished _busting_ a fellow's _balls_, I think I'm gonna have a look at themenu.
-    Menu:/=
+    Doc Sensei: Now if y'all are finished _busting_ a fellow's _balls_, I think I'm gonna have a look at the menu.
+	Menu:/=
   ~Old Timey Izakaya~
 Arabiki Wiener........a dollar
 Okonomiyaki...........a dollar

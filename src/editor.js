@@ -16,6 +16,7 @@ import {
   autocompletion,
   completeFromList,
   ifIn,
+  ifNotIn,
 } from "@codemirror/autocomplete";
 /* SERIFU-SPECIFIC IMPORTS BEGIN HERE */
 import { highlightStyleOptions } from "./parsersetup.js";
@@ -51,12 +52,18 @@ const updateAutoCompletion = EditorState.transactionExtender.of((tr) => {
       effects: [
         sourceCompletion.reconfigure(
           serifuLanguage.data.of({
-            autocomplete: ifIn(["Source"], completeFromList(theDoc.sources)),
+            autocomplete: ifNotIn(
+              ["Content", "Style"],
+              completeFromList(theDoc.sources)
+            ),
           })
         ),
         styleCompletion.reconfigure(
           serifuLanguage.data.of({
-            autocomplete: ifIn(["Style"], completeFromList(theDoc.styles)),
+            autocomplete: ifNotIn(
+              ["Content", "Source"],
+              completeFromList(theDoc.styles)
+            ),
           })
         ),
       ],
@@ -77,18 +84,21 @@ let view = new EditorView({
       serifuHighlighter,
       sourceLabelsPlugin,
       nodeInspector(),
-      autocompletion(),
+      autocompletion({ icons: true }),
       sourceCompletion.of(
         serifuLanguage.data.of({
-          autocomplete: ifIn(
-            ["Source", "Text"],
+          autocomplete: ifNotIn(
+            ["Style", "Content"],
             completeFromList(theDoc.sources)
           ),
         })
       ),
       styleCompletion.of(
         serifuLanguage.data.of({
-          autocomplete: ifIn(["Style"], completeFromList(theDoc.styles)),
+          autocomplete: ifNotIn(
+            ["Source", "Content"],
+            completeFromList(theDoc.styles)
+          ),
         })
       ),
       updateAutoCompletion,
@@ -102,10 +112,6 @@ let view = new EditorView({
   }),
   parent: document.getElementById("editor-pane"),
   lineWrapping: true,
-});
-
-document.getElementById("hitpages").addEventListener("click", () => {
-  insertNewlineAndRenumberPages(view);
 });
 
 export { theDoc };

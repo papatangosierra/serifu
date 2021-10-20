@@ -58,6 +58,9 @@ export const serifuHighlighter = HighlightStyle.define([
     fontWeight: "bold",
     fontStyle: "italic",
     color: "black",
+    minWidth: "50%",
+    display: "inline-block",
+    textAlign: "right",
     backgroundColor: "rgba(255, 228, 225, .7)", // mistyRose
   },
   {
@@ -70,6 +73,9 @@ export const serifuHighlighter = HighlightStyle.define([
     borderStyle: "none solid solid none",
     borderColor: "cadetBlue", // cadetBlue
     paddingRight: ".5ex",
+    minWidth: "25%",
+    display: "inline-block",
+    textAlign: "right",
     backgroundColor: "rgba(240, 248, 255, .7)", // aliceBlue
   },
   {
@@ -96,12 +102,20 @@ export const serifuHighlighter = HighlightStyle.define([
     paddingLeft: ".5ex",
     paddingRight: ".5ex",
     borderRadius: "0 .5ex .5ex 0",
-    ":hover": "",
+    minWidth: "5rem",
+    textAlign: "right",
+    margin: "auto",
+    display: "inline-block",
   },
   { tag: t.propertyName, color: "mediumvioletred" }, // text line styles
   { tag: t.comment, backgroundColor: "papayawhip", fontStyle: "italic" }, // side notes
   { tag: t.string, fontStyle: "italic" }, // italics
   { tag: t.number, fontWeight: "bold" }, // boldface
   { tag: t.regexp, fontStyle: "italic", fontWeight: "bold" }, // bold italics
-  { tag: t.blockComment, color: "black", backgroundColor: "mintcream" }, // block text
+  {
+    tag: t.blockComment,
+    fontFamily: "Source Code Pro",
+    color: "black",
+    backgroundColor: "mintcream",
+  }, // block text
 ]);

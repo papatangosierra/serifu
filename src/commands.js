@@ -160,10 +160,10 @@ export function insertNewlineAndRenumberPages(view) {
           // We subtract 1 from currentPageNumber here because it will have already been incremented
           // by the time we encounter the panel. This kind of sucks but it will work for now.
           inSpread
-            ? (labelText = `    - ${currentPageNumber - 2}-${
+            ? (labelText = `\t- ${currentPageNumber - 2}-${
                 currentPageNumber - 1
               }.${currentPanelNumber}\n`)
-            : (labelText = `    - ${
+            : (labelText = `\t- ${
                 currentPageNumber - 1
               }.${currentPanelNumber}\n`);
           console.log(`We're in a panel, using ${labelText}`);
@@ -173,7 +173,7 @@ export function insertNewlineAndRenumberPages(view) {
             // If this is the panel our cursor is currently in/on
             insert:
               curPos >= from && curPos <= to
-                ? (labelText += "    \n")
+                ? (labelText += "\t\n")
                 : labelText,
           });
           if (curPos >= from && curPos <= to) {
