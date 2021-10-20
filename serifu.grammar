@@ -13,7 +13,7 @@ Panel[group="Panels"] {
 }
 
 Line[group="Lines"] {
-	(Text | Note | Sfx)
+	(Text | Note | Sfx) | newline
 }
 
 Sfx {
@@ -21,11 +21,11 @@ Sfx {
 }
 
 Note {
-	NoteToken content newlines
+	NoteToken Content newlines
 }
 
 Text {
-	Source ("/" Style)? ":" content newlines
+	Source ("/" Style)? ":" Content newlines
 }
 
 Source {
@@ -36,7 +36,7 @@ Style {
 	word
 }
 
-content {
+Content {
 	( unstyledText | Bold | BoldItal | Ital | Star | Colon | DoubleStar | Underscore )* |	BlockText
 }
 
@@ -51,11 +51,11 @@ unstyledText {
 	newline { $[\r\n\u2028\u2029] }
 	newlines { $[\r\n\u2028\u2029]+ }
 
-	PageToken { "#" ![\n#]* newline}
+	PageToken { spaces? "#" ![\n#]* newline}
 	SpreadToken { "##" ![\n]* newline}
 	@precedence { SpreadToken, PageToken }
 
-	PanelToken { "-" ![\n]* newlines}
+	PanelToken { spaces? "-" ![\n]* newlines}
 
 	wordChar { std.asciiLetter | $[_$\u{a1}-\u{10ffff}] | std.digit | "-" | "'" | "&" | " "}
 	word { (std.asciiLetter | $[\u{a1}-\u{10ffff}] | std.digit) (wordChar* (std.asciiLetter | $[\u{a1}-\u{10ffff}] | std.digit))? }
@@ -87,5 +87,5 @@ unstyledText {
 	BlockTextRest { ![=] BlockTextRest | "=" BlockTextAfterEquals}
 	BlockTextAfterEquals { "/" | "=" BlockTextAfterEquals | ![/=] BlockTextRest }
 
-	@precedence { BlockText, SpreadToken, PageToken, PanelToken, SfxSource, SfxTranslation, BoldItal, DoubleStar, Star, Bold, Underscore, Ital, anyText, word, spaces, newlines }
+	@precedence { BlockText, SpreadToken, PageToken, PanelToken, SfxSource, SfxTranslation, BoldItal, DoubleStar, Star, Bold, Underscore, Ital, anyText, word, spaces, newlines, newline }
 }

@@ -1,14 +1,26 @@
 import { parser } from "./serifu-parser/serifu-parser.js";
-import { foldNodeProp, foldInside, indentNodeProp } from "@codemirror/language";
 import { styleTags, tags as t, HighlightStyle } from "@codemirror/highlight";
-import { LRLanguage, LanguageSupport } from "@codemirror/language";
+import {
+  LRLanguage,
+  LanguageSupport,
+  continuedIndent,
+  flatIndent,
+  indentUnit,
+  indentNodeProp,
+  foldNodeProp,
+  foldInside,
+} from "@codemirror/language";
 import { buildParser } from "@lezer/generator";
 
-export function initNewParser() {
-  let newParser = buildParser(
-    document.getElementById("parserdef").value
-  ).configure({
+export const serifuLanguage = LRLanguage.define({
+  parser: parser.configure({
     props: [
+      indentNodeProp.add({
+        Text: flatIndent, // indent Lines except for comments (is this doing anything??)
+        Note: flatIndent,
+        Sfx: flatIndent,
+        Source: flatIndent,
+      }),
       styleTags({
         "PageToken SpreadToken": t.heading,
         PanelToken: t.labelName,
@@ -24,47 +36,9 @@ export function initNewParser() {
         BoldItal: t.regexp,
         BlockText: t.blockComment,
       }),
-      indentNodeProp.add({
-        Application: (context) =>
-          context.column(context.node.from) + context.unit,
-      }),
-      foldNodeProp.add({
-        Application: foldInside,
-      }),
     ],
-  });
-  return newParser;
-}
-
-let serifuParser = parser.configure({
-  props: [
-    styleTags({
-      "PageToken SpreadToken": t.heading,
-      PanelToken: t.labelName,
-      Sfx: t.float,
-      SfxTranslation: t.atom,
-      SfxSource: t.unit,
-      Text: t.literal,
-      Source: t.variableName,
-      Style: t.propertyName,
-      Note: t.comment,
-      Ital: t.string,
-      Bold: t.number,
-      BoldItal: t.regexp,
-      BlockText: t.blockComment,
-    }),
-    indentNodeProp.add({
-      Application: (context) =>
-        context.column(context.node.from) + context.unit,
-    }),
-    foldNodeProp.add({
-      Application: foldInside,
-    }),
-  ],
-});
-
-const serifuLanguage = LRLanguage.define({
-  parser: serifuParser,
+  }),
+  languageData: {}, // re-indent when a new line is started.
 });
 
 export function serifu() {
@@ -76,27 +50,27 @@ export const serifuHighlighter = HighlightStyle.define([
   {
     // Page Lines
     tag: t.heading,
-    borderRadius: "0 0 .5ex 0",
+    borderRadius: "0 0 .75ex 0",
     borderWidth: "2px",
     borderStyle: "none solid solid none",
     borderColor: "indianred",
+    paddingRight: ".5ex",
     fontWeight: "bold",
     fontStyle: "italic",
     color: "black",
-    paddingRight: "1rem",
-    backgroundColor: "mistyrose",
+    backgroundColor: "rgba(255, 228, 225, .7)", // mistyRose
   },
   {
     // Panel lines
     tag: t.labelName,
     fontWeight: "bold",
     color: "purple",
-    borderRadius: "0 0 .5ex 0",
+    borderRadius: "0 0 .75ex 0",
     borderWidth: "2px",
     borderStyle: "none solid solid none",
-    borderColor: "cadetblue",
-    paddingRight: "1rem",
-    backgroundColor: "aliceblue",
+    borderColor: "cadetBlue", // cadetBlue
+    paddingRight: ".5ex",
+    backgroundColor: "rgba(240, 248, 255, .7)", // aliceBlue
   },
   {
     // SFX lines
@@ -122,6 +96,7 @@ export const serifuHighlighter = HighlightStyle.define([
     paddingLeft: ".5ex",
     paddingRight: ".5ex",
     borderRadius: "0 .5ex .5ex 0",
+    ":hover": "",
   },
   { tag: t.propertyName, color: "mediumvioletred" }, // text line styles
   { tag: t.comment, backgroundColor: "papayawhip", fontStyle: "italic" }, // side notes

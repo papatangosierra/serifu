@@ -1,5 +1,4 @@
 import { Text } from "@codemirror/text";
-import { parser } from "./serifu-parser/serifu-parser.js";
 import {
   WidgetType,
   EditorView,
@@ -85,67 +84,102 @@ import {
   transposeChars,
 } from "@codemirror/commands";
 
-function getPanelLocations(view) {}
-
-function getPagePanelOfCursor(view) {}
+import { parser } from "./serifu-parser/serifu-parser.js";
+import { theDoc } from "./editor.js";
 
 export function insertNewlineAndRenumberPages(view) {
   // If we're in a Page or Spread node when enter is pressed
+  let panelIndentString = "    ";
   let curPos = view.state.selection.ranges[0].from;
   let currentNodeName = syntaxTree(view.state).resolve(curPos).name;
-  if (currentNodeName === "PageToken" || currentNodeName === "SpreadToken") {
+  if (
+    currentNodeName === "PageToken" ||
+    currentNodeName === "SpreadToken" ||
+    currentNodeName === "PanelToken"
+  ) {
     let changes = [];
     let currentPageNumber = 1;
+    let currentPanelNumber = 1;
     let newCurPos = curPos;
-    let labeltext = "";
+    let labelText = "";
+    let inSpread = false; // to keep track of whether we're in a spread or a page
     syntaxTree(view.state).iterate({
       from: 0,
       to: view.state.doc.length, // we're iterating until the end of the doc
       enter: (type, from, to) => {
         // console.log("traversing tree for page count update");
         if (type.name === "PageToken" || type.name === "SpreadToken") {
+          // If we're on a new page or spread, reset the panel counter
+          currentPanelNumber = 1;
           // when we find a PageToken node, record its range
           if (type.name === "PageToken") {
+            inSpread = false;
             // if this is a Page, build a change spec
-            labeltext = "# Page " + currentPageNumber.toString() + "\n";
+            labelText = "# Page " + currentPageNumber.toString() + "\n";
             console.log(
-              `Recording Page: from: ${from} to: ${to} label: ${labeltext}`
+              `Recording Page: from: ${from} to: ${to} label: ${labelText}`
             );
             changes.push({
               from: from,
               to: to,
               // if this is the page node that also contains the cursor, newline, otherwise no
               insert:
-                curPos >= from && curPos <= to ? labeltext + "\n" : labeltext,
+                curPos >= from && curPos <= to ? labelText + "\n" : labelText,
             });
             // derive new cursor position after insert
             if (curPos >= from && curPos <= to) {
-              newCurPos = from + labeltext.length;
+              newCurPos = from + labelText.length;
             }
             currentPageNumber++;
           } else {
-            labeltext =
+            inSpread = true; // we're in a spread, which the panel numbering check needs to know
+            labelText =
               "## Pages " +
               currentPageNumber.toString() +
               "-" +
               (++currentPageNumber).toString() +
               "\n";
             console.log(
-              `Recording Spread: from: ${from} to:${to} label: ${labeltext}`
+              `Recording Spread: from: ${from} to:${to} label: ${labelText}`
             );
             changes.push({
               from: from,
               to: to,
               insert:
-                curPos >= from && curPos <= to ? labeltext + "\n" : labeltext,
+                curPos >= from && curPos <= to ? labelText + "\n" : labelText,
             }); //
-            // derive new cursor position after insert
+            // if our cursor is in this node, derive its new position after insert
             if (curPos >= from && curPos <= to) {
-              newCurPos = from + labeltext.length;
+              newCurPos = from + labelText.length;
             }
             currentPageNumber++; // we've already incremented it once, so now we do it again for
             // if this is the panel that also contains the cursor
           }
+        }
+        if (type.name === "PanelToken") {
+          // We subtract 1 from currentPageNumber here because it will have already been incremented
+          // by the time we encounter the panel. This kind of sucks but it will work for now.
+          inSpread
+            ? (labelText = `    - ${currentPageNumber - 2}-${
+                currentPageNumber - 1
+              }.${currentPanelNumber}\n`)
+            : (labelText = `    - ${
+                currentPageNumber - 1
+              }.${currentPanelNumber}\n`);
+          console.log(`We're in a panel, using ${labelText}`);
+          changes.push({
+            from: from,
+            to: to,
+            // If this is the panel our cursor is currently in/on
+            insert:
+              curPos >= from && curPos <= to
+                ? (labelText += "    \n")
+                : labelText,
+          });
+          if (curPos >= from && curPos <= to) {
+            newCurPos = from + labelText.length - 1; // at the end of the spaces, before the newline
+          }
+          currentPanelNumber++;
         }
       },
     });
@@ -153,22 +187,74 @@ export function insertNewlineAndRenumberPages(view) {
       view.state.update({
         changes: changes,
         selection: EditorSelection.cursor(newCurPos),
+        scrollIntoView: true,
       })
     );
     return true;
   } else {
-    console.log("not in Page Token, inserting normal newline");
-    // view.dispatch(
-    //   view.state.update({
-    //     changes: [{ from: curPos, to: curPos, insert: "" }],
-    //     selection: EditorSelection.cursor(curPos),
-    //   })
-    // );
+    console.log(
+      "not in Page Token, refreshing parse and inserting normal newline"
+    );
+    theDoc.refreshParse(view.state.doc.toString());
     insertNewlineAndIndent(view);
     return true;
   }
-  // Build a list of ranges we're going to apply changes to
 }
+
+function getPageAndPanelNumberAtPos(view) {
+  // this is a horrible hack
+  console.log("getPageAndPanelNumberAtPos fired");
+  let curPos = view.state.selection.ranges[0].from;
+  let curNode = syntaxTree(view.state).resolve(curPos);
+  let result = {
+    page: "",
+    panel: "",
+  };
+  while (curPos > -1 && (result.page === "" || result.panel === "")) {
+    console.log("checking position " + curPos);
+    // if we get to the beginning of the doc, uh, stop
+    curNode = syntaxTree(view.state).resolve(curPos);
+    curPos--;
+    if (
+      (curNode.name === "PageToken" || curNode.name === "SpreadToken") &&
+      result.page === ""
+    ) {
+      result.page = view.state.doc
+        .sliceString(curNode.from, curNode.to)
+        .split(" ")[2]
+        .trim();
+      console.log(`We found page: ${result.page}, and should stop looking`);
+    }
+    if (curNode.name === "PanelToken" && result.panel === "") {
+      result.panel = view.state.doc
+        .sliceString(curNode.from, curNode.to)
+        .split(".")[1]
+        .trim();
+      console.log(`We found panel: ${result.panel}, and should stop looking`);
+    }
+  }
+  console.log(`We found page: ${result.page} and panel: ${result.panel}`);
+  return result;
+}
+
+export function insertPanelAtCursor(view) {
+  console.log("insertPanelAtCursor fired");
+  let curPgPnl = getPageAndPanelNumberAtPos(view);
+  let insertString = `\n  - ${curPgPnl.page}.${parseInt(curPgPnl.panel) + 1}\n`;
+  view.dispatch({
+    changes: {
+      from: view.state.selection.ranges[0].from,
+      to: view.state.selection.ranges[0].to,
+      insert: insertString,
+    },
+    selection: EditorSelection.cursor(
+      view.state.selection.ranges[0].from + insertString.length
+    ),
+  });
+  return true;
+}
+
+export function insertPageAtCursor(view) {}
 
 const emacsStyleKeymap = [
   {
@@ -276,6 +362,16 @@ const standardKeymap = /*@__PURE__*/ [
 );
 
 const defaultKeymap = /*@__PURE__*/ [
+  {
+    key: "Shift-Ctrl-Enter",
+    mac: "Shift-Cmd-Enter",
+    run: insertPageAtCursor,
+  },
+  {
+    key: "Ctrl-Enter",
+    mac: "Cmd-Enter",
+    run: insertPanelAtCursor,
+  },
   {
     key: "Alt-ArrowLeft",
     mac: "Ctrl-ArrowLeft",

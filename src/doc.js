@@ -7,12 +7,23 @@ export class SerifuDoc {
     console.log(`docText length: ${docText.length}`);
     this.sources = [];
     this.styles = [];
+    // we toggle these on a refresh to know whether to bother asking for a new source/style list,
+    // which is useful when deciding whether or not to refresh the autocomplete extensions.
+
     // parse the initial document text
+    this.refreshParse(docText);
+    console.log("Doc obj created.");
+    console.log(`Unique sources found: ${JSON.stringify(this.sources)}`);
+    console.log(`Unique styles found: ${JSON.stringify(this.styles)}`);
+  }
+  refreshParse(docText) {
+    console.log("refreshParse fired");
     let startTree = parser.parse(docText);
+    this.prevSourceCount = this.sources.length;
+    this.prevStyleCount = this.styles.length;
     let cursor = startTree.cursor();
     // go through the parse tree and extract Sources and Styles
     do {
-      console.log(`On node: ${cursor.name}`);
       if (
         // if we find a Source token, and if its contents aren't already in our array of Sources
         cursor.type.name === "Source" &&
@@ -30,9 +41,15 @@ export class SerifuDoc {
         this.styles.push(docText.substring(cursor.from, cursor.to));
       }
     } while (cursor.next());
-    console.log("Doc obj created.");
-    console.log(`Unique sources found: ${JSON.stringify(this.sources)}`);
-    console.log(`Unique styles found: ${JSON.stringify(this.styles)}`);
+  }
+  // getters to check if a new source or style has been added to our running list
+  // on the most recent parse.
+  get sourceAdded() {
+    return this.sources.length > this.prevSourceCount;
+  }
+
+  get styleAdded() {
+    return this.styles.length > this.prevStyleCount;
   }
 }
 
@@ -60,9 +77,6 @@ class Squeezer {
   // string, use [...Squeeze.inflate()].join("")
   *inflate() {
     let i = 0;
-    // this.squeezeObj.seq.forEach((curVal, i, arr) => {
-    //   this.str =  this.squeezeObj.uniques[arr[i].charCodeAt(0)];
-    // });
     while (i < this.squeezeObj.seq.length) {
       yield this.squeezeObj.uniques[this.squeezeObj.seq[i].charCodeAt(0)];
       i++;

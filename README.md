@@ -172,7 +172,7 @@ Any text between `/=` `=/` tokens is interpreted verbatim, so the `*`, `_`, and 
 
 If a line requires multiple underscores or asterisks to be represented literally, a one-line Text Block is the best way to accomplish this:
 
-        Contract Text:/= The undersigned* agrees to sell his soul** for a thousand                      berries.***=/
+        Contract Text:/= The undersigned* agrees to sell his soul** for a thousand berries.***=/
 
 ## Etc.
 
