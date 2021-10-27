@@ -21,7 +21,7 @@ import {
 /* SERIFU-SPECIFIC IMPORTS BEGIN HERE */
 import { highlightStyleOptions } from "./parsersetup.js";
 import { serifu, serifuHighlighter, serifuLanguage } from "./parsersetup.js";
-import { testDoc } from "./testDoc.js";
+// import { testDoc } from "./testDoc.js";
 import { SerifuDoc } from "./doc.js";
 import {
   SourceWidget,
@@ -37,7 +37,27 @@ let baseTheme = EditorView.baseTheme({
   ".cm-line": {
     lineHeight: "160%",
   },
+  ".cm-tooltip": {
+    border: "1px solid darkslategrey",
+    borderRadius: ".3ex",
+    backgroundColor: "lavenderblush",
+  },
+  ".cm-tooltip-autocomplete": {
+    border: "1px solid darkslategrey",
+    backgroundColor: "lavenderblush",
+  },
+  ".cm-completionLabel": {
+    fontFamily: "Nunito Sans",
+  },
+  ".cm-completionMatchedText": {
+    textDecorationThickness: "2px",
+  },
 });
+
+/* Utility Function*/
+function id(str) {
+  return document.getElementById(str);
+}
 
 /* cargo-cult programming here; I'm not sure if, or why, this may work*/
 // If it does, it's because we're setting up Compartments, that allow us
@@ -71,12 +91,13 @@ const updateAutoCompletion = EditorState.transactionExtender.of((tr) => {
   }
 });
 
-/* Open doc and instantiate editor */
-let theDoc = new SerifuDoc(testDoc);
+/* Open doc and instantiate editor from current autosave */
+let initText = localStorage.getItem("autosave");
+let theDoc = new SerifuDoc(initText ? initText : "# Page 1\n- 1.1\n");
 
 let view = new EditorView({
   state: EditorState.create({
-    doc: testDoc,
+    doc: theDoc.getText,
     extensions: [
       basicSetup,
       baseTheme,
@@ -115,3 +136,29 @@ let view = new EditorView({
 });
 
 export { theDoc };
+
+// File download button
+id("dlTextBtn").addEventListener("click", () => {
+  theDoc.downloadAsText(theDoc.getText);
+});
+
+id("dlVizBtn").addEventListener("click", () => {
+  theDoc.downloadAsViz();
+});
+
+//
+// Autosave Timer
+
+function autosaveToLocalStorage() {
+  console.log("saving to local storage..." + theDoc.text);
+  localStorage.setItem("autosave", theDoc.getText);
+  let d = new Date();
+  id("autosave-time").innerText =
+    d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds();
+}
+
+function initAutosave(interval) {
+  setInterval(autosaveToLocalStorage, interval);
+}
+
+initAutosave(10000);

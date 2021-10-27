@@ -160,10 +160,10 @@ export function insertNewlineAndRenumberPages(view) {
           // We subtract 1 from currentPageNumber here because it will have already been incremented
           // by the time we encounter the panel. This kind of sucks but it will work for now.
           inSpread
-            ? (labelText = `\t- ${currentPageNumber - 2}-${
+            ? (labelText = `- ${currentPageNumber - 2}-${
                 currentPageNumber - 1
               }.${currentPanelNumber}\n`)
-            : (labelText = `\t- ${
+            : (labelText = `- ${
                 currentPageNumber - 1
               }.${currentPanelNumber}\n`);
           console.log(`We're in a panel, using ${labelText}`);
@@ -172,11 +172,10 @@ export function insertNewlineAndRenumberPages(view) {
             to: to,
             // If this is the panel our cursor is currently in/on
             insert:
-              curPos >= from && curPos <= to
-                ? (labelText += "\t\n")
-                : labelText,
+              curPos >= from && curPos <= to ? (labelText += "\n") : labelText,
           });
           if (curPos >= from && curPos <= to) {
+            console.log("this is the panel containing the cursor");
             newCurPos = from + labelText.length - 1; // at the end of the spaces, before the newline
           }
           currentPanelNumber++;
@@ -195,10 +194,66 @@ export function insertNewlineAndRenumberPages(view) {
     console.log(
       "not in Page Token, refreshing parse and inserting normal newline"
     );
+    // Right now we're refreshing the parse on every ENTER
+    // keystroke. So far this seems to still give acceptable
+    // performance, but if it becomes a problem we might need
+    // to be more efficient about it. FIXME
     theDoc.refreshParse(view.state.doc.toString());
     insertNewlineAndIndent(view);
     return true;
   }
+}
+
+function getLastSourceAndStyle(view) {
+  let curPos = view.state.selection.ranges[0].from;
+  let curNode = syntaxTree(view.state).resolve(curPos);
+  let result = {
+    source: "",
+    style: "",
+  };
+  while (result.source === "" && curPos > -1) {
+    // don't infinite loop if we don't have any sources in the document
+    // a style will always come before a source, so we know to stop once we find a source
+    console.log("checking position " + curPos);
+    curNode = syntaxTree(view.state).resolve(curPos);
+    curPos--;
+    if (curNode.name === "Style") {
+      result.style = view.state.doc
+        .sliceString(curNode.from, curNode.to)
+        .trim();
+      curPos = curNode.from; // skip to beginning of this node, since we've found it.
+    }
+    if (curNode.name === "Source") {
+      result.source = view.state.doc
+        .sliceString(curNode.from, curNode.to)
+        .trim();
+    }
+  }
+  console.log(`We found source: ${result.source} and style: ${result.style}`);
+  return result;
+}
+
+export function newlineWithLastSourceAndStyle(view) {
+  console.log("newlineWithLastSourceAndStyle fired");
+  let lastSrcStl = getLastSourceAndStyle(view);
+  let insertString = `\n${lastSrcStl.source}`;
+  if (lastSrcStl.style != "") {
+    insertString += "/" + lastSrcStl.style + ": ";
+  } else {
+    insertString += ": ";
+  }
+  view.dispatch({
+    changes: {
+      from: view.state.selection.ranges[0].from,
+      to: view.state.selection.ranges[0].to,
+      insert: insertString,
+    },
+    selection: EditorSelection.cursor(
+      view.state.selection.ranges[0].from + insertString.length
+    ),
+    scrollIntoView: true,
+  });
+  return true;
 }
 
 function getPageAndPanelNumberAtPos(view) {
@@ -250,6 +305,7 @@ export function insertPanelAtCursor(view) {
     selection: EditorSelection.cursor(
       view.state.selection.ranges[0].from + insertString.length
     ),
+    scrollIntoView: true,
   });
   return true;
 }
@@ -346,6 +402,7 @@ const standardKeymap = /*@__PURE__*/ [
   },
   { key: "Mod-End", run: cursorDocEnd, shift: selectDocEnd },
   { key: "Enter", run: insertNewlineAndRenumberPages } /* MY ADDITION */,
+  { key: "Mod-d", run: newlineWithLastSourceAndStyle } /* MY ADDITION */,
   { key: "Mod-a", run: selectAll },
   { key: "Backspace", run: deleteCharBackward, shift: deleteCharBackward },
   { key: "Delete", run: deleteCharForward, shift: deleteCharForward },
