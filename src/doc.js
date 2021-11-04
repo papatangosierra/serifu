@@ -131,6 +131,17 @@ export class SerifuDoc {
     } while (cursor.next());
     this.downloadAsText(scriptText);
   }
+  // buildMinimap returns a function that when called with React Components as arguments,
+  // builds a DOM-based minimap of the current document structure and returns it for rendering.
+  buildMinimap() {
+    return function (Minimap, Spread, Page, Panel, Line, Sfx) {
+      let startTree = parser.parse(this.text);
+      let cursor = startTree.cursor();
+      let curPg = 1;
+      let curPnl = 1;
+      do {} while (cursor.next());
+    };
+  }
 }
 
 class Squeezer {
@@ -162,4 +173,28 @@ class Squeezer {
       i++;
     }
   }
+}
+
+function roughSizeOfObject(object) {
+  // from https://stackoverflow.com/questions/1248302/how-to-get-the-size-of-a-javascript-object
+  var objectList = [];
+  var stack = [object];
+  var bytes = 0;
+  while (stack.length) {
+    var value = stack.pop();
+
+    if (typeof value === "boolean") {
+      bytes += 4;
+    } else if (typeof value === "string") {
+      bytes += value.length * 2;
+    } else if (typeof value === "number") {
+      bytes += 8;
+    } else if (typeof value === "object" && objectList.indexOf(value) === -1) {
+      objectList.push(value);
+      for (var i in value) {
+        stack.push(value[i]);
+      }
+    }
+  }
+  return bytes;
 }

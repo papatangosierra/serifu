@@ -292,6 +292,22 @@ function getPageAndPanelNumberAtPos(view) {
   return result;
 }
 
+export function insertCharAtCursor(view, char) {
+  console.log("insertCharAtCursor fired with " + char);
+  view.dispatch({
+    changes: {
+      from: view.state.selection.ranges[0].from,
+      to: view.state.selection.ranges[0].to,
+      insert: char,
+    },
+    selection: EditorSelection.cursor(
+      view.state.selection.ranges[0].from + char.length
+    ),
+    scrollIntoView: true,
+  });
+  return true;
+}
+
 export function insertPanelAtCursor(view) {
   console.log("insertPanelAtCursor fired");
   let curPgPnl = getPageAndPanelNumberAtPos(view);

@@ -32,6 +32,12 @@ import {
 import { nodeInspector } from "./nodeinspector.js";
 import { insertNewlineAndRenumberPages } from "./commands.js";
 
+/* React and components setup */
+
+import { React } from "react";
+import { ReactDOM } from "react-dom";
+import { CharButton } from "./components/char-button.jsx";
+
 // make a new basic theme
 let baseTheme = EditorView.baseTheme({
   ".cm-line": {
@@ -135,7 +141,7 @@ let view = new EditorView({
   lineWrapping: true,
 });
 
-export { theDoc };
+export { theDoc, view };
 
 // File download button
 id("dlTextBtn").addEventListener("click", () => {
@@ -148,7 +154,6 @@ id("dlVizBtn").addEventListener("click", () => {
 
 //
 // Autosave Timer
-
 function autosaveToLocalStorage() {
   console.log("saving to local storage..." + theDoc.text);
   localStorage.setItem("autosave", theDoc.getText);
