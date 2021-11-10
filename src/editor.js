@@ -34,9 +34,10 @@ import { insertNewlineAndRenumberPages } from "./commands.js";
 
 /* React and components setup */
 
-import { React } from "react";
-import { ReactDOM } from "react-dom";
-import { CharButton } from "./components/char-button.jsx";
+import React from "react";
+import ReactDOM from "react-dom";
+import { insertButtons } from "./components/char-button.jsx";
+import { SourceItemGroup, StyleItemGroup } from "./components/source-list.jsx";
 
 // make a new basic theme
 let baseTheme = EditorView.baseTheme({
@@ -73,22 +74,22 @@ let sourceCompletion = new Compartment(),
 
 const updateAutoCompletion = EditorState.transactionExtender.of((tr) => {
   if (!tr.docChanged) return null;
-  if (theDoc.sourceAdded || theDoc.styleAdded) {
+  if (theDoc.sourceChanged || theDoc.styleChanged) {
     return {
       effects: [
         sourceCompletion.reconfigure(
           serifuLanguage.data.of({
             autocomplete: ifNotIn(
-              ["Content", "Style"],
-              completeFromList(theDoc.sources)
+              ["Content", "Style", "Note", "Sfx"],
+              completeFromList(theDoc.getSources)
             ),
           })
         ),
         styleCompletion.reconfigure(
           serifuLanguage.data.of({
             autocomplete: ifNotIn(
-              ["Content", "Source"],
-              completeFromList(theDoc.styles)
+              ["Content", "Source", "Note", "Sfx"],
+              completeFromList(theDoc.getStyles)
             ),
           })
         ),
@@ -100,6 +101,7 @@ const updateAutoCompletion = EditorState.transactionExtender.of((tr) => {
 /* Open doc and instantiate editor from current autosave */
 let initText = localStorage.getItem("autosave");
 let theDoc = new SerifuDoc(initText ? initText : "# Page 1\n- 1.1\n");
+console.log(theDoc.getSources);
 
 let view = new EditorView({
   state: EditorState.create({
@@ -152,10 +154,19 @@ id("dlVizBtn").addEventListener("click", () => {
   theDoc.downloadAsViz();
 });
 
+id("saveBtn").addEventListener("click", () => {
+  theDoc.saveToSlot("alpha");
+});
+
+id("openBtn").addEventListener("click", () => {
+  theDoc.openFromSlot(view, "alpha");
+});
+
 //
 // Autosave Timer
 function autosaveToLocalStorage() {
-  console.log("saving to local storage..." + theDoc.text);
+  console.log("autosaving to local storage...");
+  theDoc.refreshParse(view.state.doc.toString());
   localStorage.setItem("autosave", theDoc.getText);
   let d = new Date();
   id("autosave-time").innerText =
@@ -167,3 +178,24 @@ function initAutosave(interval) {
 }
 
 initAutosave(10000);
+
+// React Render calls
+
+ReactDOM.render(
+  React.createElement("div", null, insertButtons),
+  document.getElementById("charbuttons")
+);
+
+ReactDOM.render(
+  React.createElement(SourceItemGroup, {
+    items: theDoc.getSources,
+  }),
+  document.getElementById("sourcelist")
+);
+
+ReactDOM.render(
+  React.createElement(StyleItemGroup, {
+    items: theDoc.getStyles,
+  }),
+  document.getElementById("stylelist")
+);

@@ -30,11 +30,6 @@ class InsertCharButton extends React.Component {
 }
 
 // Built a list of elements, one button for each character in our list
-const insertButtons = shortcutChars.map((char) => (
+export const insertButtons = shortcutChars.map((char) => (
   <InsertCharButton key={char} char={char}></InsertCharButton>
 ));
-
-ReactDOM.render(
-  <div>{insertButtons}</div>,
-  document.getElementById("charbuttons")
-);

@@ -1,3 +1,5 @@
+@precedence { line @left, panel @left}
+
 @top Doc { (Page | Spread | newlines)+ }
 
 Page[group="Pages"] {
@@ -9,19 +11,19 @@ Spread[group="Pages"] {
 }
 
 Panel[group="Panels"] {
-	PanelToken Line*
+	!panel PanelToken Line*
 }
 
 Line[group="Lines"] {
-	(Text | Note | Sfx) | newline
+	!line (Text | Note | Sfx) | newlines
 }
 
 Sfx {
-	Star SfxTranslation SfxSource? newlines
+	Star SfxTranslation SfxSource? newline
 }
 
 Note {
-	NoteToken contentText newlines
+	NoteToken contentText newline
 }
 
 Text {
@@ -33,7 +35,7 @@ Source {
 }
 
 Style {
-	word
+	word 
 }
 
 Content {
@@ -59,7 +61,7 @@ unstyledText {
 	SpreadToken { "##" ![\n]* newline}
 	@precedence { SpreadToken, PageToken }
 
-	PanelToken { spaces? "-" ![\n]* newlines}
+	PanelToken { spaces? "-" ![\n]* newline}
 
 	wordChar { std.asciiLetter | $[_$\u{a1}-\u{10ffff}] | std.digit | "-" | "'" | "&" | " "}
 	word { (std.asciiLetter | $[\u{a1}-\u{10ffff}] | std.digit) (wordChar* (std.asciiLetter | $[\u{a1}-\u{10ffff}] | std.digit))? }
