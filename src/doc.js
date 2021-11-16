@@ -153,7 +153,7 @@ export class SerifuDoc {
 
   saveToSlot(slot) {
     this.refreshParse(this.text); // refresh parse on save, just to be sure
-    const s = new Squeezer(this.text);
+    const s = new Squeezer(this.text.replace(/\u001f/g, "")); // strip out \u001f if it's there (it probably isn't, but if it is, for some reason, we'll lose data, because it's the separator for Squeezer dictionary fields.
     console.log(`saving to slot ${slot}`);
     localStorage.setItem(`slot-${slot}-uniques`, s.squozed.uniques);
     localStorage.setItem(`slot-${slot}-seq`, s.squozed.seq);

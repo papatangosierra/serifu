@@ -38,6 +38,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { insertButtons } from "./components/char-button.jsx";
 import { SourceItemGroup, StyleItemGroup } from "./components/source-list.jsx";
+import { SaveSlotBar, saveSlotPanel } from "./components/save-slots.jsx";
 
 // make a new basic theme
 let baseTheme = EditorView.baseTheme({
@@ -113,6 +114,7 @@ let view = new EditorView({
       serifuHighlighter,
       sourceLabelsPlugin,
       nodeInspector(),
+      saveSlotPanel(),
       autocompletion({ icons: true }),
       sourceCompletion.of(
         serifuLanguage.data.of({
@@ -155,7 +157,7 @@ id("dlVizBtn").addEventListener("click", () => {
 });
 
 id("saveBtn").addEventListener("click", () => {
-  theDoc.saveToSlot("alpha");
+  theDoc.saveToSlot("★");
 });
 
 id("openBtn").addEventListener("click", () => {
@@ -198,4 +200,9 @@ ReactDOM.render(
     items: theDoc.getStyles,
   }),
   document.getElementById("stylelist")
+);
+
+ReactDOM.render(
+  /*#__PURE__*/ React.createElement(SaveSlotBar, null),
+  document.getElementById("saveslotsbar")
 );
