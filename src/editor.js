@@ -38,7 +38,11 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { insertButtons } from "./components/char-button.jsx";
 import { SourceItemGroup, StyleItemGroup } from "./components/source-list.jsx";
-import { SaveSlotBar, saveSlotPanel } from "./components/save-slots.jsx";
+import {
+  SaveSlotBar,
+  saveSlotPanel,
+  manualSave,
+} from "./components/save-slots.jsx";
 
 // make a new basic theme
 let baseTheme = EditorView.baseTheme({
@@ -99,11 +103,15 @@ const updateAutoCompletion = EditorState.transactionExtender.of((tr) => {
   }
 });
 
-/* Open doc and instantiate editor from current autosave */
-let initText = localStorage.getItem("autosave");
-let theDoc = new SerifuDoc(initText ? initText : "# Page 1\n- 1.1\n");
-console.log(theDoc.getSources);
+// set up localStorage active slot default if it's not already there.
+if (localStorage.getItem("current-active-slot") === null) {
+  localStorage.setItem("current-active-slot", "♥︎");
+}
 
+/* Create new doc and init editor with its (empty) contents */
+let theDoc = new SerifuDoc("");
+
+// initialize Editor View
 let view = new EditorView({
   state: EditorState.create({
     doc: theDoc.getText,
@@ -145,6 +153,9 @@ let view = new EditorView({
   lineWrapping: true,
 });
 
+// Load current active save slot contents into doc
+theDoc.openFromSlot(view, localStorage.getItem("current-active-slot"));
+
 export { theDoc, view };
 
 // File download button
@@ -156,30 +167,40 @@ id("dlVizBtn").addEventListener("click", () => {
   theDoc.downloadAsViz();
 });
 
-id("saveBtn").addEventListener("click", () => {
-  theDoc.saveToSlot("★");
+// Event listeners for save slots. "saveSlotChange" is a custom event that includes
+// "docText" and "docName" attributes, which we use to update the editor view.
+document.addEventListener("saveSlotChange", (e) => {
+  view.dispatch({
+    changes: {
+      from: 0,
+      to: view.state.doc.length, // the entire document
+      insert: e.detail.docText,
+    },
+  });
+  id("docname").textContent = e.detail.docName;
+  theDoc.refreshParse(view.state.doc.toString());
 });
 
-id("openBtn").addEventListener("click", () => {
-  theDoc.openFromSlot(view, "alpha");
+id("saveBtn").addEventListener("click", () => {
+  manualSave();
 });
 
 //
 // Autosave Timer
-function autosaveToLocalStorage() {
-  console.log("autosaving to local storage...");
-  theDoc.refreshParse(view.state.doc.toString());
-  localStorage.setItem("autosave", theDoc.getText);
-  let d = new Date();
-  id("autosave-time").innerText =
-    d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds();
-}
-
-function initAutosave(interval) {
-  setInterval(autosaveToLocalStorage, interval);
-}
-
-initAutosave(10000);
+// function autosaveToLocalStorage() {
+//   console.log("autosaving to local storage...");
+//   theDoc.refreshParse(view.state.doc.toString());
+//   localStorage.setItem("autosave", theDoc.getText);
+//   let d = new Date();
+//   id("autosave-time").innerText =
+//     d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds();
+// }
+//
+// function initAutosave(interval) {
+//   setInterval(autosaveToLocalStorage, interval);
+// }
+//
+// initAutosave(10000);
 
 // React Render calls
 

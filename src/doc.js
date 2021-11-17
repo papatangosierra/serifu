@@ -151,9 +151,9 @@ export class SerifuDoc {
     return this.text;
   }
 
-  saveToSlot(slot) {
+  saveToSlot(slot, docText, docName) {
     this.refreshParse(this.text); // refresh parse on save, just to be sure
-    const s = new Squeezer(this.text.replace(/\u001f/g, "")); // strip out \u001f if it's there (it probably isn't, but if it is, for some reason, we'll lose data, because it's the separator for Squeezer dictionary fields.
+    const s = new Squeezer(docText.replace(/\u001f/g, "")); // strip out \u001f if it's there (it probably isn't, but if it is, for some reason, we'll lose data, because it's the separator for Squeezer dictionary fields.,
     console.log(`saving to slot ${slot}`);
     localStorage.setItem(`slot-${slot}-uniques`, s.squozed.uniques);
     localStorage.setItem(`slot-${slot}-seq`, s.squozed.seq);
@@ -164,7 +164,7 @@ export class SerifuDoc {
     );
     console.log(`size of native save obj: approx. ${sizeOf(s)} bytes`);
     console.log(`size of raw text: approx. ${sizeOf(this.text)} bytes`);
-    localStorage.setItem(`slot-${slot}-name`, id("docname").textContent);
+    localStorage.setItem(`slot-${slot}-name`, docName);
   }
 
   openFromSlot(view, slot) {
@@ -184,6 +184,17 @@ export class SerifuDoc {
     });
     id("docname").textContent = localStorage.getItem(`slot-${slot}-name`);
     this.refreshParse(view.state.doc.toString()); // refresh parse on load
+  }
+
+  textFromSlot(slot) {
+    let s = new Squeezer({
+      uniques: localStorage.getItem(`slot-${slot}-uniques`),
+      seq: localStorage.getItem(`slot-${slot}-seq`),
+    }); // set s to the compressed text
+    console.log(`getting text from slot ${slot}`);
+    // let newDoc = [...s.inflate()].join("");
+    // console.log(newDoc);
+    return [...s.inflate()].join("");
   }
 
   /*
