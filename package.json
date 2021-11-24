@@ -1,11 +1,11 @@
 {
-  "name": "serifu",
-  "version": "0.0.1",
+  "name": "Serifu",
+  "version": "0.9.0",
   "description": "",
   "private": "true",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "watch": "lezer-generator serifu-literal-u.grammar --output src/serifu-parser/serifu-parser.js && webpack --watch",
+    "watch": "lezer-generator serifu.grammar --output src/serifu-parser/serifu-parser.js && webpack --watch",
     "build": "lezer-generator serifu.grammar --output src/serifu-parser/serifu-parser.js && webpack"
   },
   "keywords": [],

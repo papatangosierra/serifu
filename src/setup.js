@@ -1,6 +1,7 @@
 /* This is a customized version of the basic-setup package included with codemirror. */
 
 import {
+  EditorView,
   highlightSpecialChars,
   drawSelection,
   highlightActiveLine,
@@ -14,15 +15,32 @@ import { history, historyKeymap } from "@codemirror/history";
 import { foldGutter, foldKeymap } from "@codemirror/fold";
 import { indentOnInput, indentUnit } from "@codemirror/language";
 import { lineNumbers, highlightActiveLineGutter } from "@codemirror/gutter";
+import {
+  startCompletion,
+  closeCompletion,
+  moveCompletionSelection,
+  acceptCompletion,
+} from "@codemirror/autocomplete";
 /* ***************************** */
 /* REMEMBER: This is my edited version of the default keymap setup!!!*/
 import { defaultKeymap } from "./commands.js";
 /* ***************************** */
 import { bracketMatching } from "@codemirror/matchbrackets";
 import { searchKeymap } from "@codemirror/search";
-import { completionKeymap } from "@codemirror/autocomplete";
 import { defaultHighlightStyle } from "@codemirror/highlight";
 import { lintKeymap } from "@codemirror/lint";
+
+const completionKeymap = [
+  { key: "Ctrl-Space", run: startCompletion },
+  { key: "Escape", run: closeCompletion },
+  { key: "ArrowDown", run: /*@__PURE__*/ moveCompletionSelection(true) },
+  { key: "ArrowUp", run: /*@__PURE__*/ moveCompletionSelection(false) },
+  { key: "PageDown", run: /*@__PURE__*/ moveCompletionSelection(true, "page") },
+  { key: "PageUp", run: /*@__PURE__*/ moveCompletionSelection(false, "page") },
+  { key: "Enter", run: acceptCompletion },
+  { key: ":", run: acceptCompletion },
+  { key: "/", run: acceptCompletion },
+];
 
 const basicSetup = [
   lineNumbers(),
@@ -31,9 +49,10 @@ const basicSetup = [
   history(),
   foldGutter(),
   drawSelection(),
-  EditorState.allowMultipleSelections.of(true),
+  EditorState.allowMultipleSelections.of(false),
   EditorState.tabSize.of(4),
   indentUnit.of("\t"),
+  EditorView.lineWrapping,
   indentOnInput(),
   defaultHighlightStyle.fallback,
   bracketMatching(),

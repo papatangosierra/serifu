@@ -58,7 +58,7 @@ export const serifuHighlighter = HighlightStyle.define([
     fontWeight: "bold",
     fontStyle: "italic",
     color: "black",
-    minWidth: "50%",
+    minWidth: "4rem",
     display: "inline-block",
     textAlign: "right",
     backgroundColor: "rgba(255, 228, 225, .7)", // mistyRose
@@ -73,10 +73,10 @@ export const serifuHighlighter = HighlightStyle.define([
     borderStyle: "none solid solid none",
     borderColor: "cadetBlue", // cadetBlue
     paddingRight: ".5ex",
-    minWidth: "25%",
+    minWidth: "6rem",
     display: "inline-block",
     textAlign: "right",
-    backgroundColor: "rgba(240, 248, 255, .7)", // aliceBlue
+    backgroundColor: "rgba(220, 210, 230, .4)", // aliceBlue
   },
   {
     // SFX lines
@@ -97,12 +97,13 @@ export const serifuHighlighter = HighlightStyle.define([
   {
     // text line sources
     tag: t.variableName,
-    backgroundColor: "whitesmoke",
+    backgroundColor: "rgba(200,200,200, .25)",
+    borderColor: "rgb(255,255,255, 0)",
     color: "black",
     paddingLeft: ".5ex",
     paddingRight: ".5ex",
     borderRadius: "0 .5ex .5ex 0",
-    minWidth: "5rem",
+    minWidth: "8rem",
     textAlign: "right",
     margin: "auto",
     display: "inline-block",

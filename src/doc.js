@@ -1,8 +1,3 @@
-// the char-button component renders a button that inserts a given single character at the cursor point
-// import React from "react";
-// import ReactDOM from "react-dom";
-// import { ItemGroup } from "./components/source-list.jsx";
-
 /* doc.js describes an object that contains a Serifu document, along with metadata computed by the object at the time of instantiation. It provides up-to-date information on Sources and Styles for autocomplete purposes, along with other state important to functionality but not strictly speaking part of the document itself. */
 
 /* Utility Function*/
@@ -99,7 +94,7 @@ export class SerifuDoc {
   }
   refreshParse(text) {
     this.text = text;
-    // console.log("refreshParse fired on: " + this.text);
+    this.docStruct = [];
     this.sources = [];
     this.styles = [];
     let startTree = parser.parse(text);
@@ -107,9 +102,51 @@ export class SerifuDoc {
     this.prevStyleCount = this.styles.length;
     this.lastSource = "";
     this.lastStyle = "";
+    let pageCounter = -1; // hack, but if we start at -1 it's okay because we'll increment immediately and be at 0
+    let panelCounter = -1;
     let cursor = startTree.cursor();
-    // go through the parse tree and extract Sources and Styles
+    // go through the parse tree and extract Sources and Styles, as well as building a structure tree
+    // for the minimap
     do {
+      if (cursor.type.name === "Page") {
+        this.docStruct.push({
+          node: "Page",
+          content: [],
+        });
+        pageCounter++;
+        panelCounter = -1; // reset panel counter at every new page
+      }
+      if (cursor.type.name === "Spread") {
+        this.docStruct.push({
+          node: "Spread",
+          content: [],
+        });
+        pageCounter++; // it's okay not to increment this twice for a spread
+        panelCounter = -1;
+      }
+      if (cursor.type.name === "Panel") {
+        this.docStruct[pageCounter].content.push({
+          // push into content array of current page
+          node: "Panel",
+          content: [],
+        });
+        panelCounter++;
+      }
+      if (cursor.type.name === "Text") {
+        this.docStruct[pageCounter].content[panelCounter].content.push({
+          // push into content array of current panel, of current page
+          node: "Text",
+          content: [],
+        });
+      }
+      if (cursor.type.name === "Sfx") {
+        this.docStruct[pageCounter].content[panelCounter].content.push({
+          // push into content array of current panel, of current page
+          node: "Sfx",
+          content: [],
+        });
+      }
+
       if (
         // if we find a Source token, and if its contents aren't already in our array of Sources
         cursor.type.name === "Source" &&
@@ -130,6 +167,9 @@ export class SerifuDoc {
   }
   // getters to check if a new source or style has been added or removed from our running list
   // on the most recent parse.
+  get currentDocStruct() {
+    return this.docStruct;
+  }
   get sourceChanged() {
     return this.sources.length != this.prevSourceCount;
   }
@@ -228,12 +268,12 @@ function autosaveToLocalStorage() {
     let scriptText = "";
     do {
       if (cursor.type.name === "PageToken") {
-        scriptText += `Page ${curPg}\n`;
+        scriptText += `\nPage ${curPg}\n`;
         curPg++;
         curPnl = 1; // panel numbering resets every page
       }
       if (cursor.type.name === "SpreadToken") {
-        scriptText += `Pages ${curPg}-${curPg + 1}\n`;
+        scriptText += `\nPages ${curPg}-${curPg + 1}\n`;
         curPg += 2; // increment page number by two, since this is a spread
         curPnl = 1; // panel numbering resets every page
       }
@@ -242,22 +282,17 @@ function autosaveToLocalStorage() {
         curPnl++;
       }
       if (cursor.type.name === "SfxTranslation") {
-        scriptText += `\t SFX:\t${this.text.substring(
-          cursor.from,
-          cursor.to
-        )}\n`;
-      }
-      if (cursor.type.name === "SfxTranslation") {
-        scriptText += `\t SFX:\t${this.text.substring(
-          cursor.from,
-          cursor.to
-        )}\n`;
+        scriptText += `\t SFX:\t${this.text
+          .substring(cursor.from, cursor.to)
+          .trim()}\n`;
       }
       if (cursor.type.name === "Note") {
-        scriptText += `NOTE:${this.text.substring(
-          cursor.from + 1, // leave off the exclamation point
-          cursor.to
-        )}\n`;
+        scriptText += `NOTE: ${this.text
+          .substring(
+            cursor.from + 1, // leave off the exclamation point
+            cursor.to
+          )
+          .trim()}\n`;
       }
       if (cursor.type.name === "Source") {
         scriptText += `\t${this.text.substring(cursor.from, cursor.to).trim()}`;

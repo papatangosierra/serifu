@@ -206,15 +206,17 @@ export function insertNewlineAndRenumberPages(view) {
 
 function getLastSourceAndStyle(view) {
   let curPos = view.state.selection.ranges[0].from;
-  let curNode = syntaxTree(view.state).resolve(curPos);
+  console.log(`starting cursor pos: ${curPos}`);
+  let curNode = syntaxTree(view.state).resolve(curPos, -1);
+  console.log(`starting node: ${curNode.name}`);
   let result = {
     source: "",
     style: "",
+    lineHasAnyLength: view.state.doc.lineAt(curPos).length > 0, // we save the initial result of checking the current node for logic in newlineWithLastSourceAndStyle
   };
   while (result.source === "" && curPos > -1) {
     // don't infinite loop if we don't have any sources in the document
     // a style will always come before a source, so we know to stop once we find a source
-    console.log("checking position " + curPos);
     curNode = syntaxTree(view.state).resolve(curPos);
     curPos--;
     if (curNode.name === "Style") {
@@ -229,14 +231,18 @@ function getLastSourceAndStyle(view) {
         .trim();
     }
   }
-  console.log(`We found source: ${result.source} and style: ${result.style}`);
+  console.log(
+    `We found source: ${result.source} and style: ${result.style} and a cursor at ${result.curNode}`
+  );
   return result;
 }
 
 export function newlineWithLastSourceAndStyle(view) {
   console.log("newlineWithLastSourceAndStyle fired");
   let lastSrcStl = getLastSourceAndStyle(view);
-  let insertString = `\n${lastSrcStl.source}`;
+  console.log(`lastSrcStl.lineHasAnytLength is ${lastSrcStl.lineHasAnyLength}`);
+  let insertString = lastSrcStl.lineHasAnyLength ? "\n" : ""; // if we're at the end of a line, start with a newline, otherwise don't
+  insertString += `${lastSrcStl.source}`;
   if (lastSrcStl.style != "") {
     insertString += "/" + lastSrcStl.style + ": ";
   } else {

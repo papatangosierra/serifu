@@ -14,9 +14,11 @@ Panel[group="Panels"] {
 	!panel PanelToken Line*
 }
 
+
 Line[group="Lines"] {
 	!line (Text | Note | Sfx) | newlines
 }
+
 
 Sfx {
 	Star SfxTranslation SfxSource? newline

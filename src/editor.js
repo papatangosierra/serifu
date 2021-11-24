@@ -44,6 +44,8 @@ import {
   manualSave,
 } from "./components/save-slots.jsx";
 
+import { Minimap } from "./components/minimap.jsx";
+
 // make a new basic theme
 let baseTheme = EditorView.baseTheme({
   ".cm-line": {
@@ -71,9 +73,9 @@ function id(str) {
   return document.getElementById(str);
 }
 
-/* cargo-cult programming here; I'm not sure if, or why, this may work*/
-// If it does, it's because we're setting up Compartments, that allow us
-// to reinitialize these plugins with new autocompletion lists.
+// Set up the autocomplete Compartments. These allow us
+// to reinitialize these plugins with new autocompletion lists
+// whenever the lists change.
 let sourceCompletion = new Compartment(),
   styleCompletion = new Compartment();
 
@@ -109,7 +111,7 @@ if (localStorage.getItem("current-active-slot") === null) {
 }
 
 /* Create new doc and init editor with its (empty) contents */
-let theDoc = new SerifuDoc("");
+let theDoc = new SerifuDoc("# Page 1");
 
 // initialize Editor View
 let view = new EditorView({
@@ -127,7 +129,7 @@ let view = new EditorView({
       sourceCompletion.of(
         serifuLanguage.data.of({
           autocomplete: ifNotIn(
-            ["Style", "Content"],
+            ["Content", "Style", "Note", "Sfx"],
             completeFromList(theDoc.sources)
           ),
         })
@@ -135,7 +137,7 @@ let view = new EditorView({
       styleCompletion.of(
         serifuLanguage.data.of({
           autocomplete: ifNotIn(
-            ["Source", "Content"],
+            ["Content", "Source", "Note", "Sfx"],
             completeFromList(theDoc.styles)
           ),
         })
@@ -153,7 +155,34 @@ let view = new EditorView({
   lineWrapping: true,
 });
 
+// Render our React elements
+ReactDOM.render(
+  React.createElement("div", null, insertButtons),
+  document.getElementById("charbuttons")
+);
+
+ReactDOM.render(
+  React.createElement(SourceItemGroup, {
+    items: theDoc.getSources,
+  }),
+  document.getElementById("sourcelist")
+);
+
+ReactDOM.render(
+  React.createElement(StyleItemGroup, {
+    items: theDoc.getStyles,
+  }),
+  document.getElementById("stylelist")
+);
+
+// We have to render the SaveSlotBar in order to initialize our save slots
+ReactDOM.render(
+  /*#__PURE__*/ React.createElement(SaveSlotBar, null),
+  document.getElementById("saveslotsbar")
+);
+
 // Load current active save slot contents into doc
+// WILL NOT WORK UNLESS SaveSlotBar HAS RENDERED!!!
 theDoc.openFromSlot(view, localStorage.getItem("current-active-slot"));
 
 export { theDoc, view };
@@ -185,25 +214,7 @@ id("saveBtn").addEventListener("click", () => {
   manualSave();
 });
 
-//
-// Autosave Timer
-// function autosaveToLocalStorage() {
-//   console.log("autosaving to local storage...");
-//   theDoc.refreshParse(view.state.doc.toString());
-//   localStorage.setItem("autosave", theDoc.getText);
-//   let d = new Date();
-//   id("autosave-time").innerText =
-//     d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds();
-// }
-//
-// function initAutosave(interval) {
-//   setInterval(autosaveToLocalStorage, interval);
-// }
-//
-// initAutosave(10000);
-
 // React Render calls
-
 ReactDOM.render(
   React.createElement("div", null, insertButtons),
   document.getElementById("charbuttons")
@@ -224,6 +235,13 @@ ReactDOM.render(
 );
 
 ReactDOM.render(
-  /*#__PURE__*/ React.createElement(SaveSlotBar, null),
+  React.createElement(SaveSlotBar, null),
   document.getElementById("saveslotsbar")
+);
+
+ReactDOM.render(
+  React.createElement(Minimap, {
+    docStruct: theDoc.currentDocStruct,
+  }),
+  document.getElementById("minimap")
 );
