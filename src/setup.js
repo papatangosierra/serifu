@@ -38,8 +38,8 @@ const completionKeymap = [
   { key: "PageDown", run: /*@__PURE__*/ moveCompletionSelection(true, "page") },
   { key: "PageUp", run: /*@__PURE__*/ moveCompletionSelection(false, "page") },
   { key: "Enter", run: acceptCompletion },
-  { key: ":", run: acceptCompletion },
-  { key: "/", run: acceptCompletion },
+  // { key: ":", run: acceptCompletion },
+  // { key: "/", run: acceptCompletion },
 ];
 
 const basicSetup = [

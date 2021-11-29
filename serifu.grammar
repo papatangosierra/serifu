@@ -45,10 +45,10 @@ Content {
 }
 
 contentText {
-	( unstyledText | Bold | BoldItal | Ital | Star | Colon | DoubleStar | Underscore )* | BlockText
+	( UnstyledText | Bold | BoldItal | Ital | Star | Colon | DoubleStar | Underscore )* | BlockText
 }
 
-unstyledText {
+UnstyledText {
 	anyText
 }
 

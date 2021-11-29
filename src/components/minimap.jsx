@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom";
 // my imports
 import { theDoc, view } from "../editor.js";
@@ -47,8 +47,17 @@ function MinimapSpread(props) {
 }
 
 export function Minimap(props) {
+  const [docStruct, setDocStruct] = useState([]);
+
+  // on a refresh of theDoc's parse, update the Minimap element state.
+  useEffect(() => {
+    document.addEventListener("docParseRefreshed", (e) => {
+      setDocStruct(e.detail.docStruct);
+    });
+  });
+
   let spreadOffset = 0; // to keep track of how many two-page spreads we've hit
-  const mapPages = props.docStruct.map((el, i) => {
+  const mapPages = docStruct.map((el, i) => {
     if (el.node === "Page") {
       return (
         <MinimapPage
