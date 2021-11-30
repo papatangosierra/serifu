@@ -1,6 +1,5 @@
 import { parser } from "./serifu-parser/serifu-parser.js";
 import { Squeezer } from "./squeeze.js";
-import { view } from "./editor.js";
 
 /* doc.js describes an object that contains a Serifu document, along with metadata computed by the object at the time of instantiation. It provides up-to-date information on Sources and Styles for autocomplete purposes, along with other state important to functionality but not strictly speaking part of the document itself. */
 
@@ -137,17 +136,13 @@ export class SerifuDoc {
   }
 
   saveToSlot(slot, docText, docName) {
-    this.refreshParse(view.state.doc.toString()); // refresh parse on save, just to be sure
-    // const s = new Squeezer(docText.replace(/\u001f/g, "")); // strip out \u001f if it's there (it probably isn't, but if it is, for some reason, we'll lose data, because it's the separator for Squeezer dictionary fields.,
+    this.refreshParse(docText); // refresh parse on save from text in view state, just to be sure
     // send document text to squeezeWorker
     squeezeWorker.postMessage(this.text);
     squeezeWorker.onmessage = (e) => {
       localStorage.setItem(`slot-${slot}-uniques`, e.data[0]);
       localStorage.setItem(`slot-${slot}-seq`, e.data[1]);
       localStorage.setItem(`slot-${slot}-name`, docName);
-      console.log(
-        `squeezeWorker wrote to slot ${slot} with e.data[0]: ${e.data[0]} and e.data[1]: ${e.data[1]}`
-      );
     };
   }
 

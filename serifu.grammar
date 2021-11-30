@@ -19,13 +19,12 @@ Line[group="Lines"] {
 	!line (Text | Note | Sfx) | newlines
 }
 
-
 Sfx {
 	Star SfxTranslation SfxSource? newline
 }
 
 Note {
-	NoteToken contentText newline
+	noteToken newline
 }
 
 Text {
@@ -87,7 +86,7 @@ UnstyledText {
 
 	Colon { ":" }
 
-	NoteToken { "!" }
+	noteToken { "!" ![\r\n\u2028\u2029]+ }
 	SfxTranslation { ![\n)(]+ }
 	SfxSource { "(" ![\n)(]+ ")"? }
 
@@ -95,5 +94,5 @@ UnstyledText {
 	BlockTextRest { ![=] BlockTextRest | "=" BlockTextAfterEquals}
 	BlockTextAfterEquals { "/" | "=" BlockTextAfterEquals | ![/=] BlockTextRest }
 
-	@precedence { BlockText, SpreadToken, PageToken, PanelToken, SfxSource, SfxTranslation, BoldItal, DoubleStar, Star, Bold, Underscore, Ital, anyText, word, spaces, newlines, newline }
+	@precedence { anyText, BlockText, SpreadToken, PageToken, PanelToken, SfxSource, SfxTranslation, BoldItal, DoubleStar, Star, Bold, Underscore, Ital, word, spaces, newlines, newline }
 }

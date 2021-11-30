@@ -6,7 +6,7 @@ import { Squeezer } from "./squeeze.js";
 
 // actual web worker code starts here
 onmessage = (e) => {
-  console.log(`worker got message from main script: ${e.data}`);
+  console.log(`squeeze worker got message from main script`);
   if (typeof e.data === "string") {
     let s = new Squeezer(e.data.replace(/\u001f/g, "")).squozed; // strip out \u001f if it's there (it probably isn't, but if it is, for some reason, we'll lose data, because it's the separator for Squeezer dictionary fields.
     postMessage([s.uniques, s.seq]); // send uniques and sequence back to main thread

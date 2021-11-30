@@ -109,7 +109,11 @@ export const serifuHighlighter = HighlightStyle.define([
     display: "inline-block",
   },
   { tag: t.propertyName, color: "mediumvioletred" }, // text line styles
-  { tag: t.comment, backgroundColor: "papayawhip", fontStyle: "italic" }, // side notes
+  {
+    tag: t.comment,
+    backgroundColor: "papayawhip",
+    fontStyle: "italic",
+  }, // side notes
   { tag: t.string, fontStyle: "italic" }, // italics
   { tag: t.number, fontWeight: "bold" }, // boldface
   { tag: t.regexp, fontStyle: "italic", fontWeight: "bold" }, // bold italics

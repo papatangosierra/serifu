@@ -31,6 +31,7 @@ import {
 
 import { nodeInspector } from "./nodeinspector.js";
 import { insertNewlineAndRenumberPages } from "./commands.js";
+import { pageNumberGutter } from "./page-panel-numbers.js";
 
 /* React and components setup */
 
@@ -125,6 +126,7 @@ let view = new EditorView({
       sourceLabelsPlugin,
       nodeInspector(),
       saveSlotPanel(),
+      pageNumberGutter,
       autocompletion({ icons: true }),
       sourceCompletion.of(
         serifuLanguage.data.of({
