@@ -1,4 +1,4 @@
-@precedence { line @left, panel @left}
+@precedence { line @left, panel @left }
 
 @top Doc { (Page | Spread | newlines)+ }
 
@@ -16,19 +16,19 @@ Panel[group="Panels"] {
 
 
 Line[group="Lines"] {
-	!line (Text | Note | Sfx) | newlines
+	!line (Text | Note | Sfx) 
 }
 
 Sfx {
-	Star SfxTranslation SfxSource? newline
+	Star SfxTranslation SfxSource? newlines
 }
 
 Note {
-	noteToken newline
+	noteToken newlines
 }
 
 Text {
-	Source ("/" Style)? ":" Content newline
+	Source ("/" Style)? ":" Content newlines
 }
 
 Source {
@@ -94,5 +94,5 @@ UnstyledText {
 	BlockTextRest { ![=] BlockTextRest | "=" BlockTextAfterEquals}
 	BlockTextAfterEquals { "/" | "=" BlockTextAfterEquals | ![/=] BlockTextRest }
 
-	@precedence { anyText, BlockText, SpreadToken, PageToken, PanelToken, SfxSource, SfxTranslation, BoldItal, DoubleStar, Star, Bold, Underscore, Ital, word, spaces, newlines, newline }
+	@precedence { BlockText, SpreadToken, PageToken, PanelToken, SfxSource, SfxTranslation, BoldItal, DoubleStar, Star, Bold, Underscore, Ital, word, spaces, anyText, newlines, newline }
 }

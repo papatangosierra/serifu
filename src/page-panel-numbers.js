@@ -46,7 +46,7 @@ const pageNodesState = StateField.define({
   },
 });
 
-function findPageNodes(view) {
+export function findPageNodes(view) {
   let pageNodes = view.state.field(pageNodesState);
   let cursor = syntaxTree(view.state).cursor();
   let effects = [];

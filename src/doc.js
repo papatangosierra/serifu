@@ -8,6 +8,36 @@ function id(str) {
   return document.getElementById(str);
 }
 
+/* deepPush pushes a given val onto the end of an array after recursively descending into any array elements it finds first, and returns the new full array. This also descends into "content" properties, when found*/
+function deepPush(arr, val) {
+  function descend(inside, into) {
+    if (typeof into === "object") {
+      if (into.hasOwnProperty("content")) {
+        //  descend(into.content, into.content[into.content.length - 1]);
+        into.content.push(val);
+      } else {
+        descend(into, into[into.length - 1]);
+      }
+    } else {
+      inside.push(val);
+    }
+    return inside;
+  }
+  return descend(arr, arr[arr.length - 1]);
+}
+// deepEdit finds the most deeply-nested object in the last element of an array, and assigns the given attribute to the given value, returning the new array
+function deepEdit(arr, attr, val) {
+  function descend(inside, into) {
+    if (typeof into === "object" && into.length === undefined) {
+      into[attr] = val;
+    } else {
+      descend(into, into[into.length - 1]);
+    }
+    return inside;
+  }
+  return descend(arr, arr[arr.length - 1]);
+}
+
 /* instantiate our compression web worker */
 
 const squeezeWorker = new Worker(
@@ -72,6 +102,8 @@ export class SerifuDoc {
         this.docStruct[pageCounter].content[panelCounter].content.push({
           // push into content array of current panel, of current page
           node: "Text",
+          source: null,
+          style: null,
           content: [],
         });
       }
@@ -79,10 +111,10 @@ export class SerifuDoc {
         this.docStruct[pageCounter].content[panelCounter].content.push({
           // push into content array of current panel, of current page
           node: "Sfx",
-          content: [],
+          sfxTranslation: null,
+          sfxSource: null,
         });
       }
-
       if (
         // if we find a Source token, and if its contents aren't already in our array of Sources
         cursor.type.name === "Source" &&
@@ -108,7 +140,108 @@ export class SerifuDoc {
     });
     // emit parse refreshed event event
     document.dispatchEvent(event);
+    this.parseForIndPanel();
   }
+
+  parseForIndPanel() {
+    let cursor = parser.parse(this.text).cursor();
+    let pageMap = new Map([]);
+    let pageStruct = [];
+    let pageNum = -1;
+    let panelNum = -1;
+    do {
+      if (cursor.type.name === "Page") {
+        // associate current page number with index of last pageStruct element
+        pageMap.set(pageNum, pageStruct.length);
+        pageStruct.push([]);
+        pageNum++;
+        panelNum = -1;
+      }
+      if (cursor.type.name === "Spread") {
+        // associate current AND NEXT page numbers with index of last pageStruct element
+        pageMap.set(pageNum, pageStruct.length);
+        pageMap.set(pageNum + 1, pageStruct.length);
+        pageStruct.push([]);
+        pageNum += 2;
+        panelNum = -1;
+      }
+      if (cursor.type.name === "Panel") {
+        pageStruct[pageNum].push([]);
+        panelNum++;
+      }
+      if (cursor.type.name === "SfxTranslation") {
+        pageStruct[pageNum][panelNum].push({
+          type: "Sfx",
+          text: this.text.substring(cursor.from, cursor.to).trim(),
+        });
+      }
+      if (cursor.type.name === "Note") {
+        pageStruct[pageNum][panelNum].push({
+          type: "Note",
+          text: this.text.substring(cursor.from, cursor.to),
+        });
+      }
+      if (cursor.type.name === "Source") {
+        // if we've found a Source token, we know we're in a Text line, so we can add the line and
+        // assign the source simultaneously.
+        pageStruct[pageNum][panelNum].push({
+          type: "Text",
+          source: this.text.substring(cursor.from, cursor.to),
+          style: null,
+          content: [],
+        });
+      }
+      if (cursor.type.name === "Style") {
+        pageStruct = deepEdit(
+          pageStruct,
+          "style",
+          this.text.substring(cursor.from, cursor.to)
+        );
+      }
+      if (cursor.type.name === "Bold") {
+        pageStruct = deepPush(pageStruct, {
+          emphasis: "Bold",
+          text: this.text.substring(cursor.from, cursor.to).replace(/\*/g, ""), // remove asterisks
+        });
+      }
+      if (cursor.type.name === "BoldItal") {
+        pageStruct = deepPush(pageStruct, {
+          emphasis: "BoldItal",
+          text: this.text
+            .substring(cursor.from, cursor.to)
+            .replace(/\*\*/g, ""), // remove double asterisks
+        });
+      }
+      if (cursor.type.name === "Ital") {
+        pageStruct = deepPush(pageStruct, {
+          emphasis: "Ital",
+          text: this.text.substring(cursor.from, cursor.to).replace(/\_/g, ""), // remove underscores
+        });
+      }
+      if (
+        (cursor.type.name === "UnstyledText" ||
+          cursor.type.name === "Star" ||
+          cursor.type.name === "Colon" ||
+          cursor.type.name === "DoubleStar" ||
+          cursor.type.name === "Underscore") &&
+        cursor.node.parent.name === "Content"
+      ) {
+        pageStruct = deepPush(pageStruct, {
+          emphasis: "none",
+          text: this.text.substring(cursor.from, cursor.to), // push text as-is
+        });
+      }
+      if (cursor.type.name === "BlockText") {
+        pageStruct = deepPush(pageStruct, {
+          emphasis: "BlockText",
+          text: this.text.substring(cursor.from, cursor.to), // push text as-is
+        });
+      }
+    } while (cursor.next());
+    console.log(`pageStruct for panel: ${JSON.stringify(pageStruct, 0, 4)}`);
+    return pageStruct;
+  }
+
   // getters to check if a new source or style has been added or removed from our running list
   // on the most recent parse.
   get currentDocStruct() {

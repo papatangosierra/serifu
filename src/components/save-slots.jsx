@@ -94,6 +94,10 @@ export class SaveSlotBar extends React.Component {
     });
   }
 
+  componentWillUnmount() {
+    this.autoSaveTimer = clearInterval();
+  }
+
   // saveToCurrentSlot saves the current document to the current active save slot
   saveToCurrentSlot() {
     console.log(`SaveSlotBar saving to: ${this.slots[this.state.activeSlot]}`);

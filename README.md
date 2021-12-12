@@ -11,6 +11,8 @@ There are several reasons one might want to do this:
 - A specialized Serifu text editor--coming soon--can take advantage of the format's predictable structure to offer features like automatic page and panel numbering, character name autocomplete, and lots more.
 - The rigorously predictable format allows script text to be presented to the letterer or book designer in a variety of more convenient ways than a word-processing document can be.
 
+[This is a live demo of a web-based editor](https://serifu-sketchpad.glitch.me) for Serifu-formatted files.
+
 ## The current Serifu rules
 
 ### Pages and Panels

@@ -31,7 +31,7 @@ import {
 
 import { nodeInspector } from "./nodeinspector.js";
 import { insertNewlineAndRenumberPages } from "./commands.js";
-import { pageNumberGutter } from "./page-panel-numbers.js";
+import { pageNumberGutter, findPageNodes } from "./page-panel-numbers.js";
 
 /* React and components setup */
 
@@ -196,6 +196,10 @@ id("dlTextBtn").addEventListener("click", () => {
 
 id("dlVizBtn").addEventListener("click", () => {
   theDoc.downloadAsViz();
+});
+
+id("pgNumBtn").addEventListener("click", () => {
+  findPageNodes(view);
 });
 
 // Event listeners for save slots. "saveSlotChange" is a custom event that includes
