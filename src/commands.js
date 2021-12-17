@@ -314,10 +314,11 @@ export function insertCharAtCursor(view, char) {
   return true;
 }
 
+// FIXME: insertPanelAtCursor and insertPageAtCursor don't work correctly when the document is empty, so that's an edge case to fix.
 export function insertPanelAtCursor(view) {
   console.log("insertPanelAtCursor fired");
   let curPgPnl = getPageAndPanelNumberAtPos(view);
-  let insertString = `\n  - ${curPgPnl.page}.${parseInt(curPgPnl.panel) + 1}\n`;
+  let insertString = `\n- ${curPgPnl.page}.${parseInt(curPgPnl.panel) + 1}\n`;
   view.dispatch({
     changes: {
       from: view.state.selection.ranges[0].from,
@@ -332,7 +333,25 @@ export function insertPanelAtCursor(view) {
   return true;
 }
 
-export function insertPageAtCursor(view) {}
+export function insertPageAtCursor(view) {
+  console.log("insertPageAtCursor fired");
+  let curPgPnl = getPageAndPanelNumberAtPos(view);
+  let insertString = `\n# Page ${parseInt(curPgPnl.page) + 1}\n- ${
+    parseInt(curPgPnl.page) + 1
+  }.1\n`;
+  view.dispatch({
+    changes: {
+      from: view.state.selection.ranges[0].from,
+      to: view.state.selection.ranges[0].to,
+      insert: insertString,
+    },
+    selection: EditorSelection.cursor(
+      view.state.selection.ranges[0].from + insertString.length
+    ),
+    scrollIntoView: true,
+  });
+  return true;
+}
 
 const emacsStyleKeymap = [
   {
