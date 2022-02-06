@@ -147,6 +147,7 @@ export class SerifuDoc {
     let cursor = parser.parse(this.text).cursor();
     let pageMap = new Map([]);
     let pageStruct = [];
+    let pageOffsetWithSpreads = 0; // we increment this every time a spread is encountered, to derive an offset
     let pageNum = -1;
     let panelNum = -1;
     do {
@@ -162,21 +163,22 @@ export class SerifuDoc {
         pageMap.set(pageNum, pageStruct.length);
         pageMap.set(pageNum + 1, pageStruct.length);
         pageStruct.push([]);
+        pageOffsetWithSpreads++;
         pageNum += 2;
         panelNum = -1;
       }
       if (cursor.type.name === "Panel") {
-        pageStruct[pageNum].push([]);
+        pageStruct[pageNum - pageOffsetWithSpreads].push([]);
         panelNum++;
       }
       if (cursor.type.name === "SfxTranslation") {
-        pageStruct[pageNum][panelNum].push({
+        pageStruct[pageNum - pageOffsetWithSpreads][panelNum].push({
           type: "Sfx",
           text: this.text.substring(cursor.from, cursor.to).trim(),
         });
       }
       if (cursor.type.name === "Note") {
-        pageStruct[pageNum][panelNum].push({
+        pageStruct[pageNum - pageOffsetWithSpreads][panelNum].push({
           type: "Note",
           text: this.text.substring(cursor.from, cursor.to),
         });
@@ -184,7 +186,7 @@ export class SerifuDoc {
       if (cursor.type.name === "Source") {
         // if we've found a Source token, we know we're in a Text line, so we can add the line and
         // assign the source simultaneously.
-        pageStruct[pageNum][panelNum].push({
+        pageStruct[pageNum - pageOffsetWithSpreads][panelNum].push({
           type: "Text",
           source: this.text.substring(cursor.from, cursor.to),
           style: null,
@@ -333,6 +335,7 @@ function autosaveToLocalStorage() {
   }
 
   downloadAsViz() {
+    console.log("downloadasViz called");
     let startTree = parser.parse(this.text);
     let cursor = startTree.cursor();
     let curPg = 1;
