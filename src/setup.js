@@ -8,9 +8,9 @@ import {
   keymap,
 } from "@codemirror/view";
 
-export { EditorView } from "@codemirror/view";
+export { EditorView }; // from "@codemirror/view";
 import { EditorState } from "@codemirror/state";
-export { EditorState } from "@codemirror/state";
+export { EditorState }; // from "@codemirror/state";
 import { history, historyKeymap } from "@codemirror/history";
 import { foldGutter, foldKeymap } from "@codemirror/fold";
 import { indentOnInput, indentUnit } from "@codemirror/language";

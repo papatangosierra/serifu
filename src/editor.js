@@ -2,14 +2,10 @@
 import {
   EditorState,
   basicSetup,
+  EditorView,
 } from "./setup.js"; /* my edited version of the basic-setup package */
 import { syntaxTree, indentUnit, indentOnInput } from "@codemirror/language";
-import {
-  EditorView,
-  Decoration,
-  ViewUpdate,
-  ViewPlugin,
-} from "@codemirror/view";
+import { Decoration, ViewUpdate, ViewPlugin } from "@codemirror/view";
 import { Compartment } from "@codemirror/state";
 import { HighlightStyle } from "@codemirror/highlight";
 import {

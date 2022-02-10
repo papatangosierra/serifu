@@ -28,7 +28,7 @@ Note {
 }
 
 Text {
-	Source ("/" Style)? ":" Content newlines
+	Source? ("/" Style)? ":" Content newlines
 }
 
 Source {
