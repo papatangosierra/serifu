@@ -52,17 +52,19 @@ Serifu is meant to be relatively un-opinionated, but one opinion its author does
 
 Text following `#` or `-` characters is meant as a convenience to make scripts more readable. As such, text after the `#` or `-` characters but _before_ the next newline is not inherently meaningful. This means that from Serifu's perspective,
 
-    # Page One Billion
-        - 888.123
-        Deunan: There's something screwy about these numbers, Bri.
-    # Page -666
-        - 666.???
-        * tick tick tick
-        - π
-        Deunan: They don't make sense.
-    # Page
-        -
-        Briareos: What numbers?
+```
+# Page One Billion
+	- 888.123
+	Deunan: There's something screwy about these numbers, Bri.
+# Page -666
+	- 666.???
+	* tick tick tick
+	- π
+	Deunan: They don't make sense.
+# Page
+	-
+	Briareos: What numbers?
+```
 
 would be a valid (albeit perverse) way to describe three sequential pages, the second of which has two panels.
 
@@ -76,7 +78,7 @@ Any line _not_ beginning with an `#`, `-`, `*`, or `!` is interpreted as a **Tex
 
 A Text Line consists of a Source and Content, separated by a single colon: ":".
 
-    	Ayukawa: Hmm.
+    Ayukawa: Hmm.
 
 Text Lines are meant to be used for any and all text in the script that's not an onomatopoetic sound effect. Character dialogue and asides, narration, captions, diegetic text appearing in the artwork itself (e.g. signs, labels, etc.) would all be represented by Text Lines.
 
