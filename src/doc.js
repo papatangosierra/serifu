@@ -353,7 +353,7 @@ function autosaveToLocalStorage() {
         curPnl = 1; // panel numbering resets every page
       }
       if (cursor.type.name === "PanelToken") {
-        scriptText += curPnl.toString();
+        scriptText += "\n" + curPnl.toString();
         curPnl++;
       }
       if (cursor.type.name === "SfxTranslation") {

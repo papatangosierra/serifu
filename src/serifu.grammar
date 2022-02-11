@@ -1,0 +1,112 @@
+@precedence {unstyledText @left, content @left}
+
+@top Doc { (Page | Spread | newlines)+ }
+
+Page[group="Pages"] {
+	PageToken Panel*
+}
+
+Spread[group="Pages"] { 
+	SpreadToken Panel*
+}
+
+Panel[group="Panels"] {
+	PanelToken Line*
+}
+
+Line[group="Lines"] {
+	 (Text | Note | Sfx) 
+}
+
+Sfx {
+	Star SfxTranslation SfxSource? newlines
+}
+
+Note {
+	noteToken newlines
+}
+
+Text {
+	Source ("/" Style)? attribToken Content newlines
+}
+
+Source {
+	word?
+}
+
+Style {
+	word?
+}
+
+Content {
+  contentText+
+}
+
+contentText {
+  ( UnstyledText | Bold | BoldItal | Ital | Star | Colon | DoubleStar | Underscore ) | BlockText | StyleBlock
+}
+
+StyleBlock { 
+   styleBlockOpen 
+	    ( UnstyledText | Bold | BoldItal | Ital | Star | Colon | DoubleStar | Underscore | newline )*
+		styleBlockClose 
+	}
+
+UnstyledText {
+	anyText
+}
+
+@tokens {
+	space { $[\u0009 \u000b\u00a0\u1680\u2000-\u200a\u202f\u205f\u3000\ufeff] }
+  spaces { space+ }
+	attribToken { ":" spaces? }
+	newline { $[\r\n\u2028\u2029] }
+	newlines { newline+ }
+
+	PageToken { "#" ![\n#]* newlines}
+	SpreadToken { "##" ![\n]* newlines}
+  @precedence { SpreadToken, PageToken }
+	PanelToken { "-" ![\n]* newlines}
+
+
+	wordChar { std.asciiLetter | $[_$\u{a1}-\u{10ffff}] | std.digit | "-" | "'" | "&" | " "}
+	word { (std.asciiLetter | $[\u{a1}-\u{10ffff}] | std.digit) (wordChar* (std.asciiLetter | $[\u{a1}-\u{10ffff}] | std.digit))? }
+
+
+	anychar { ![\u0009:*_\u000b\u00a0\u1680\u2000-\u200a\u202f\u205f\u3000\ufeff\r\n\u2028\u2029] }	
+	anyText { anychar+ }
+  anycharExceptSpace { ![\u0009:*_ \u000b\u00a0\u1680\u2000-\u200a\u202f\u205f\u3000\ufeff\r\n\u2028\u2029] }
+	
+	nonStyleChar { ![_*\n ] }
+	Star { "*" }
+	boldOpen { Star nonStyleChar }
+	boldClose { nonStyleChar Star}
+	Bold {
+		( Star anycharExceptSpace Star | boldOpen anyText* boldClose | boldItalOpen anyText* boldClose )
+	}
+
+	DoubleStar { Star Star }
+	boldItalOpen { DoubleStar nonStyleChar }
+	boldItalClose { nonStyleChar DoubleStar}
+	BoldItal {
+		(DoubleStar anychar DoubleStar | boldItalOpen anyText? boldItalClose)
+	}
+
+	Underscore { "_" }
+	Ital { Underscore anychar* Underscore }
+
+	Colon { ":" }
+
+	noteToken { "!" ![\r\n\u2028\u2029]+ }
+	SfxTranslation { ![\n)(]+ }
+	SfxSource { "(" ![\n)(]+ ")"? }
+
+	BlockText { "/=" BlockTextRest }
+	BlockTextRest { ![=] BlockTextRest | "=" BlockTextAfterEquals}
+	BlockTextAfterEquals { "/" | "=" BlockTextAfterEquals | ![/=] BlockTextRest }
+	
+	styleBlockOpen { "===\n" }
+	styleBlockClose { "\n==="}
+
+	@precedence { BlockText, styleBlockOpen, styleBlockClose, anyText, SfxSource, SfxTranslation, BoldItal, DoubleStar, Star, Bold, Underscore, Ital, word, newlines }
+}
