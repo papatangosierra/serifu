@@ -7,7 +7,7 @@ import { insertCharAtCursor } from "../commands.js";
 import { view } from "../editor.js";
 
 // These are the default shortcut characters; we'll create a button component for each
-let shortcutChars = ["☆", "★", "♡", "♥︎", "♪", "♫"];
+let shortcutChars = ["☆", "★", "♡", "♥︎", "♪", "♫", "¥", "£", "€"];
 
 // InsertCharButton is our React component for making a button that inserts a given
 // string at the cursor position.

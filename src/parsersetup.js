@@ -93,7 +93,9 @@ export const serifuHighlighter = HighlightStyle.define([
     color: "darkslategray",
   },
   { tag: t.unit, fontStyle: "italic", color: "lightslategray" }, // SFX sources
-  { tag: t.literal }, // text lines
+  {
+    tag: t.literal, // text lines
+  },
   {
     // text line sources
     tag: t.variableName,
@@ -103,7 +105,7 @@ export const serifuHighlighter = HighlightStyle.define([
     paddingLeft: ".5ex",
     paddingRight: ".5ex",
     borderRadius: "0 .5ex .5ex 0",
-    minWidth: "8rem",
+    // minWidth: "5rem",
     textAlign: "right",
     margin: "auto",
     display: "inline-block",

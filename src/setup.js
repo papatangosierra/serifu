@@ -8,6 +8,9 @@ import {
   keymap,
 } from "@codemirror/view";
 
+// Give us tab character
+import { indentWithTab } from "@codemirror/commands";
+
 export { EditorView }; // from "@codemirror/view";
 import { EditorState } from "@codemirror/state";
 export { EditorState }; // from "@codemirror/state";
@@ -64,6 +67,7 @@ const basicSetup = [
     ...foldKeymap,
     ...completionKeymap,
     ...lintKeymap,
+    indentWithTab,
   ]),
 ];
 

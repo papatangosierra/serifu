@@ -48,7 +48,7 @@ As with pages, blank panels are marked by simply starting the next panel. In thi
     	- 9.3
     	Keiichi: Hi, do you have such as a way to deal with real bad senpais.
 
-Serifu is meant to be relatively un-opinionated, but one opinion its author does hold is that page and panel numbering should be tracked automatically. The structure of Serifu is such that accurate page and panel numbers can be derived at parse time, freeing the translator from entering and tracking them manually.
+Serifu is meant to be relatively un-opinionated, but one opinion its author does hold is that page and panel numbering should be tracked automatically. Serifu's design is such that accurate page and panel numbers can be derived from the structure of the script itself, freeing the translator from entering and tracking them manually.
 
 Text following `#` or `-` characters is meant as a convenience to make scripts more readable. As such, text after the `#` or `-` characters but _before_ the next newline is not inherently meaningful. This means that from Serifu's perspective,
 
@@ -66,7 +66,7 @@ Text following `#` or `-` characters is meant as a convenience to make scripts m
 	Briareos: What numbers?
 ```
 
-would be a valid (albeit perverse) way to describe three sequential pages, the second of which has two panels.
+would be a valid (albeit perverse) way to describe three sequential pages, the second of which has two panels. The fanciful descriptions following the `#` an `-` characters have no meaningful effect on the script's structure.
 
 The expectation is that well-behaved Serifu editing software will automatically insert page and panel numbers, keeping them updated as necessary when the script changes and freeing the translator or editor from the error-prone process of doing so manually.
 
@@ -98,7 +98,7 @@ Spaces or tabs immediately before or after the colon are ignored, so the followi
     Nanako:Oh, no!
     Nanako:    Oh, no!
 
-A line's contents are ended by a newline character.
+A line's content is ended by a newline character.
 
 Comics frequently use multiple consecutive word balloons from the same speaker. For the sake of concision, once a Source has been specified, it can be omitted from subsequent lines:
 
@@ -108,7 +108,7 @@ Comics frequently use multiple consecutive word balloons from the same speaker. 
 
 Even though `Kaz` isn't specified in the second and third lines, Serifu will assume he's the Source for those lines.
 
-You can also specify a Style without specifying a Source:
+You can also specify a Style without specifying a Source. In this case, the Source will be assumed from the previously named Source.
 
     Archangelo: All the right people liked it, homie.
     /Big: And they're gonna love our kick-ass manga.
@@ -131,9 +131,7 @@ Bold italics are indicated with two asterisks:
 
     Mariko: It's **box-cutter time**, pal.
 
-The bold, italics, and bold italics notations should not be combined or nested.
-
-If a single asterisk (`*`) or underscore (`_`) is needed verbatim in the text itself, they may be included as-is, e.g.
+If a single asterisk (`*`) or underscore (`_`) is needed verbatim in the text itself, it may be included as-is, e.g.
 
     Footnote: *Qifrey is a licensed witch. Do not try this at home.
 
@@ -168,10 +166,10 @@ These are all valid sound effect lines:
 
 #### Side Notes
 
-A side note contains text for the benefit of someone else reading the script (e.g., the letterer or editor), but which does _not_ represent any text on the page of the comic itself, is indicated by a line beginning with "!".
+A side note contains text meant to be read by someone else reading the script (e.g., the letterer or editor), but which does _not_ represent any text on the page of the comic itself, is indicated by a line beginning with "!".
 
     Haruhi: Look, just show me where the cryptid is and nobody gets hurt!
-    ! Haruhi says ウーマー, a wasei eigo construction from the acronym "UMA," or "Unidentified MysteriouAnimal." "Cryptid" is more idiomatic English.
+    ! Haruhi says ウーマー, a wasei eigo construction from the acronym "UMA," or "Unidentified Mysterious Animal." "Cryptid" is more idiomatic English.
 
 Or
 
@@ -189,18 +187,23 @@ As stated before, Text Lines are normally ended with a newline character. **Ther
 
 It's sometimes most convenient to compose a piece of text as a multi-line section—for example, in an artist's afterword, where there are potentially multiple paragraphs of text in a straightforward, homogenous block.
 
-While Text Lines are normally ended with a newline character, Multi-Line Text Blocks are one of two exceptions to this rule.
+While Text Lines are normally ended with a newline character, **Multi-Line Text Blocks** are one of two exceptions to this rule.
 
 A Multi-Line Text Block is begun by immediately following the colon (`:`) after a Source with three equals signs (`===`) and a newline, and it is ended with three equals signs on a line by themselves:
 
+```
     Sensei:===
     Afterword: My Apologies
+
     There are many reasons this book is late:
+
     * I am lazy.
     * My body is giving out
     * The life of the manga professional is composed of suffering.
+
     I'm truly sorry for the inconvenience I know this must cause all my readers.
     ===
+```
 
 Note that without being enclosed in `===` markers, the `Afterword: My Apologies` line would be interpreted as a Text Line with a Source of `Afterword` and a Text of `My Apologies`, and the lines beginning with asterisks, like `* I am lazy.` would be interpreted as sound effects. However, within a Multi-line Text Block, other syntax is superceded until the block is ended with a `===` marker on a line by itself.
 
@@ -208,7 +211,7 @@ The `*bold*`, `_italic_`, and `**bold italic**` formatting rules work in Multi-L
 
 #### Pre-formatted Text
 
-Pre-formatted Text is the other exception to the "one Line per line" rule.
+**Pre-formatted Text** is the other exception to the "one Line per line" rule.
 
 Immediately following a Text Line's Source with a forward slash and an equals sign (`/=`) begins a pre-formatted text block. This is useful for composing translations where every character must be included verbatim. An equals sign followed by a forward slash (`=/`) ends the block. For example, in the unlikely case that you needed to represent Serifu-formatted text literally on a page, something like this would work:
 
@@ -223,7 +226,7 @@ This indicates that every single character between the `/=` `=/` marks is meant 
 
 Any text between `/=` `=/` tokens is interpreted verbatim, so the `*`, `_`, and `**` tokens for indicating boldface and italics do not work within them, and will always be included literally.
 
-_Note:_ An important distinction between Multiline Text Blocks and Pre-formatted Text is that Multiline Text Blocks must take up multiple lines of text, since the ending `===` marker must be on a line by itself. Pre-formatted Text, however, can remain on a single line:
+**Note:** An important distinction between Multiline Text Blocks and Pre-formatted Text is that Multiline Text Blocks must take up multiple lines of text, since the ending `===` marker must be on a line by itself. Pre-formatted Text, however, can remain on a single line:
 
     	Computer Screen: /= *Bingo.* =/
 

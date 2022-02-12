@@ -1,4 +1,4 @@
-@precedence {unstyledText @left, content @left}
+@precedence {skipspaces @left, style @left, source @left}
 
 @top Doc { (Page | Spread | newlines)+ }
 
@@ -27,15 +27,15 @@ Note {
 }
 
 Text {
-	Source ("/" Style)? attribToken Content newlines
+	 spaces? Source? spaces? ("/" Style)? spaces? attribToken Content newlines
 }
 
 Source {
-	word?
+	word !source
 }
 
 Style {
-	word?
+	word !style
 }
 
 Content {
@@ -56,6 +56,7 @@ UnstyledText {
 	anyText
 }
 
+
 @tokens {
 	space { $[\u0009 \u000b\u00a0\u1680\u2000-\u200a\u202f\u205f\u3000\ufeff] }
   spaces { space+ }
@@ -63,10 +64,9 @@ UnstyledText {
 	newline { $[\r\n\u2028\u2029] }
 	newlines { newline+ }
 
-	PageToken { "#" ![\n#]* newlines}
-	SpreadToken { "##" ![\n]* newlines}
-  @precedence { SpreadToken, PageToken }
-	PanelToken { "-" ![\n]* newlines}
+	PageToken { spaces? "#" ![\n#]* newlines}
+	SpreadToken { spaces? "##" ![\n]* newlines}
+	PanelToken { spaces? "-" ![\n]* newlines}
 
 
 	wordChar { std.asciiLetter | $[_$\u{a1}-\u{10ffff}] | std.digit | "-" | "'" | "&" | " "}
@@ -108,5 +108,5 @@ UnstyledText {
 	styleBlockOpen { "===\n" }
 	styleBlockClose { "\n==="}
 
-	@precedence { BlockText, styleBlockOpen, styleBlockClose, anyText, SfxSource, SfxTranslation, BoldItal, DoubleStar, Star, Bold, Underscore, Ital, word, newlines }
+	@precedence { BlockText, styleBlockOpen, styleBlockClose, anyText, SfxSource, SfxTranslation, BoldItal, DoubleStar, Star, Bold, Underscore, Ital, word, spaces, SpreadToken, PageToken, PanelToken, newlines }
 }
