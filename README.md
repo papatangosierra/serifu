@@ -8,7 +8,7 @@ There are several reasons one might want to do this:
 
 - A translator could compose all of their scripts, regardless of the client publisher, in Serifu, and let software translate it into a given publisher's style sheet prior to submission.
 - Any of the considerable breadth of tools available for text editing can easily be used for Serifu.
-- A specialized Serifu text editor take advantage of the format's predictable structure to offer features like automatic page and panel numbering, character name autocomplete, and lots more. Furthermore, it's (relatively) easy to write such extensions for other text editors.
+- A specialized Serifu text editor can take advantage of the format's predictable structure to offer features like automatic page and panel numbering, character name autocomplete, and lots more. Furthermore, it's (relatively) easy to write such extensions for other text editors.
 - The rigorously predictable format allows script text to be presented to the letterer or book designer in a variety of more convenient ways than a word-processing document can be.
 
 [This is a live demo of a web-based editor](https://serifu-sketchpad.glitch.me) for Serifu-formatted files.
