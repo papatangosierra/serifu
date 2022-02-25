@@ -8,7 +8,7 @@ There are several reasons one might want to do this:
 
 - A translator could compose all of their scripts, regardless of the client publisher, in Serifu, and let software translate it into a given publisher's style sheet prior to submission.
 - Any of the considerable breadth of tools available for text editing can easily be used for Serifu.
-- A specialized Serifu text editor--coming soon--can take advantage of the format's predictable structure to offer features like automatic page and panel numbering, character name autocomplete, and lots more.
+- A specialized Serifu text editor take advantage of the format's predictable structure to offer features like automatic page and panel numbering, character name autocomplete, and lots more. Furthermore, it's (relatively) easy to write such extensions for other text editors.
 - The rigorously predictable format allows script text to be presented to the letterer or book designer in a variety of more convenient ways than a word-processing document can be.
 
 [This is a live demo of a web-based editor](https://serifu-sketchpad.glitch.me) for Serifu-formatted files.
@@ -84,11 +84,15 @@ Text Lines are meant to be used for any and all text in the script that's not an
 
 A Text Line is meant to represent one piece of contiguous text on the page. A single word balloon, a caption, a footnote---all of these would be represented by a Text Line.
 
+A Text Line's **Source** (notionally, the character speaking the line) is the text that precedes the colon (`:`).
+
 A Text Line may be given an optional **Style**, which is indicated by a forward slash character after the Source, before the colon:
 
     Kyosuke/Excited: A-Ayukawa...!
 
 A Text Style would typically be used to indicate an alternate font or typographical style from the way a given Text Line would normally appear.
+
+Source and Style labels may contain spaces, and can use any alphabetic or numeric characters, but the only punctuation characters permitted are `'`, `-`, and `&`.
 
 Different projects have different levels of specificity they require in a script, and Serifu's Source and Style fields are meant to be freeform enough to accommodate a wide variety of editorial needs.
 
@@ -116,6 +120,12 @@ You can also specify a Style without specifying a Source. In this case, the Sour
     /Thought: At least I hope they do.
 
 In this case, since the last three lines all omit a Source, they're attributed to `Archangelo`. The second line specifies a style of `Big`, and since the third line doesn't specify either a Source or a Style, it inherits the previous instances of each: a Source of `Archangelo`, and a Style of `Big`. The fourth line also gets the source `Archangelo`, but it specifies a new style of `Thought`.
+
+**Note:** Once you've specified a Style, the only way return to default, unstyled text is to explicitly specify a Source again, with no Style. In the previous example, to add a line where the Source `Archangelo` has no Style:
+
+    	Archangelo: Even Bergdorf's carries manga, now!
+
+##### In-Line Styling and Emphasis
 
 Within a line's contents, there are three forms of typographic emphasis available: boldface, italics, and bold italics.
 
@@ -152,7 +162,13 @@ Serifu tries to be clever enough to figure out the right thing to do when boldfa
 
 In this example, the asterisk in `wisewolf*` is treated literally, while `*not*` is interpreted as boldface text. In the next line, `*Note:*` is bolded, with the extra asterisk after it being interpreted literally.
 
-If more complicated arrangements of special characters are necessary, see the section below on Pre-formatted Text.
+The current Serifu behavior is that only the outermost set of style markers are respected. So in a line like:
+
+    	Caption: *This was to be the _Excelion's_ maiden voyage.*
+
+The outer set of `*` markers specify bolded text, and the inner `_` markers do not create italics, but are instead treated literally. This is probably not what such a line would intend, so lines like this should be avoided. (An ideal Serifu implementation would probably flag a line like this with a warning.)
+
+It is generally preferable to avoid complicated arrangements of `*` and `_` characters. For handling cases when such arrangements are absolutely necessary, see the section below on Pre-formatted Text.
 
 #### Sound Effects / Onomatopoeia
 
@@ -226,9 +242,13 @@ This indicates that every single character between the `/=` `=/` marks is meant 
 
 Any text between `/=` `=/` tokens is interpreted verbatim, so the `*`, `_`, and `**` tokens for indicating boldface and italics do not work within them, and will always be included literally.
 
-**Note:** An important distinction between Multiline Text Blocks and Pre-formatted Text is that Multiline Text Blocks must take up multiple lines of text, since the ending `===` marker must be on a line by itself. Pre-formatted Text, however, can remain on a single line:
+**Note:** An important distinction between Multiline Text Blocks and Pre-formatted Text is that Multiline Text Blocks _must_ take up multiple lines of text, since the ending `===` marker must be on a line by itself. Pre-formatted Text, however, can remain on a single line:
 
     	Computer Screen: /= *Bingo.* =/
+
+### Future-Proofing
+
+Backticks (```) currently have no special meaning in Serifu. However, placing text between backticks may eventually be used as a way to mark words or phrases as special terminology—i.e., terms that the parser can identify to include on an automatically-generated style sheet. The backticks themselves would not be present in the lettered text. For future compatibility, the Serifu author recommends avoiding using backticks in scripts.
 
 ## Etc.
 
