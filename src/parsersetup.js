@@ -58,7 +58,7 @@ export const serifuHighlighter = HighlightStyle.define([
     fontWeight: "bold",
     fontStyle: "italic",
     color: "black",
-    minWidth: "4rem",
+    minWidth: "6rem",
     display: "inline-block",
     textAlign: "right",
     backgroundColor: "rgba(255, 228, 225, .7)", // mistyRose

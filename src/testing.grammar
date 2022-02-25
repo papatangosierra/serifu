@@ -1,0 +1,37 @@
+
+THIS WORKS SOMEHOW: WHY??
+
+-----
+
+
+@top Doc { (Group)+ }
+
+Group { 
+	 space* GroupToken Line*
+}
+
+Line {
+	Key space? ":" space? Value
+}
+
+Value {
+	value newline*
+}
+
+@tokens {
+	newline { $[\r\n] }
+	space { $[\u0009 \u000b\u00a0\u1680\u2000-\u200a\u202f\u205f\u3000\ufeff] }
+	value { (![\n])+ }
+	Key { std.asciiLetter+ }
+	GroupToken { "-" (![\n])* newline+ }
+	
+	@precedence { value, space, Key, newline, GroupToken}
+}
+
+------
+
+-
+Paul:Yes.
+
+
+

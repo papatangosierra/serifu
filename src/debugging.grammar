@@ -1,0 +1,24 @@
+@top Doc { (Panel)+ }
+
+Panel { 
+	PanelToken (Line | newline)*
+}
+
+Line {
+	(Source space*) Text
+}
+
+Source {
+	anyText
+}
+
+Text {
+	":" space* anyText newline
+}
+
+@tokens {
+	newline { $[\n] }
+	space { " " }
+	PanelToken { space* "-" ![\n]* newline* }
+	anyText { ![:\n]+ }@precedence { anyText, space, PanelToken }
+}

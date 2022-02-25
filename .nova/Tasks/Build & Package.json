@@ -1,7 +1,7 @@
 {
   "actions" : {
     "build" : {
-      "command" : "\/bin\/sh",
+      "command" : "\/bin\/bash",
       "enabled" : true,
       "script" : "#!\/bin\/bash\nnpm run build\n"
     }

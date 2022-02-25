@@ -1,6 +1,4 @@
-@precedence {skipspaces @left, style @left, source @left}
-
-@top Doc { (Page | Spread | newlines)+ }
+@top Doc { (Page | Spread)+ }
 
 Page[group="Pages"] {
 	PageToken Panel*
@@ -11,7 +9,19 @@ Spread[group="Pages"] {
 }
 
 Panel[group="Panels"] {
-	PanelToken Line*
+	PanelToken  (Line | newline)*
+}
+
+PageToken { 
+	"#" anyText? newline
+}
+
+SpreadToken { 
+	"##" anyText? newline
+}
+
+PanelToken {
+	"-" anyText? newline
 }
 
 Line[group="Lines"] {
@@ -19,36 +29,36 @@ Line[group="Lines"] {
 }
 
 Sfx {
-	Star SfxTranslation SfxSource? newlines
+	Star SfxTranslation SfxSource? newline
 }
 
 Note {
-	noteToken newlines
+	noteToken newline
 }
 
 Text {
-	 spaces? Source? spaces? ("/" Style)? spaces? attribToken Content newlines
+		(Source )? ("/" Style )?  attribToken Content newline
 }
 
 Source {
-	word !source
+	word
 }
 
 Style {
-	word !style
+	word
 }
 
 Content {
-  contentText+
+	contentText+
 }
 
 contentText {
-  ( UnstyledText | Bold | BoldItal | Ital | Star | Colon | DoubleStar | Underscore ) | BlockText | StyleBlock
+	( UnstyledText | Bold | BoldItal | Ital | Star | Colon | DoubleStar | Underscore ) | BlockText | StyleBlock 
 }
 
 StyleBlock { 
-   styleBlockOpen 
-	    ( UnstyledText | Bold | BoldItal | Ital | Star | Colon | DoubleStar | Underscore | newline )*
+	 styleBlockOpen 
+			( UnstyledText | Bold | BoldItal | Ital | Star | Colon | DoubleStar | Underscore | newline )+
 		styleBlockClose 
 	}
 
@@ -56,45 +66,45 @@ UnstyledText {
 	anyText
 }
 
+@skip {
+	space
+}
 
 @tokens {
 	space { $[\u0009 \u000b\u00a0\u1680\u2000-\u200a\u202f\u205f\u3000\ufeff] }
-  spaces { space+ }
-	attribToken { ":" spaces? }
+	attribToken { ":" space* }
 	newline { $[\r\n\u2028\u2029] }
-	newlines { newline+ }
-
-	PageToken { spaces? "#" ![\n#]* newlines}
-	SpreadToken { spaces? "##" ![\n]* newlines}
-	PanelToken { spaces? "-" ![\n]* newlines}
-
-
-	wordChar { std.asciiLetter | $[_$\u{a1}-\u{10ffff}] | std.digit | "-" | "'" | "&" | " "}
-	word { (std.asciiLetter | $[\u{a1}-\u{10ffff}] | std.digit) (wordChar* (std.asciiLetter | $[\u{a1}-\u{10ffff}] | std.digit))? }
-
-
-	anychar { ![\u0009:*_\u000b\u00a0\u1680\u2000-\u200a\u202f\u205f\u3000\ufeff\r\n\u2028\u2029] }	
-	anyText { anychar+ }
-  anycharExceptSpace { ![\u0009:*_ \u000b\u00a0\u1680\u2000-\u200a\u202f\u205f\u3000\ufeff\r\n\u2028\u2029] }
 	
+	wordChar { std.asciiLetter | $[\u{a1}-\u{10ffff}] | std.digit | "-" | "'" | "&" | " "}
+	@precedence { Ital, word }
+	word { (std.asciiLetter | $[\u{a1}-\u{10ffff}] | std.digit) (wordChar* (std.asciiLetter | $[\u{a1}-\u{10ffff}] | std.digit))? }
+	
+	anychar { ![:*_\r\n\u2028\u2029] }	
+	anyText { anychar+ }	
+		
 	nonStyleChar { ![_*\n ] }
+	
 	Star { "*" }
 	boldOpen { Star nonStyleChar }
 	boldClose { nonStyleChar Star}
 	Bold {
-		( Star anycharExceptSpace Star | boldOpen anyText* boldClose | boldItalOpen anyText* boldClose )
+		( Star (anychar | Underscore) Star | boldOpen (anyText | Underscore)* boldClose | boldItalOpen (anyText | Underscore)* boldClose )
 	}
 
 	DoubleStar { Star Star }
 	boldItalOpen { DoubleStar nonStyleChar }
 	boldItalClose { nonStyleChar DoubleStar}
 	BoldItal {
-		(DoubleStar anychar DoubleStar | boldItalOpen anyText? boldItalClose)
+		(DoubleStar (anychar | Underscore) DoubleStar | boldItalOpen (anyText | Underscore)* boldItalClose)
 	}
 
 	Underscore { "_" }
-	Ital { Underscore anychar* Underscore }
-
+	italOpen { Underscore nonStyleChar }
+	italClose { nonStyleChar Underscore}
+	Ital {
+		( Underscore (anychar | Star) Underscore | italOpen (anyText | Star)* italClose  )
+	}
+	
 	Colon { ":" }
 
 	noteToken { "!" ![\r\n\u2028\u2029]+ }
@@ -108,5 +118,5 @@ UnstyledText {
 	styleBlockOpen { "===\n" }
 	styleBlockClose { "\n==="}
 
-	@precedence { BlockText, styleBlockOpen, styleBlockClose, anyText, SfxSource, SfxTranslation, BoldItal, DoubleStar, Star, Bold, Underscore, Ital, word, spaces, SpreadToken, PageToken, PanelToken, newlines }
+	@precedence { BlockText, styleBlockOpen, styleBlockClose, SfxSource, SfxTranslation, BoldItal, DoubleStar, Star, Bold, Ital, Underscore, anyText, word, newline, space }
 }
