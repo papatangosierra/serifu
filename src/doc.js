@@ -8,7 +8,7 @@ function id(str) {
   return document.getElementById(str);
 }
 
-/* deepPush pushes a given val onto the end of an array after recursively descending into any array elements it finds first, and returns the new full array. This also descends into "content" properties, when found*/
+/* deepPush pushes a given val onto the end of an array after recursively descending into any array-final elements it finds first, and returns the new full array. This also descends into "content" properties, when found*/
 function deepPush(arr, val) {
   function descend(inside, into) {
     if (typeof into === "object") {
@@ -140,7 +140,8 @@ export class SerifuDoc {
     });
     // emit parse refreshed event event
     document.dispatchEvent(event);
-    this.parseForIndPanel();
+    let pageStruct = this.parseForIndPanel();
+    console.log(`pageStruct: ${JSON.stringify(pageStruct, 0, 4)}`);
   }
 
   parseForIndPanel() {
@@ -150,6 +151,8 @@ export class SerifuDoc {
     let pageOffsetWithSpreads = 0; // we increment this every time a spread is encountered, to derive an offset
     let pageNum = -1;
     let panelNum = -1;
+    let lastSource = "";
+    let lastStyle = "";
     do {
       if (cursor.type.name === "Page") {
         // associate current page number with index of last pageStruct element
@@ -183,22 +186,34 @@ export class SerifuDoc {
           text: this.text.substring(cursor.from, cursor.to),
         });
       }
-      if (cursor.type.name === "Source") {
-        // if we've found a Source token, we know we're in a Text line, so we can add the line and
+      if (cursor.type.name === "Text") {
+        // if we've found a Text token, we can add the line and
         // assign the source simultaneously.
         pageStruct[pageNum - pageOffsetWithSpreads][panelNum].push({
           type: "Text",
-          source: this.text.substring(cursor.from, cursor.to),
+          source: null,
           style: null,
           content: [],
         });
       }
+      if (cursor.type.name === "Source") {
+        // save this as the most recently found Source
+        lastSource = this.text.substring(cursor.from, cursor.to);
+        // clear any saved Styles:
+        lastStyle = null;
+      }
       if (cursor.type.name === "Style") {
-        pageStruct = deepEdit(
-          pageStruct,
-          "style",
-          this.text.substring(cursor.from, cursor.to)
-        );
+        // save this as the most recently found Style
+        lastStyle = this.text.substring(cursor.from, cursor.to);
+      }
+      if (cursor.type.name === "Content") {
+        // If have found a Content node, we've passed Source and Style,
+        // which means we can apply the last-found Source and Style to the
+        // node. If the containing Text node didn't have a Source or Style
+        // specified, we won't have encountered those nodes, so the last-specified
+        // Source and Style will control.
+        pageStruct = deepEdit(pageStruct, "source", lastSource);
+        pageStruct = deepEdit(pageStruct, "style", lastStyle);
       }
       if (cursor.type.name === "Bold") {
         pageStruct = deepPush(pageStruct, {
@@ -220,13 +235,21 @@ export class SerifuDoc {
           text: this.text.substring(cursor.from, cursor.to).replace(/\_/g, ""), // remove underscores
         });
       }
+      if (cursor.type.name === "Newline") {
+        pageStruct = deepPush(pageStruct, {
+          emphasis: "none",
+          text: "\n", // remove underscores
+        });
+      }
       if (
         (cursor.type.name === "UnstyledText" ||
+          cursor.type.name === "BlockText" ||
           cursor.type.name === "Star" ||
           cursor.type.name === "Colon" ||
           cursor.type.name === "DoubleStar" ||
           cursor.type.name === "Underscore") &&
-        cursor.node.parent.name === "Content"
+        (cursor.node.parent.name === "Content" ||
+          cursor.node.parent.name === "StyleBlock")
       ) {
         pageStruct = deepPush(pageStruct, {
           emphasis: "none",
@@ -240,7 +263,6 @@ export class SerifuDoc {
         });
       }
     } while (cursor.next());
-    console.log(`pageStruct for panel: ${JSON.stringify(pageStruct, 0, 4)}`);
     return pageStruct;
   }
 

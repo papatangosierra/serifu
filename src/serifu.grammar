@@ -58,12 +58,16 @@ contentText {
 
 StyleBlock { 
 	 styleBlockOpen 
-			( UnstyledText | Bold | BoldItal | Ital | Star | Colon | DoubleStar | Underscore | newline )+
+			( UnstyledText | Bold | BoldItal | Ital | Star | Colon | DoubleStar | Underscore | Newline)+
 		styleBlockClose 
 	}
 
 UnstyledText {
 	anyText
+}
+
+Newline {
+  newline
 }
 
 @skip {

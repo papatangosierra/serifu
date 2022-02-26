@@ -20,9 +20,10 @@ export const
   Underscore = 18,
   BlockText = 19,
   StyleBlock = 20,
-  Note = 21,
-  Sfx = 22,
-  SfxTranslation = 23,
-  SfxSource = 24,
-  Spread = 25,
-  SpreadToken = 26
+  Newline = 21,
+  Note = 22,
+  Sfx = 23,
+  SfxTranslation = 24,
+  SfxSource = 25,
+  Spread = 26,
+  SpreadToken = 27
