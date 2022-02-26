@@ -104,6 +104,8 @@ Spaces or tabs immediately before or after the colon are ignored, so the followi
 
 A line's content is ended by a newline character.
 
+##### Source and Style Carryover
+
 Comics frequently use multiple consecutive word balloons from the same speaker. For the sake of concision, once a Source has been specified, it can be omitted from subsequent lines:
 
     Kaz: I can't believe this.
@@ -121,9 +123,11 @@ You can also specify a Style without specifying a Source. In this case, the Sour
 
 In this case, since the last three lines all omit a Source, they're attributed to `Archangelo`. The second line specifies a style of `Big`, and since the third line doesn't specify either a Source or a Style, it inherits the previous instances of each: a Source of `Archangelo`, and a Style of `Big`. The fourth line also gets the source `Archangelo`, but it specifies a new style of `Thought`.
 
-**Note:** Once you've specified a Style, the only way return to default, unstyled text is to explicitly specify a Source again, with no Style. In the previous example, to add a line where the Source `Archangelo` has no Style:
+**Note:** Once you've specified a Style, the only way return to default, unstyled text is to explicitly specify a Source again, with no Style. Following the previous example, to add a line where the Source `Archangelo` has no Style, you explictly specify `Archangelo:` again, e.g.:
 
     	Archangelo: Even Bergdorf's carries manga, now!
+
+This clears the Style carryover.
 
 ##### In-Line Styling and Emphasis
 
