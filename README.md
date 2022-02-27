@@ -82,7 +82,7 @@ A Text Line consists of a Source and Content, separated by a single colon: ":".
 
 Text Lines are meant to be used for any and all text in the script that's not an onomatopoetic sound effect. Character dialogue and asides, narration, captions, diegetic text appearing in the artwork itself (e.g. signs, labels, etc.) would all be represented by Text Lines.
 
-A Text Line is meant to represent one piece of contiguous text on the page. A single word balloon, a caption, a footnote---all of these would be represented by a Text Line.
+A Text Line is meant to represent one piece of contiguous text on the page. A single word balloon, a caption, a footnote---each of these would be represented by one Text Line.
 
 A Text Line's **Source** (notionally, the character speaking the line) is the text that precedes the colon (`:`).
 
@@ -94,7 +94,7 @@ A Text Style would typically be used to indicate an alternate font or typographi
 
 Source and Style labels may contain spaces, and can use any alphabetic or numeric characters, but the only punctuation characters permitted are `'`, `-`, and `&`.
 
-Different projects have different levels of specificity they require in a script, and Serifu's Source and Style fields are meant to be freeform enough to accommodate a wide variety of editorial needs.
+Different projects have different levels of specificity they require in a script, and Serifu's Source and Style fields are meant to be freeform enough to accommodate a wide variety scenarios.
 
 Spaces or tabs immediately before or after the colon are ignored, so the following Dialogue Lines are equivalent:
 
@@ -125,7 +125,7 @@ In this case, since the last three lines all omit a Source, they're attributed t
 
 **Note:** Once you've specified a Style, the only way return to default, unstyled text is to explicitly specify a Source again, with no Style. Following the previous example, to add a line where the Source `Archangelo` has no Style, you explictly specify `Archangelo:` again, e.g.:
 
-    	Archangelo: Even Bergdorf's carries manga, now!
+    Archangelo: Even Bergdorf's carries manga, now!
 
 This clears the Style carryover.
 
@@ -168,7 +168,7 @@ In this example, the asterisk in `wisewolf*` is treated literally, while `*not*`
 
 The current Serifu behavior is that only the outermost set of style markers are respected. So in a line like:
 
-    	Caption: *This was to be the _Excelion's_ maiden voyage.*
+    Caption: *This was to be the _Excelion's_ maiden voyage.*
 
 The outer set of `*` markers specify bolded text, and the inner `_` markers do not create italics, but are instead treated literally. This is probably not what such a line would intend, so lines like this should be avoided. (An ideal Serifu implementation would probably flag a line like this with a warning.)
 
@@ -248,11 +248,25 @@ Any text between `/=` `=/` tokens is interpreted verbatim, so the `*`, `_`, and 
 
 **Note:** An important distinction between Multiline Text Blocks and Pre-formatted Text is that Multiline Text Blocks _must_ take up multiple lines of text, since the ending `===` marker must be on a line by itself. Pre-formatted Text, however, can remain on a single line:
 
-    	Computer Screen: /= *Bingo.* =/
+    Computer Screen: /= *Bingo.* =/
 
 ### Future-Proofing
 
 Backticks (```) currently have no special meaning in Serifu. However, placing text between backticks may eventually be used as a way to mark words or phrases as special terminology—i.e., terms that the parser can identify to include on an automatically-generated style sheet. The backticks themselves would not be present in the lettered text. For future compatibility, the Serifu author recommends avoiding using backticks in scripts.
+
+## The Reasoning Behind Sources and Styles
+
+Serifu is a set of deliberately minimal conventions for specifying the text that is meant to appear on a page of sequential art.
+
+Arguably, the order of Pages, Panels, and Lines alone should be enough for a letterer to understand which pieces of text go where. Specifying which character is speaking, however, adds another piece of information that the letterer can use to infer text placement. This also makes the script considerably more readable as a standalone document.
+
+Associating lines of text with the characters speaking them also allows scripts to be treated as data in a way conventional word processing documents can't be. With Serifu, it's trivial to constraint a search to lines only spoke by a particular character, which can be very useful during the translation or editorial processes of long series. The information in a Serifu document can also easily be the beginning of an automatically generated stylesheet.
+
+A letterer's job is to place the text in art, and for every piece of text they place, a question must be answered: "What kind of text is this?" Serifu's Sources and Styles are meant to make it easy for the script writer or translator to answer this question ahead of time.
+
+The notional goal is this: When a letterer loads a Serifu document into their design software, they will have a way to associate Sources and Styles specified in the script with design parameters (fonts, weights, sizes, etc) appropriate for the comic's presentation. Then whenever a piece of text with a given Serifu Style is placed, it will automatically be given the appropriate font, etc.
+
+This means that the Serifu Style of e.g. `/Thought` can be associated with e.g. 14pt WildWords Italics, and once this association is created, _every_ text line with a `/Thought` Style will automatically be set in 14pt WildWords Italics. This, along with the automatic text placement Serifu enables, removes much of the repetitive gruntwork involved in lettering, leaving the letterer more time to focus on the aspects of their work that require human judgement and taste.
 
 ## Etc.
 

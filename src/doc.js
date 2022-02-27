@@ -360,17 +360,19 @@ function autosaveToLocalStorage() {
     console.log("downloadasViz called");
     let startTree = parser.parse(this.text);
     let cursor = startTree.cursor();
+    let curSource = "";
+    let curStyle = "";
     let curPg = 1;
     let curPnl = 1;
     let scriptText = "";
     do {
       if (cursor.type.name === "PageToken") {
-        scriptText += `\nPage ${curPg}\n`;
+        scriptText += `\nPage ${curPg}`;
         curPg++;
         curPnl = 1; // panel numbering resets every page
       }
       if (cursor.type.name === "SpreadToken") {
-        scriptText += `\nPages ${curPg}-${curPg + 1}\n`;
+        scriptText += `\nPages ${curPg}-${curPg + 1}`;
         curPg += 2; // increment page number by two, since this is a spread
         curPnl = 1; // panel numbering resets every page
       }
@@ -379,7 +381,7 @@ function autosaveToLocalStorage() {
         curPnl++;
       }
       if (cursor.type.name === "SfxTranslation") {
-        scriptText += `\t SFX:\t${this.text
+        scriptText += `\tSFX:\t${this.text
           .substring(cursor.from, cursor.to)
           .trim()}\n`;
       }
@@ -392,15 +394,18 @@ function autosaveToLocalStorage() {
           .trim()}\n`;
       }
       if (cursor.type.name === "Source") {
-        scriptText += `\t${this.text.substring(cursor.from, cursor.to).trim()}`;
+        // scriptText += `\t${this.text.substring(cursor.from, cursor.to).trim()}`;
+        curSource = `${this.text.substring(cursor.from, cursor.to).trim()}`;
+        curStyle = ""; // clear Style on finding Source, since specifying a Source ends Style carryover
       }
       if (cursor.type.name === "Style") {
-        scriptText += `/${this.text.substring(cursor.from, cursor.to).trim()}`;
+        // scriptText += `/${this.text.substring(cursor.from, cursor.to).trim()}`;
+        curStyle = `${this.text.substring(cursor.from, cursor.to).trim()}`;
       }
       if (cursor.type.name === "Content") {
-        scriptText += `:\t${this.text
-          .substring(cursor.from, cursor.to)
-          .trim()}\n`;
+        scriptText += `\t${curSource}${
+          curStyle ? "/" + curStyle : ""
+        }:\t${this.text.substring(cursor.from, cursor.to).trim()}\n`;
       }
     } while (cursor.next());
     this.downloadAsText(scriptText);
