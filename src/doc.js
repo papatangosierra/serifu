@@ -367,17 +367,17 @@ function autosaveToLocalStorage() {
     let scriptText = "";
     do {
       if (cursor.type.name === "PageToken") {
-        scriptText += `\nPage ${curPg}`;
+        scriptText += `Page ${curPg}\n`;
         curPg++;
         curPnl = 1; // panel numbering resets every page
       }
       if (cursor.type.name === "SpreadToken") {
-        scriptText += `\nPages ${curPg}-${curPg + 1}`;
+        scriptText += `Pages ${curPg}-${curPg + 1}\n`;
         curPg += 2; // increment page number by two, since this is a spread
         curPnl = 1; // panel numbering resets every page
       }
       if (cursor.type.name === "PanelToken") {
-        scriptText += "\n" + curPnl.toString();
+        scriptText += curPnl.toString();
         curPnl++;
       }
       if (cursor.type.name === "SfxTranslation") {
