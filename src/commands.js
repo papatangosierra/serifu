@@ -157,15 +157,7 @@ export function insertNewlineAndRenumberPages(view) {
           }
         }
         if (type.name === "PanelToken") {
-          // We subtract 1 from currentPageNumber here because it will have already been incremented
-          // by the time we encounter the panel. This kind of sucks but it will work for now.
-          inSpread
-            ? (labelText = `- ${currentPageNumber - 2}-${
-                currentPageNumber - 1
-              }.${currentPanelNumber}\n`)
-            : (labelText = `- ${
-                currentPageNumber - 1
-              }.${currentPanelNumber}\n`);
+          labelText = `- ${currentPanelNumber}\n`;
           console.log(`We're in a panel, using ${labelText}`);
           changes.push({
             from: from,
@@ -263,38 +255,65 @@ export function newlineWithLastSourceAndStyle(view) {
 }
 
 function getPageAndPanelNumberAtPos(view) {
-  // this is a horrible hack
+  // This is less of a horrible hack than it used to be.
+  /* I'm trading off the horrible hack of relying on the text in the page & panel
+  tokens to report accurate numbering (which directly contradicts what the Serifu
+	specification says will happen) for the unsatisfyingly inefficient (but probably
+	still fast enough not to matter) method of counting PageToken nodes backwards from
+	the current cursor position in order to derive the correct number for the next one.
+	This at least includes the optimization of not checking every cursor-previous position
+	in the document, which is what I was going to grit my teeth and do until realizing
+	I could use Node.prevSibling to just skip pages, using the starting position of 
+	each node's position to update curPos such that the while loop still works.
+	The longer-term solution to this and several other problems with the architecture
+	is to add state to the syntax tree such that every page and panel knows its own order
+	index, but I haven't figure out how to do that yet, and for now? This will work.
+	*/
   console.log("getPageAndPanelNumberAtPos fired");
   let curPos = view.state.selection.ranges[0].from;
   let curNode = syntaxTree(view.state).resolve(curPos);
   let result = {
-    page: "",
-    panel: "",
+    page: 0,
+    panel: 0,
   };
-  while (curPos > -1 && (result.page === "" || result.panel === "")) {
+  // As long as we're not at the beginning of the document
+  while (curPos >= 0) {
     console.log("checking position " + curPos);
-    // if we get to the beginning of the doc, uh, stop
-    curNode = syntaxTree(view.state).resolve(curPos);
-    curPos--;
-    if (
-      (curNode.name === "PageToken" || curNode.name === "SpreadToken") &&
-      result.page === ""
-    ) {
-      result.page = view.state.doc
-        .sliceString(curNode.from, curNode.to)
-        .split(" ")[2]
-        .trim();
-      console.log(`We found page: ${result.page}, and should stop looking`);
-    }
-    if (curNode.name === "PanelToken" && result.panel === "") {
-      result.panel = view.state.doc
-        .sliceString(curNode.from, curNode.to)
-        .split(".")[1]
-        .trim();
-      console.log(`We found panel: ${result.panel}, and should stop looking`);
+    curNode = syntaxTree(view.state).resolve(curPos, 0); // the -1 tells resolve to resolve nodes that END at this position
+    // if we find a Page that's not at the beginning of the document, and it's not the first one
+    // IN the document
+    console.log("current node is: " + curNode.name);
+    if (curNode.name === "PageToken" && curPos > 0) {
+      result.page++; // increment counter
+      if (curNode.parent.prevSibling != null) {
+        curPos = curNode.parent.prevSibling.from + 1; // jump curPos backward to where the previous page or panel token should be.
+      } else {
+        // if the current page has no previous sibling, this is the first page, so we can safely break
+        break;
+      }
+    } else if (curNode.name === "SpreadToken") {
+      result.page += 2; // increment counter by two since this is a Spread
+      curPos = curNode.parent.prevSibling.from + 1; // jump curPos backward to where the previous page or panel token should be.
+    } else if (curNode.name === "PanelToken" && result.page === 0) {
+      // If we find a PanelToken that's not the first one and haven't found a Page of any kind yet
+      console.log(`We found panel: ${result.panel}`);
+      result.panel++; // count panel
+      console.log(
+        `Jumping back to position: ${curNode.parent.prevSibling.from + 1}`
+      );
+      curPos = curNode.parent.prevSibling.from + 1; // jump curPos backward to beginning of previous PanelToken
+    } else {
+      // If we're not in a page, spread, or panel, move backwards.
+      curPos--;
     }
   }
-  console.log(`We found page: ${result.page} and panel: ${result.panel}`);
+  console.log(
+    `We found page: ${result.page} and panel: ${result.panel}, 0-indexed.`
+  );
+  // If there are no pages or panels in the current position yet, return 0;
+  // However, if there are, return a 1-indexed result for either.
+  // result.page = result.page === 0 ? 0 : result.page + 1;
+  // result.panel = result.panel === 0 ? 0 : result.panel + 1;
   return result;
 }
 
@@ -311,6 +330,7 @@ export function insertCharAtCursor(view, char) {
     ),
     scrollIntoView: true,
   });
+  view.focus(); // return focus to view; it will have been shifted out because of the button-press
   return true;
 }
 
@@ -318,7 +338,7 @@ export function insertCharAtCursor(view, char) {
 export function insertPanelAtCursor(view) {
   console.log("insertPanelAtCursor fired");
   let curPgPnl = getPageAndPanelNumberAtPos(view);
-  let insertString = `\n- ${curPgPnl.page}.${parseInt(curPgPnl.panel) + 1}\n`;
+  let insertString = `\n- ${parseInt(curPgPnl.panel) + 1}\n`;
   view.dispatch({
     changes: {
       from: view.state.selection.ranges[0].from,
@@ -336,9 +356,7 @@ export function insertPanelAtCursor(view) {
 export function insertPageAtCursor(view) {
   console.log("insertPageAtCursor fired");
   let curPgPnl = getPageAndPanelNumberAtPos(view);
-  let insertString = `\n# Page ${parseInt(curPgPnl.page) + 1}\n- ${
-    parseInt(curPgPnl.page) + 1
-  }.1\n`;
+  let insertString = `\n# Page ${parseInt(curPgPnl.page) + 1}\n- 1\n`;
   view.dispatch({
     changes: {
       from: view.state.selection.ranges[0].from,
