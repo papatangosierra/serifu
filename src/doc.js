@@ -311,7 +311,7 @@ export class SerifuDoc {
     }); // set s to the compressed text
     // if there's actually anything in these slots, then uncompress it and update the view state
     // with it
-    if (s.uniques != null) {
+    if (s.squeezeObj.uniques != null) {
       view.dispatch({
         changes: {
           from: 0,
@@ -356,13 +356,13 @@ function autosaveToLocalStorage() {
 	}
 */
   // When downloadAsJSON is called on the object, it generates a blob and triggers a download
-  downloadAsText(dlText) {
+  downloadAsText(filename, dlText) {
     let blob = new Blob([dlText], {
       type: "text/text",
     });
     let e = document.createElement("a");
     e.href = URL.createObjectURL(blob);
-    e.download = id("docname").textContent + ".txt";
+    e.download = filename + ".txt";
     document.body.appendChild(e);
     e.click();
     document.body.removeChild(e);
@@ -378,25 +378,33 @@ function autosaveToLocalStorage() {
     let curPg = 1;
     let curPnl = 1;
     let scriptText = "";
+    let prevToken = "";
     do {
       if (cursor.type.name === "PageToken") {
-        scriptText += `Page ${curPg}\n`;
+        scriptText += `\n\nPage ${curPg}`;
         curPg++;
         curPnl = 1; // panel numbering resets every page
+        prevToken = "PageToken";
       }
       if (cursor.type.name === "SpreadToken") {
-        scriptText += `Pages ${curPg}-${curPg + 1}\n`;
+        scriptText += `\n\nPages ${curPg}-${curPg + 1}`;
         curPg += 2; // increment page number by two, since this is a spread
         curPnl = 1; // panel numbering resets every page
+        prevToken = "PageToken";
       }
       if (cursor.type.name === "PanelToken") {
-        scriptText += curPnl.toString();
+        scriptText +=
+          prevToken === "PanelToken" || prevToken === "PageToken"
+            ? "\n" + curPnl.toString()
+            : curPnl.toString();
+        prevToken = "PanelToken";
         curPnl++;
       }
       if (cursor.type.name === "SfxTranslation") {
         scriptText += `\tSFX:\t${this.text
           .substring(cursor.from, cursor.to)
           .trim()}\n`;
+        prevToken = "";
       }
       if (cursor.type.name === "Note") {
         scriptText += `NOTE: ${this.text
@@ -405,6 +413,7 @@ function autosaveToLocalStorage() {
             cursor.to
           )
           .trim()}\n`;
+        prevToken = "";
       }
       if (cursor.type.name === "Source") {
         // scriptText += `\t${this.text.substring(cursor.from, cursor.to).trim()}`;
@@ -419,9 +428,10 @@ function autosaveToLocalStorage() {
         scriptText += `\t${curSource}${
           curStyle ? "/" + curStyle : ""
         }:\t${this.text.substring(cursor.from, cursor.to).trim()}\n`;
+        prevToken = "";
       }
     } while (cursor.next());
-    this.downloadAsText(scriptText);
+    this.downloadAsText(`${id("docname").textContent} (Viz)`, scriptText);
   }
   // buildMinimap returns a function that when called with React Components as arguments,
   // builds a DOM-based minimap of the current document structure and returns it for rendering.

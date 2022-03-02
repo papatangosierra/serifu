@@ -30,7 +30,7 @@ import { insertNewlineAndRenumberPages } from "./commands.js";
 import { pageNumberGutter, findPageNodes } from "./page-panel-numbers.js";
 import { Squeezer } from "./squeeze.js";
 import { defaultDoc } from "./default-doc.js";
-
+import { instanceWarning } from "./warning.js";
 /* React and components setup */
 
 import React from "react";
@@ -70,6 +70,13 @@ let baseTheme = EditorView.baseTheme({
 /* Utility Function*/
 function id(str) {
   return document.getElementById(str);
+}
+
+// if this get set true by the following check, we won't be loading the app at all.
+let DANGER_FLAG = false;
+// Check instance mutex
+if (localStorage.getItem("instance-mutex") != null) {
+  DANGER_FLAG = true;
 }
 
 // Set up localStorage
@@ -178,98 +185,107 @@ let view = new EditorView({
   lineWrapping: true,
 });
 
-// Render our React elements
-ReactDOM.render(
-  React.createElement("div", null, insertButtons),
-  document.getElementById("charbuttons")
-);
-
-ReactDOM.render(
-  React.createElement(SourceItemGroup, {
-    items: theDoc.getSources,
-  }),
-  document.getElementById("sourcelist")
-);
-
-ReactDOM.render(
-  React.createElement(StyleItemGroup, {
-    items: theDoc.getStyles,
-  }),
-  document.getElementById("stylelist")
-);
-
-// We have to render the SaveSlotBar in order to initialize our save slots
-ReactDOM.render(
-  /*#__PURE__*/ React.createElement(SaveSlotBar, null),
-  document.getElementById("saveslotsbar")
-);
-
 export { theDoc, view };
 
-// File download button
-id("dlTextBtn").addEventListener("click", () => {
-  theDoc.downloadAsText(theDoc.getText);
-});
+if (DANGER_FLAG) {
+  // unmount editor
+  document.body.innerHTML = instanceWarning;
+} else {
+  // Set the mutext to indicate that we're the authoritative window.
+  localStorage.setItem("instance-mutex", "SET");
 
-id("dlVizBtn").addEventListener("click", () => {
-  theDoc.downloadAsViz();
-});
-
-id("pgNumBtn").addEventListener("click", () => {
-  findPageNodes(view);
-});
-
-// Event listeners for save slots. "saveSlotChange" is a custom event that includes
-// "docText" and "docName" attributes, which we use to update the editor view.
-document.addEventListener("saveSlotChange", (e) => {
-  view.dispatch({
-    changes: {
-      from: 0,
-      to: view.state.doc.length, // the entire document
-      insert: e.detail.docText,
-    },
+  // set event listener to clear mutex when we close or unload
+  window.addEventListener("beforeunload", () => {
+    localStorage.removeItem("instance-mutex");
   });
-  id("docname").textContent = e.detail.docName;
-  theDoc.refreshParse(view.state.doc.toString());
-});
 
-id("saveBtn").addEventListener("click", () => {
-  manualSave();
-});
+  // Render our React elements
+  ReactDOM.render(
+    React.createElement("div", null, insertButtons),
+    document.getElementById("charbuttons")
+  );
 
-// React Render calls
-ReactDOM.render(
-  React.createElement(ParanoiaMode),
-  document.getElementById("paranoia-mode")
-);
+  ReactDOM.render(
+    React.createElement(SourceItemGroup, {
+      items: theDoc.getSources,
+    }),
+    document.getElementById("sourcelist")
+  );
 
-ReactDOM.render(
-  React.createElement("div", null, insertButtons),
-  document.getElementById("charbuttons")
-);
+  ReactDOM.render(
+    React.createElement(StyleItemGroup, {
+      items: theDoc.getStyles,
+    }),
+    document.getElementById("stylelist")
+  );
 
-ReactDOM.render(
-  React.createElement(SourceItemGroup, {
-    items: theDoc.getSources,
-  }),
-  document.getElementById("sourcelist")
-);
+  // We have to render the SaveSlotBar in order to initialize our save slots
+  ReactDOM.render(
+    /*#__PURE__*/ React.createElement(SaveSlotBar, null),
+    document.getElementById("saveslotsbar")
+  );
 
-ReactDOM.render(
-  React.createElement(StyleItemGroup, {
-    items: theDoc.getStyles,
-  }),
-  document.getElementById("stylelist")
-);
+  // File download button
+  id("dlTextBtn").addEventListener("click", () => {
+    theDoc.downloadAsText(`${id("docname").textContent}`, theDoc.getText);
+  });
 
-ReactDOM.render(
-  React.createElement(SaveSlotBar, null),
-  document.getElementById("saveslotsbar")
-);
+  id("dlVizBtn").addEventListener("click", () => {
+    theDoc.downloadAsViz();
+  });
 
-ReactDOM.render(
-  React.createElement(Minimap, {
-    docStruct: theDoc.currentDocStruct,
-  }),
-  document.getElementById("minimap")
-);
+  // Event listeners for save slots. "saveSlotChange" is a custom event that includes
+  // "docText" and "docName" attributes, which we use to update the editor view.
+  document.addEventListener("saveSlotChange", (e) => {
+    view.dispatch({
+      changes: {
+        from: 0,
+        to: view.state.doc.length, // the entire document
+        insert: e.detail.docText,
+      },
+    });
+    id("docname").textContent = e.detail.docName;
+    theDoc.refreshParse(view.state.doc.toString());
+  });
+
+  id("saveBtn").addEventListener("click", () => {
+    manualSave();
+  });
+
+  // React Render calls
+  ReactDOM.render(
+    React.createElement(ParanoiaMode),
+    document.getElementById("paranoia-mode")
+  );
+
+  ReactDOM.render(
+    React.createElement("div", null, insertButtons),
+    document.getElementById("charbuttons")
+  );
+
+  ReactDOM.render(
+    React.createElement(SourceItemGroup, {
+      items: theDoc.getSources,
+    }),
+    document.getElementById("sourcelist")
+  );
+
+  ReactDOM.render(
+    React.createElement(StyleItemGroup, {
+      items: theDoc.getStyles,
+    }),
+    document.getElementById("stylelist")
+  );
+
+  ReactDOM.render(
+    React.createElement(SaveSlotBar, null),
+    document.getElementById("saveslotsbar")
+  );
+
+  ReactDOM.render(
+    React.createElement(Minimap, {
+      docStruct: theDoc.currentDocStruct,
+    }),
+    document.getElementById("minimap")
+  );
+}

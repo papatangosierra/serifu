@@ -17,7 +17,10 @@ export function ParanoiaMode() {
     let paranoiaDownload = setInterval(() => {
       // If Paranoia mode is enabled and the doc has changed since our last download
       if (enabled === true && theDoc.text != lastDocText) {
-        theDoc.downloadAsText(theDoc.text);
+        theDoc.downloadAsText(
+          `${document.getElementById("docname").textContent} (Auto)`,
+          theDoc.text
+        );
         setLastDocText(theDoc.text);
       }
     }, 300000);
