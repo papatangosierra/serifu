@@ -6,13 +6,14 @@ import { Squeezer } from "./squeeze.js";
 
 // actual web worker code starts here
 onmessage = (e) => {
-  console.log(`squeeze worker got message from main script`);
-  if (typeof e.data === "string") {
+  console.log(`squeeze worker got message from main script: ${e.data}`);
+  if (typeof e.data === "string" && e.data.length > 0) {
     let s = new Squeezer(e.data.replace(/\u001f/g, "")).squozed; // strip out \u001f if it's there (it probably isn't, but if it is, for some reason, we'll lose data, because it's the separator for Squeezer dictionary fields.
     postMessage([s.uniques, s.seq]); // send uniques and sequence back to main thread
   } else {
-    console.err("squeeze worker not given string to compress; giving up.");
-    postMessage(null);
+    console.log(
+      "squeeze worker not given string to compress; returning empty strings."
+    );
+    postMessage(["", ""]);
   }
-  console.log("compression done, returning result");
 };

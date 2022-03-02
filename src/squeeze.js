@@ -1,6 +1,8 @@
 // my home-rolled dictionary compression algorithm
 
 export class Squeezer {
+  // if we receive a string as our constructor argument, then we compress it and use that as our squeeze obj.
+  // otherwise, we're expecting to get a squeeze obj as our constructor arg.
   constructor(str) {
     if (typeof str === "string") {
       this.squeezeObj = this.squeeze(str);

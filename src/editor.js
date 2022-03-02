@@ -18,7 +18,7 @@ import {
 import { highlightStyleOptions } from "./parsersetup.js";
 import { serifu, serifuHighlighter, serifuLanguage } from "./parsersetup.js";
 // import { testDoc } from "./testDoc.js";
-import { SerifuDoc } from "./doc.js";
+import { SerifuDoc, squeezeWorker } from "./doc.js";
 import {
   SourceWidget,
   sourceLabels,
@@ -28,6 +28,8 @@ import {
 import { nodeInspector } from "./nodeinspector.js";
 import { insertNewlineAndRenumberPages } from "./commands.js";
 import { pageNumberGutter, findPageNodes } from "./page-panel-numbers.js";
+import { Squeezer } from "./squeeze.js";
+import { defaultDoc } from "./default-doc.js";
 
 /* React and components setup */
 
@@ -40,8 +42,8 @@ import {
   saveSlotPanel,
   manualSave,
 } from "./components/save-slots.jsx";
-
 import { Minimap } from "./components/minimap.jsx";
+import { ParanoiaMode } from "./components/paranoia-mode.jsx";
 
 // make a new basic theme
 let baseTheme = EditorView.baseTheme({
@@ -69,6 +71,37 @@ let baseTheme = EditorView.baseTheme({
 function id(str) {
   return document.getElementById(str);
 }
+
+// Set up localStorage
+// doing this here in global scope kind of sucks but it's okay for now
+const slots = ["♥︎", "★", "✿"];
+slots.forEach((slot) => {
+  let s = new Squeezer(defaultDoc).squozed;
+  if (!localStorage.getItem(`slot-${slot}-name`)) {
+    localStorage.setItem(`slot-${slot}-name`, "Untitled Script");
+  }
+  if (!localStorage.getItem(`slot-${slot}-seq`)) {
+    localStorage.setItem(`slot-${slot}-seq`, s.seq);
+  }
+  if (!localStorage.getItem(`slot-${slot}-uniques`)) {
+    localStorage.setItem(`slot-${slot}-uniques`, s.uniques);
+  }
+});
+
+// set up localStorage active slot default if it's not already there.
+if (localStorage.getItem("current-active-slot") === null) {
+  localStorage.setItem("current-active-slot", "♥︎");
+}
+
+// create a new Squeezer object with the contents of the current active slot
+const curInitSlot = localStorage.getItem("current-active-slot");
+const s = new Squeezer({
+  uniques: localStorage.getItem(`slot-${curInitSlot}-uniques`),
+  seq: localStorage.getItem(`slot-${curInitSlot}-seq`),
+}); // set s to the compressed text
+
+/* Create new doc object with uncompressed contents of current active slot */
+let theDoc = new SerifuDoc([...s.inflate()].join(""));
 
 // Set up the autocomplete Compartments. These allow us
 // to reinitialize these plugins with new autocompletion lists
@@ -101,14 +134,6 @@ const updateAutoCompletion = EditorState.transactionExtender.of((tr) => {
     };
   }
 });
-
-// set up localStorage active slot default if it's not already there.
-if (localStorage.getItem("current-active-slot") === null) {
-  localStorage.setItem("current-active-slot", "♥︎");
-}
-
-/* Create new doc and init editor with its (empty) contents */
-let theDoc = new SerifuDoc("# Page 1");
 
 // initialize Editor View
 let view = new EditorView({
@@ -179,10 +204,6 @@ ReactDOM.render(
   document.getElementById("saveslotsbar")
 );
 
-// Load current active save slot contents into doc
-// WILL NOT WORK UNLESS SaveSlotBar HAS RENDERED!!!
-theDoc.openFromSlot(view, localStorage.getItem("current-active-slot"));
-
 export { theDoc, view };
 
 // File download button
@@ -217,6 +238,11 @@ id("saveBtn").addEventListener("click", () => {
 });
 
 // React Render calls
+ReactDOM.render(
+  React.createElement(ParanoiaMode),
+  document.getElementById("paranoia-mode")
+);
+
 ReactDOM.render(
   React.createElement("div", null, insertButtons),
   document.getElementById("charbuttons")

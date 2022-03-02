@@ -256,17 +256,17 @@ Backticks (```) currently have no special meaning in Serifu. However, placing te
 
 ## The Reasoning Behind Sources and Styles
 
-Serifu is a set of deliberately minimal conventions for specifying the text that is meant to appear on a page of sequential art.
+Serifu is a set of deliberately minimal conventions for specifying the text that is meant to appear on a page of a comic book. It has its roots in the workflow of manga translation, but its rules are general enough to be applicable to anything recognizable as a comic book.
 
-Arguably, the order of Pages, Panels, and Lines alone should be enough for a letterer to understand which pieces of text go where. Specifying which character is speaking, however, adds another piece of information that the letterer can use to infer text placement. This also makes the script considerably more readable as a standalone document.
+Arguably, the order of Pages, Panels, and Lines alone could be enough for a letterer to understand which pieces of text go where. Specifying which character is speaking, however, adds another piece of information that the letterer can use to infer text placement. This also makes the script considerably more readable as a standalone document.
 
-Associating lines of text with the characters speaking them also allows scripts to be treated as data in a way conventional word processing documents can't be. With Serifu, it's trivial to constraint a search to lines only spoke by a particular character, which can be very useful during the translation or editorial processes of long series. The information in a Serifu document can also easily be the beginning of an automatically generated stylesheet.
+Associating lines of text with the characters speaking them also allows scripts to be treated as data in a way conventional word processing documents can't be. With Serifu, it's trivial to constrain a search to lines only spoke by a particular character, which can be very useful during the translation or editorial processes of long series. The information in a Serifu document can also easily be the beginning of an automatically generated stylesheet.
 
-A letterer's job is to place the text in art, and for every piece of text they place, a question must be answered: "What kind of text is this?" Serifu's Sources and Styles are meant to make it easy for the script writer or translator to answer this question ahead of time.
+A letterer's job is to place the text in art, and for every piece of text they place, a question must be answered: "Where does this text go, and what should it look like?" Serifu's Sources and Styles are meant to make it easy for the script writer or translator to answer this question ahead of time.
 
-The notional goal is this: When a letterer loads a Serifu document into their design software, they will have a way to associate Sources and Styles specified in the script with design parameters (fonts, weights, sizes, etc) appropriate for the comic's presentation. Then whenever a piece of text with a given Serifu Style is placed, it will automatically be given the appropriate font, etc.
+The notional goal is this: When a letterer loads a Serifu document into their design software, they will have a way to associate Sources and Styles specified in the script with design parameters (fonts, weights, sizes, etc) appropriate for the comic's presentation. Then whenever a piece of text with a given Serifu Source or Style is placed, it will automatically be given the appropriate font, etc.
 
-This means that the Serifu Style of e.g. `/Thought` can be associated with e.g. 14pt WildWords Italics, and once this association is created, _every_ text line with a `/Thought` Style will automatically be set in 14pt WildWords Italics. This, along with the automatic text placement Serifu enables, removes much of the repetitive gruntwork involved in lettering, leaving the letterer more time to focus on the aspects of their work that require human judgement and taste.
+This means that the Serifu Style of `/Thought` can be associated with e.g. 14pt WildWords Italics, and once this association is created, _every_ text line with a `/Thought` Style will automatically be set in 14pt WildWords Italics. This, along with the quick text placement Serifu enables, removes much of the repetitive gruntwork involved in lettering, leaving the letterer more time to focus on the aspects of their work that require human judgement and taste.
 
 ## Etc.
 

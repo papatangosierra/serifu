@@ -6,6 +6,7 @@ import { showPanel } from "@codemirror/panel";
 import { Text } from "@codemirror/text";
 
 import { view, theDoc } from "../editor.js";
+import { defaultDoc } from "../default-doc.js";
 
 function saveSlots(view) {
   let dom = document.createElement("div");
@@ -67,12 +68,6 @@ export class SaveSlotBar extends React.Component {
       ),
       docNames: [],
     };
-    // initalize any localStorage save slots that don't already exist
-    this.slots.forEach((slot) => {
-      if (localStorage.getItem(`slot-${slot}-name`) === null) {
-        theDoc.saveToSlot(slot, slot, "-Empty-");
-      }
-    });
     // add localStorage docNames to state
     this.slots.forEach((slot) => {
       this.state.docNames.push(localStorage.getItem(`slot-${slot}-name`));
@@ -81,9 +76,11 @@ export class SaveSlotBar extends React.Component {
   }
 
   componentDidMount() {
+    // if
+    // load the current active slot back into the view
+    theDoc.openFromSlot(view, localStorage.getItem("current-active-slot"));
     // Set up autosave timer here.
     this.autoSaveTimer = setInterval(() => {
-      // FIXME: Add a clearInterval() here! probably in componentWillUnmount() or something
       this.saveToCurrentSlot();
     }, 10000); // autosave every 10 seconds
 
@@ -92,6 +89,12 @@ export class SaveSlotBar extends React.Component {
       console.log("manual save!!!");
       this.saveToCurrentSlot();
     });
+
+    // TODO: Add storage event listener to pick up changes if there's another browser view open.
+    /* window.onstorage = (e) => {
+			// When the local storage changes elsewhere, if it affected our currently active slot
+			// we should update the view with the changes.
+		}; */
   }
 
   componentWillUnmount() {

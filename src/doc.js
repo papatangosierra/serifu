@@ -1,5 +1,6 @@
 import { parser } from "./serifu-parser/serifu-parser.js";
 import { Squeezer } from "./squeeze.js";
+import { defaultDoc } from "./default-doc.js";
 
 /* doc.js describes an object that contains a Serifu document, along with metadata computed by the object at the time of instantiation. It provides up-to-date information on Sources and Styles for autocomplete purposes, along with other state important to functionality but not strictly speaking part of the document itself. */
 
@@ -40,7 +41,7 @@ function deepEdit(arr, attr, val) {
 
 /* instantiate our compression web worker */
 
-const squeezeWorker = new Worker(
+export const squeezeWorker = new Worker(
   new URL("./squeeze-worker.js", import.meta.url)
 ); // weird worker declaration syntax courtesy of webpack
 
@@ -141,7 +142,6 @@ export class SerifuDoc {
     // emit parse refreshed event event
     document.dispatchEvent(event);
     let pageStruct = this.parseForIndPanel();
-    console.log(`pageStruct: ${JSON.stringify(pageStruct, 0, 4)}`);
   }
 
   parseForIndPanel() {
@@ -304,21 +304,34 @@ export class SerifuDoc {
   }
 
   openFromSlot(view, slot) {
-    let s = new Squeezer({
+    console.log(`attempting to open slot ${slot}`);
+    const s = new Squeezer({
       uniques: localStorage.getItem(`slot-${slot}-uniques`),
       seq: localStorage.getItem(`slot-${slot}-seq`),
     }); // set s to the compressed text
-    // console.log(`loading from slot ${slot}`);
-    // let newDoc = [...s.inflate()].join("");
-    // console.log(newDoc);
-    view.dispatch({
-      changes: {
-        from: 0,
-        to: view.state.doc.length, // the entire document
-        insert: [...s.inflate()].join(""),
-      },
-    });
-    id("docname").textContent = localStorage.getItem(`slot-${slot}-name`);
+    // if there's actually anything in these slots, then uncompress it and update the view state
+    // with it
+    if (s.uniques != null) {
+      view.dispatch({
+        changes: {
+          from: 0,
+          to: view.state.doc.length, // the entire document
+          insert: [...s.inflate()].join(""),
+        },
+      });
+      id("docname").textContent = localStorage.getItem(`slot-${slot}-name`);
+    } else {
+      // otherwise just put the default starting document in the view state.
+      view.dispatch({
+        changes: {
+          from: 0,
+          to: view.state.doc.length, // the entire document
+          insert: defaultDoc,
+        },
+      });
+      id("docname").textContent = "Untitled Script";
+    }
+
     this.refreshParse(view.state.doc.toString()); // refresh parse on load
   }
 
