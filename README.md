@@ -129,6 +129,22 @@ In this case, since the last three lines all omit a Source, they're attributed t
 
 This clears the Style carryover.
 
+**Note:** Source and Style carryover is not interrupted by either SFX lines or Notes, and may span both Panel and Page boundaries, so this would be legal markup:
+
+    	# Page 44
+    		- 1
+    		Kaz: Yeah, which is why it's lousy with _teen layabouts,_ lately.
+    		- 2
+    		: They have no appreciation for true refinement!
+    		Archangelo: _Au contraire,_ homie dearest.
+    		- 3
+    		* tsk tsk tsk
+    	# Page 45
+    		- 1
+    		: I saw Fukiko Caracciolo reading _King of Field Hockey_ just yesterday.
+
+In the above example, the second and fourth Text lines would be attributed to `Kaz` and `Archangelo` respectively.
+
 ##### In-Line Styling and Emphasis
 
 Within a line's contents, there are three forms of typographic emphasis available: boldface, italics, and bold italics.
