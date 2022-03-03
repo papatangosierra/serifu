@@ -218,21 +218,19 @@ export class SerifuDoc {
       if (cursor.type.name === "Bold") {
         pageStruct = deepPush(pageStruct, {
           emphasis: "Bold",
-          text: this.text.substring(cursor.from, cursor.to).replace(/\*/g, ""), // remove asterisks
+          text: this.text.substring(cursor.from + 1, cursor.to - 1), // remove enclosing asterisks
         });
       }
       if (cursor.type.name === "BoldItal") {
         pageStruct = deepPush(pageStruct, {
           emphasis: "BoldItal",
-          text: this.text
-            .substring(cursor.from, cursor.to)
-            .replace(/\*\*/g, ""), // remove double asterisks
+          text: this.text.substring(cursor.from + 2, cursor.to - 2), // remove enclosing double asterisks
         });
       }
       if (cursor.type.name === "Ital") {
         pageStruct = deepPush(pageStruct, {
           emphasis: "Ital",
-          text: this.text.substring(cursor.from, cursor.to).replace(/\_/g, ""), // remove underscores
+          text: this.text.substring(cursor.from + 1, cursor.to - 1), // remove enclosing underscores
         });
       }
       if (cursor.type.name === "Newline") {

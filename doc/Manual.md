@@ -109,9 +109,7 @@ You can also use the keyboard shortcut `Ctrl-shift-return` (`Cmd-shift-return` o
 
 Although it runs in your web browser, Serifu does not store any data on a server. As you compose a script, it automatically saves your progress to local browser storage every ten seconds. You can also trigger a manual save by clicking the `Save` button underneath the script title near the top-left corner.
 
-Serifu has three "save slots" that you can use to have multiple scripts open. This is a mostly fanciful feature, but perhaps you'll find it useful. Save slots can be renamed.
-
-![Animation of save slot renaming]()
+Serifu has three "save slots" that you can use to have multiple scripts open. This is a mostly fanciful feature, but perhaps you'll find it useful.
 
 Local browser storage is preserved even if you quit the browser, or it crashes, so work in progress should be relatively safe.
 
@@ -127,7 +125,7 @@ In the left sidebar, there is a checkbox labelled `Paranoia Mode`. If you click 
 
 ## Exporting
 
-While the author's hope is that eventually everyone will simply accept Serifu-formatted comic scripts, in the meantime, Serifu can export to the formatting guidelines of several publishers, and if you want to use Serifu but a necessary export format isn't available, I'll try to add it as quickly as I can.
+While the author's hope is that eventually everyone will simply accept Serifu-formatted comic scripts, in the mean time, Serifu can export to the formatting guidelines of several publishers, and if you want to use Serifu but a necessary export format isn't available, I'll try to add it as quickly as I can.
 
 Currently supported export formats:
 
