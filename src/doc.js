@@ -492,6 +492,78 @@ function autosaveToLocalStorage() {
     this.downloadAsText(`${id("docname").textContent} (Kodansha)`, scriptText);
   }
 
+  downloadAsYen() {
+    console.log("downloadAsYen called");
+    let startTree = parser.parse(this.text);
+    let cursor = startTree.cursor();
+    let curSource = "";
+    let curStyle = "";
+    let curPg = 0;
+    let curPnl = 1;
+    let curLn = 1;
+    let scriptText = "";
+    let onSpread = false;
+    do {
+      if (cursor.type.name === "PageToken") {
+        onSpread = false;
+        curPg++;
+        scriptText += `\nPAGE ${curPg}\n`;
+        curPnl = 1; // panel numbering resets every page
+        curLn = 1; // line numbering resets every page
+      }
+      if (cursor.type.name === "SpreadToken") {
+        onSpread = true;
+        scriptText += `\nPAGES ${curPg + 1}-${curPg + 2}\n`;
+        curPg += 2; // increment page number by two, since this is a spread
+        curPnl = 1; // panel numbering resets every page
+        curLn = 1;
+      }
+      if (cursor.type.name === "PanelToken") {
+        scriptText += onSpread
+          ? `${curPg - 1}-${curPg}.${curPnl}\n`
+          : `${curPg}.${curPnl}\n`;
+        curPnl++;
+      }
+      if (cursor.type.name === "Sfx") {
+        // this dance is necessary because Yen puts the SFX transliteration BEFORE the translation
+        cursor.next(); // this will be a Star token
+        cursor.next(); // this will be the mandatory SFX Translation
+        let sfxSource = "";
+        let sfxTranslation = this.text.substring(cursor.from, cursor.to).trim();
+        cursor.next(); // and if this is the SFX Source (it might not be present)...
+        if (cursor.type.name === "SfxSource") {
+          sfxSource = this.text.substring(cursor.from + 1, cursor.to - 1);
+        }
+        scriptText += `${curLn}. SFX\n${sfxSource}\n(${sfxTranslation})\n\n`;
+        curLn++;
+      }
+      if (cursor.type.name === "Note") {
+        scriptText += `[NOTE: ${this.text
+          .substring(
+            cursor.from + 1, // leave off the exclamation point
+            cursor.to
+          )
+          .trim()}]\n\n`;
+      }
+      if (cursor.type.name === "Source") {
+        // scriptText += `\t${this.text.substring(cursor.from, cursor.to).trim()}`;
+        curSource = this.text.substring(cursor.from, cursor.to).trim();
+        curStyle = ""; // clear Style on finding Source, since specifying a Source ends Style carryover
+      }
+      if (cursor.type.name === "Style") {
+        // scriptText += `/${this.text.substring(cursor.from, cursor.to).trim()}`;
+        curStyle = this.text.substring(cursor.from, cursor.to).trim();
+      }
+      if (cursor.type.name === "Content") {
+        scriptText += `${curLn}. ${curSource}${
+          curStyle ? "/" + curStyle : ""
+        }\n${this.text.substring(cursor.from, cursor.to).trim()}\n\n`;
+        curLn++;
+      }
+    } while (cursor.next());
+    this.downloadAsText(`${id("docname").textContent} (Yen/Sq)`, scriptText);
+  }
+
   downloadAsSelectedType(selected) {
     // const dlTypes = [
     //   "Serifu",
