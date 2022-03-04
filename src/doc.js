@@ -356,7 +356,7 @@ function autosaveToLocalStorage() {
   // When downloadAsJSON is called on the object, it generates a blob and triggers a download
   downloadAsText(filename, dlText) {
     let blob = new Blob([dlText], {
-      type: "text/text",
+      type: "text/plain",
     });
     let e = document.createElement("a");
     e.href = URL.createObjectURL(blob);
@@ -367,8 +367,13 @@ function autosaveToLocalStorage() {
     e.href = URL.revokeObjectURL(blob);
   }
 
+  downloadAsSerifu() {
+    console.log("downloadAsSerifu called");
+    this.downloadAsText(`${id("docname").textContent}`, this.text);
+  }
+
   downloadAsViz() {
-    console.log("downloadasViz called");
+    console.log("downloadAsViz called");
     let startTree = parser.parse(this.text);
     let cursor = startTree.cursor();
     let curSource = "";
@@ -431,6 +436,90 @@ function autosaveToLocalStorage() {
     } while (cursor.next());
     this.downloadAsText(`${id("docname").textContent} (Viz)`, scriptText);
   }
+
+  downloadAsKUP() {
+    console.log("downloadAsKUP called");
+    let startTree = parser.parse(this.text);
+    let cursor = startTree.cursor();
+    let curSource = "";
+    let curStyle = "";
+    let curPg = 1;
+    let curPnl = 1;
+    let scriptText = "";
+    do {
+      if (cursor.type.name === "PageToken") {
+        scriptText += `\n\n${curPg}`;
+        curPg++;
+        curPnl = 1; // panel numbering resets every page
+      }
+      if (cursor.type.name === "SpreadToken") {
+        scriptText += `\n\n${curPg}-${curPg + 1}`;
+        curPg += 2; // increment page number by two, since this is a spread
+        curPnl = 1; // panel numbering resets every page
+      }
+      if (cursor.type.name === "PanelToken") {
+        scriptText += `.${curPnl}`;
+        curPnl++;
+      }
+      if (cursor.type.name === "SfxTranslation") {
+        scriptText += `\tFX:\t${this.text
+          .substring(cursor.from, cursor.to)
+          .trim()}\n`;
+      }
+      if (cursor.type.name === "Note") {
+        scriptText += `NOTE: ${this.text
+          .substring(
+            cursor.from + 1, // leave off the exclamation point
+            cursor.to
+          )
+          .trim()}\n`;
+      }
+      if (cursor.type.name === "Source") {
+        // scriptText += `\t${this.text.substring(cursor.from, cursor.to).trim()}`;
+        curSource = `${this.text.substring(cursor.from, cursor.to).trim()}`;
+        curStyle = ""; // clear Style on finding Source, since specifying a Source ends Style carryover
+      }
+      if (cursor.type.name === "Style") {
+        // scriptText += `/${this.text.substring(cursor.from, cursor.to).trim()}`;
+        curStyle = `${this.text.substring(cursor.from, cursor.to).trim()}`;
+      }
+      if (cursor.type.name === "Content") {
+        scriptText += `\t${curSource}${
+          curStyle ? "/" + curStyle : ""
+        }:\t${this.text.substring(cursor.from, cursor.to).trim()}\n`;
+      }
+    } while (cursor.next());
+    this.downloadAsText(`${id("docname").textContent} (Kodansha)`, scriptText);
+  }
+
+  downloadAsSelectedType(selected) {
+    // const dlTypes = [
+    //   "Serifu",
+    //   "Viz",
+    //   "Kodansha USA",
+    //   "Yen/Square Enix",
+    //   "Seven Seas",
+    // ];
+
+    switch (selected) {
+      case 0:
+        this.downloadAsSerifu();
+        break;
+      case 1:
+        this.downloadAsViz();
+        break;
+      case 2:
+        this.downloadAsKUP();
+        break;
+      case 3:
+        this.downloadAsYen();
+        break;
+      case 4:
+        this.downloadAsSevenSeas();
+        break;
+    }
+  }
+
   // buildMinimap returns a function that when called with React Components as arguments,
   // builds a DOM-based minimap of the current document structure and returns it for rendering.
   buildMinimap() {

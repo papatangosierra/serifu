@@ -31,8 +31,8 @@ import { pageNumberGutter, findPageNodes } from "./page-panel-numbers.js";
 import { Squeezer } from "./squeeze.js";
 import { defaultDoc } from "./default-doc.js";
 import { instanceWarning } from "./warning.js";
-/* React and components setup */
 
+/* React and components setup */
 import React from "react";
 import ReactDOM from "react-dom";
 import { insertButtons } from "./components/char-button.jsx";
@@ -44,6 +44,7 @@ import {
 } from "./components/save-slots.jsx";
 import { Minimap } from "./components/minimap.jsx";
 import { ParanoiaMode } from "./components/paranoia-mode.jsx";
+import { DownloadScriptAs } from "./components/download-menu.jsx";
 
 // make a new basic theme
 let baseTheme = EditorView.baseTheme({
@@ -225,14 +226,14 @@ if (DANGER_FLAG) {
     document.getElementById("saveslotsbar")
   );
 
-  // File download button
-  id("dlTextBtn").addEventListener("click", () => {
-    theDoc.downloadAsText(`${id("docname").textContent}`, theDoc.getText);
-  });
-
-  id("dlVizBtn").addEventListener("click", () => {
-    theDoc.downloadAsViz();
-  });
+  // File download buttons (superceded by component defined in download-menu.jsx)
+  //   id("dlTextBtn").addEventListener("click", () => {
+  //     theDoc.downloadAsText(`${id("docname").textContent}`, theDoc.getText);
+  //   });
+  //
+  //   id("dlVizBtn").addEventListener("click", () => {
+  //     theDoc.downloadAsKUP();
+  //   });
 
   // Event listeners for save slots. "saveSlotChange" is a custom event that includes
   // "docText" and "docName" attributes, which we use to update the editor view.
@@ -256,6 +257,11 @@ if (DANGER_FLAG) {
   ReactDOM.render(
     React.createElement(ParanoiaMode),
     document.getElementById("paranoia-mode")
+  );
+
+  ReactDOM.render(
+    React.createElement(DownloadScriptAs),
+    document.getElementById("downloads")
   );
 
   ReactDOM.render(
