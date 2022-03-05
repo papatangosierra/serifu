@@ -1,4 +1,4 @@
-# Introduction
+# An Introduction
 
 Serifu is a plain text markup language, and as such it can be written using any text editor the user prefers. The Serifu editor is designed to make composing documents in the Serifu markup language especially quick and pleasant, but it is by—design—not the only way to compose Serifu markup.
 
