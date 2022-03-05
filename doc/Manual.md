@@ -64,7 +64,7 @@ Additionally, Source and Style carryover are built into the Serifu language. Onc
 
 ![Editor screenshot 3 here](https://raw.githubusercontent.com/papatangosierra/serifu/main/doc/img/3.png)
 
-For the detailed rules of how Source and Style carryover work, see their section in the [full description of Serifu's syntax](https://github.com/papatangosierra/serifu#readme).
+For the detailed rules of how Source and Style carryover work, see their section in the [full description of Serifu's syntax](https://github.com/papatangosierra/serifu#source-and-style-carryover).
 
 ## Sound Effects
 
