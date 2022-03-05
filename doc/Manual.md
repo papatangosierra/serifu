@@ -10,7 +10,7 @@ Regardless of the Serifu editor's functionality, it's important to remember that
 
 # Disclaimer
 
-This the beta version of Serifu. If there's something about it that needs to change, please tell me.
+[This the beta version of the Serifu editor](https://serifu-sketchpad.glitch.me). If there's something about it that needs to change, please tell me.
 
 If you don't like the way the editor looks—the color choices, the way pages, panels, and lines are displayed, etc.—please let me know. The editor's appearance will eventually be highly customizable, but the default settings should ideally be appealing and useful.
 
