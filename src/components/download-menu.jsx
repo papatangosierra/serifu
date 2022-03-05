@@ -29,7 +29,7 @@ export function DownloadScriptAs() {
 
   return (
     <>
-      <label htmlFor="dl-select">Select download format:</label>
+      <label htmlFor="dl-select">Download format:</label>
       <select
         onChange={(e) => {
           setSelected(parseInt(e.currentTarget.value)); // the menu item's value will be set to a number, but I'm not certain it'll be typed as an integer or a string.
