@@ -26,7 +26,7 @@ Let's try typing a line of dialogue. Something like...
 
 > Genji: Well, here I am.
 
-![Animation of typing that](https://raw.githubusercontent.com/papatangosierra/serifu/main/doc/1 Typing First Line.gif)
+![Animation of typing that](https://raw.githubusercontent.com/papatangosierra/serifu/main/doc/1%20Typing%20First%20Line.gif)
 
 "Genji" is this line's Source. As you type the line's source, you'll notice a colored label appear next to it, and that the color changes as you type. The Serifu editor picks a unique color for every Source in the document; if you change the name of the Source, the color will also change. This is to help make it visually clearer which Sources are present in a given section of the script.
 
@@ -38,7 +38,7 @@ The source name "Genji" will appear in the editor's left sidebar, and a line ind
 
 When you start the next line, if the Source you've started typing is similar to a Source that's previously appeared in the document, the Autocomplete menu will appear. You can just keep typing to finish entering the Source, but you can also use the up and down arrow keys to select an Autocomplete option, and then type `return` to select it. It will be automatically inserted in the script.
 
-![Animation of autocomplete selection](https://raw.githubusercontent.com/papatangosierra/serifu/main/doc/2 Autocomplete Selection.gif)
+![Animation of autocomplete selection](https://raw.githubusercontent.com/papatangosierra/serifu/main/doc/2%20Autocomplete%20Selection.gif)
 
 ## Styles
 
@@ -48,7 +48,7 @@ A Style is separated from its Source by a `/`:
 
 > Genji/Bold: Main character in the world's first novel!
 
-![Animation of Style typing](https://raw.githubusercontent.com/papatangosierra/serifu/main/doc/3 Style Entry.gif)
+![Animation of Style typing](https://raw.githubusercontent.com/papatangosierra/serifu/main/doc/3%20Style%20Entry.gif)
 
 Styles also have an autocomplete menu, which works the same way that the Source autocomplete menu does.
 
@@ -58,7 +58,7 @@ In order to save as much repetitive typing as possible, Serifu has some shortcut
 
 Typing `Ctrl-D` (`Cmd-D` on macOS) automatically creates a new line with the same Source and Style as the previous line:
 
-![Animation of Cmd-D](https://raw.githubusercontent.com/papatangosierra/serifu/main/doc/4 Ctrl-D Shortcut.gif)
+![Animation of Cmd-D](https://raw.githubusercontent.com/papatangosierra/serifu/main/doc/4%20Ctrl-D%20Shortcut.gif)
 
 Additionally, Source and Style carryover are built into the Serifu language. Once you've entered a Source, you don't have to enter it again until it changes:
 
@@ -76,7 +76,7 @@ Note that this arrangement is the opposite of e.g. Yen Press's formatting conven
 
 ## Notes
 
-Anything on a line starting with an exclamation mark (`!) is a Note. Notes do not contain layout text, but are rather used to give clarifying information to someone else reading the script, like an editor or letterer.
+Anything on a line starting with an exclamation mark (`!`) is a Note. Notes do not contain layout text, but are rather used to give clarifying information to someone else reading the script, like an editor or letterer.
 
 ![Editor screenshot 5 here](https://raw.githubusercontent.com/papatangosierra/serifu/main/doc/5.png)
 
@@ -84,26 +84,26 @@ Anything on a line starting with an exclamation mark (`!) is a Note. Notes do no
 
 Lines starting with a hyphen character (`-`) mark the start of a Panel. If you type a `-` and then `return`, Serifu will automatically insert the correct sequential numbering.
 
-![Animation of panel entering](https://raw.githubusercontent.com/papatangosierra/serifu/main/doc/5 Panel Entry.gif)
+![Animation of panel entering](https://raw.githubusercontent.com/papatangosierra/serifu/main/doc/5%20Panel%20Entry.gif)
 
 If you insert a panel before an existing panel, then press `return`, Serifu will automatically renumber the following panels:
 
-![Animation of panel renumbering](https://raw.githubusercontent.com/papatangosierra/serifu/main/doc/6 Panel Renumbering.gif)
+![Animation of panel renumbering](https://raw.githubusercontent.com/papatangosierra/serifu/main/doc/6%20Panel%20Renumbering.gif)
 
 You can also use the keyboard shortcut `Ctrl-return` (`Cmd-return` on macOS) to insert the next sequentially numbered-panel.
 
-![Animation of panel entry shortcut](https://raw.githubusercontent.com/papatangosierra/serifu/main/doc/8 Panel Entry Shortcut.gif)
+![Animation of panel entry shortcut](https://raw.githubusercontent.com/papatangosierra/serifu/main/doc/8%20Panel%20Entry%20Shortcut.gif)
 
 ## Pages and Spreads
 
 Lines starting with one or two octothorpe charaters (`#` and `##`) mark the start of Pages and Spreads, respectively. As with Panels, entering one of these characters and pressing `return` will automatically insert the text "Page" along with the number of the page.
 
-![Animation of page entering](https://raw.githubusercontent.com/papatangosierra/serifu/main/doc/7 Page Entry.gif)
-![Animation of spread entering](https://raw.githubusercontent.com/papatangosierra/serifu/main/doc/7a Spread Entry.gif)
+![Animation of page entering](https://raw.githubusercontent.com/papatangosierra/serifu/main/doc/7%20Page%20Entry.gif)
+![Animation of spread entering](https://raw.githubusercontent.com/papatangosierra/serifu/main/doc/7a%20Spread%20Entry.gif)
 
 You can also use the keyboard shortcut `Ctrl-shift-return` (`Cmd-shift-return` on macOS) to insert the next sequentially numbered page _and_ panel.
 
-![Animation of page entry shortcut](https://raw.githubusercontent.com/papatangosierra/serifu/main/doc/9 Page Entry Shortcut.gif)
+![Animation of page entry shortcut](https://raw.githubusercontent.com/papatangosierra/serifu/main/doc/9%20Page%20Entry%20Shortcut.gif)
 
 # Saving and Exporting
 
@@ -111,7 +111,7 @@ Although it runs in your web browser, Serifu does not store any data on a server
 
 Serifu has three "save slots" that you can use to have multiple scripts open. This is a mostly fanciful feature, but perhaps you'll find it useful. Save slots can be renamed.
 
-![Animation of save slot renaming](https://raw.githubusercontent.com/papatangosierra/serifu/main/doc/9a Save Slot Renaming.gif)
+![Animation of save slot renaming](https://raw.githubusercontent.com/papatangosierra/serifu/main/doc/9a%20Save%20Slot%20Renaming.gif)
 
 Local browser storage is preserved even if you quit the browser, or it crashes, so work in progress should be relatively safe.
 
