@@ -20,7 +20,7 @@ If you don't like the way the editor looks—the color choices, the way pages, p
 
 Fundamentally, the way to use Serifu is to type Serifu markup into the editor window. By default, a new "blank" document begins with the first Page and Panel already in the editor.
 
-![Editor screenshot 1 here]()
+![Editor screenshot 1 here](https://github.com/papatangosierra/serifu/blob/main/doc/1.png)
 
 Let's try typing a line of dialogue. Something like...
 
@@ -32,7 +32,7 @@ Let's try typing a line of dialogue. Something like...
 
 The source name "Genji" will appear in the editor's left sidebar, and a line indicator will appear in the minimap's display for page 1:
 
-![Editor screenshot 2 here]()
+![Editor screenshot 2 here](https://github.com/papatangosierra/serifu/blob/main/doc/2.png)
 
 ## Autocomplete
 
@@ -62,7 +62,7 @@ Typing `Ctrl-D` (`Cmd-D` on macOS) automatically creates a new line with the sam
 
 Additionally, Source and Style carryover are built into the Serifu language. Once you've entered a Source, you don't have to enter it again until it changes:
 
-![Editor screenshot 3 here]()
+![Editor screenshot 3 here](https://github.com/papatangosierra/serifu/blob/main/doc/3.png)
 
 For the detailed rules of how Source and Style carryover work, see their section in the [full description of Serifu's syntax](https://github.com/papatangosierra/serifu#readme).
 
@@ -70,7 +70,7 @@ For the detailed rules of how Source and Style carryover work, see their section
 
 Anything on a line starting with an asterisk (`*`) is a sound effect. Sound effects can have optional transliterations, which are in parenthesis.
 
-![Editor screenshot 4 here]()
+![Editor screenshot 4 here](https://github.com/papatangosierra/serifu/blob/main/doc/4.png)
 
 Note that this arrangement is the opposite of e.g. Yen Press's formatting convention, which gives the SFX transliteration first and the translation in parenthesis.
 
@@ -78,7 +78,7 @@ Note that this arrangement is the opposite of e.g. Yen Press's formatting conven
 
 Anything on a line starting with an exclamation mark (`!) is a Note. Notes do not contain layout text, but are rather used to give clarifying information to someone else reading the script, like an editor or letterer.
 
-![Editor screenshot 5 here]()
+![Editor screenshot 5 here](https://github.com/papatangosierra/serifu/blob/main/doc/5.png)
 
 ## Panels
 
@@ -132,3 +132,9 @@ While the author's hope is that eventually everyone will simply accept Serifu-fo
 Currently supported export formats:
 
 - Viz
+- Kodansha
+- Yen Press/Square Enix
+
+Seven Seas is coming soon. Other formats can be added; please get in touch if you need something different.
+
+These exports currently generate plain text files, which will need to be pasted into a word processor (Google Docs, Microsoft Word, etc) to prepare the type of files most publishers expect. The Viz and Kodansha script formats use tab-separated columns, and to make the exported text look correct, you will probably have to adjust the tab stops slightly after pasting the text into your word processing software.
