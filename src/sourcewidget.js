@@ -33,12 +33,35 @@ function hashStringToRGB(str) {
   return rgb;
 }
 
+// a string -> HSL hash function that produces more nicely vivid output
+function hashStringToHSL(str) {
+  function hashChar(char) {
+    let seed = char.charCodeAt(0);
+    let xor1 = seed * Math.E * 1e11;
+    let xor2 = seed * Math.PI * 1e11;
+    let munge = Math.abs(seed ^ xor1 ^ (seed ^ xor2));
+    return munge; // % 360;
+  }
+  let h = 0;
+  let s = 0;
+  let l = 0;
+  for (let i = 0; i < str.length; i++) {
+    h = h ^ hashChar(str.charAt(i));
+  }
+  // we're going to derive saturation by taking the mod 100 of our h hash value
+  // and pseudo-normalizing that on a scale of 50-100, and the l on a scale of  40 - 73
+  s = Math.floor((h % 100) / 2 + 50);
+  l = Math.floor((h % 100) / 3 + 40);
+  return `hsl(${h % 360}, ${s}%, ${l}%)`;
+}
+
 export class SourceWidget extends WidgetType {
   constructor(str) {
     super(); // call this first!!!
     // string -> RGB hash function
     this.sourceName = str;
-    this.defaultRGB = hashStringToRGB(str);
+    //    this.defaultRGB = hashStringToRGB(str);
+    this.defaultHSL = hashStringToHSL(str);
   }
 
   // if there's already an equivalent widget where we're applying this one,
@@ -51,11 +74,14 @@ export class SourceWidget extends WidgetType {
   // and our computed RGB value
   toDOM() {
     let wrap = document.createElement("span");
-    let rgb = hashStringToRGB(this.sourceName); // compute a color hash for this Source
+    //let rgb = hashStringToRGB(this.sourceName); // compute a color hash for this Source
+
     wrap.setAttribute("aria-hidden", "true"); // hide widget from screen readers; it won't be useful to them
     wrap.className += `cm-source-label`; // give it the generic classname
     wrap.className += ` cm-source-label-${this.sourceName}`; // give it a predictable class name we can use elsewhere if necessary, along with the base cm-source-label class
-    wrap.style.backgroundColor = `rgb(${rgb[0]} ${rgb[1]} ${rgb[2]})`;
+    //    wrap.style.backgroundColor = `rgb(${rgb[0]} ${rgb[1]} ${rgb[2]})`;
+    wrap.style.backgroundColor = hashStringToHSL(this.sourceName);
+
     return wrap;
   }
   ignoreEvent() {
