@@ -141,44 +141,56 @@ export class SerifuDoc {
     });
     // emit parse refreshed event event
     document.dispatchEvent(event);
-    let pageStruct = this.parseForIndPanel();
+    let pageStruct = this.buildCanonicalAST();
   }
 
-  parseForIndPanel() {
+  buildCanonicalAST() {
     let cursor = parser.parse(this.text).cursor();
     let pageMap = new Map([]);
     let pageStruct = [];
     let pageOffsetWithSpreads = 0; // we increment this every time a spread is encountered, to derive an offset
     let pageNum = -1;
     let panelNum = -1;
+    let lineID = 0; // we assign a page-unique line number to every Text and SFX line.
     let lastSource = "";
     let lastStyle = "";
     do {
       if (cursor.type.name === "Page") {
+        // increment immediately so we can reference pageNum as current
+        pageNum++;
         // associate current page number with index of last pageStruct element
         pageMap.set(pageNum, pageStruct.length);
         pageStruct.push([]);
-        pageNum++;
         panelNum = -1;
       }
       if (cursor.type.name === "Spread") {
+        pageNum += 2;
         // associate current AND NEXT page numbers with index of last pageStruct element
+        pageMap.set(pageNum - 1, pageStruct.length);
         pageMap.set(pageNum, pageStruct.length);
-        pageMap.set(pageNum + 1, pageStruct.length);
         pageStruct.push([]);
         pageOffsetWithSpreads++;
-        pageNum += 2;
         panelNum = -1;
       }
       if (cursor.type.name === "Panel") {
-        pageStruct[pageNum - pageOffsetWithSpreads].push([]);
         panelNum++;
+        pageStruct[pageNum - pageOffsetWithSpreads].push([]);
       }
       if (cursor.type.name === "SfxTranslation") {
         pageStruct[pageNum - pageOffsetWithSpreads][panelNum].push({
           type: "Sfx",
           text: this.text.substring(cursor.from, cursor.to).trim(),
+          id: lineID,
         });
+        lineID++;
+      }
+      if (cursor.type.name === "SfxSource") {
+        // add its value to the Sfx object, which should be right before this.
+        pageStruct = deepEdit(
+          pageStruct,
+          "translationOf",
+          this.text.substring(cursor.from + 1, cursor.to - 1)
+        ); // we strip off the enclosing parens
       }
       if (cursor.type.name === "Note") {
         pageStruct[pageNum - pageOffsetWithSpreads][panelNum].push({
@@ -193,8 +205,10 @@ export class SerifuDoc {
           type: "Text",
           source: null,
           style: null,
+          id: lineID,
           content: [],
         });
+        lineID++;
       }
       if (cursor.type.name === "Source") {
         // save this as the most recently found Source
@@ -241,7 +255,6 @@ export class SerifuDoc {
       }
       if (
         (cursor.type.name === "UnstyledText" ||
-          cursor.type.name === "BlockText" ||
           cursor.type.name === "Star" ||
           cursor.type.name === "Colon" ||
           cursor.type.name === "DoubleStar" ||
@@ -257,11 +270,19 @@ export class SerifuDoc {
       if (cursor.type.name === "BlockText") {
         pageStruct = deepPush(pageStruct, {
           emphasis: "BlockText",
-          text: this.text.substring(cursor.from, cursor.to), // push text as-is
+          text: this.text.substring(cursor.from + 2, cursor.to - 2), // push text as-is
         });
       }
     } while (cursor.next());
-    return pageStruct;
+    const canonicalAST = {
+      pageData: pageStruct,
+      pageMap: pageMap,
+    };
+    console.log("canonical AST:");
+    console.log(JSON.stringify(canonicalAST, 0, 4));
+    console.log("page mapping: ");
+    console.log(...pageMap);
+    return canonicalAST;
   }
 
   // getters to check if a new source or style has been added or removed from our running list
@@ -384,13 +405,13 @@ function autosaveToLocalStorage() {
     let prevToken = "";
     do {
       if (cursor.type.name === "PageToken") {
-        scriptText += `\n\nPage ${curPg}`;
+        scriptText += `\nPage ${curPg}`;
         curPg++;
         curPnl = 1; // panel numbering resets every page
         prevToken = "PageToken";
       }
       if (cursor.type.name === "SpreadToken") {
-        scriptText += `\n\nPages ${curPg}-${curPg + 1}`;
+        scriptText += `\nPages ${curPg}-${curPg + 1}`;
         curPg += 2; // increment page number by two, since this is a spread
         curPnl = 1; // panel numbering resets every page
         prevToken = "PageToken";

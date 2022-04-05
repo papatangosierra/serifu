@@ -21,7 +21,7 @@ export function DownloadScriptAs() {
     "Viz",
     "Kodansha USA",
     "Yen/Square Enix",
-    "Seven Seas",
+    // "Seven Seas",
   ];
   const menuItems = dlTypes.map((el, i) => {
     return <MenuItem id={i} name={el} key={`${i}-select`} />;
