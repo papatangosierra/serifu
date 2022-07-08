@@ -27,7 +27,8 @@ export const serifuLanguage = LRLanguage.define({
         Sfx: t.float,
         SfxTranslation: t.atom,
         SfxSource: t.unit,
-        Text: t.literal,
+        Text: t.operator,
+        "Content!": t.literal,
         Source: t.variableName,
         Style: t.propertyName,
         Note: t.comment,
@@ -92,9 +93,11 @@ export const serifuHighlighter = HighlightStyle.define([
     fontStyle: "italic",
     color: "darkslategray",
   },
-  { tag: t.unit, fontStyle: "italic", color: "lightslategray" }, // SFX sources
   {
-    tag: t.literal, // text lines
+    // SFX sources
+    tag: t.unit,
+    fontStyle: "italic",
+    color: "lightslategray",
   },
   {
     // text line sources
@@ -105,24 +108,56 @@ export const serifuHighlighter = HighlightStyle.define([
     paddingLeft: ".5ex",
     paddingRight: ".5ex",
     borderRadius: "0 .5ex .5ex 0",
-    // minWidth: "5rem",
+    minWidth: "7rem",
     textAlign: "right",
     margin: "auto",
     display: "inline-block",
   },
-  { tag: t.propertyName, color: "mediumvioletred" }, // text line styles
   {
+    // text line styles
+    tag: t.propertyName,
+    color: "mediumvioletred",
+  },
+  {
+    // Positioning of text outside Source and Style labels
+    tag: t.operator,
+  },
+  {
+    // Content of Text Lines
+    tag: t.literal,
+    // position: "absolute",
+    // left: "0",
+    // marginLeft: "12rem",
+  },
+  {
+    // side notes
     tag: t.comment,
     backgroundColor: "papayawhip",
     fontStyle: "italic",
-  }, // side notes
-  { tag: t.string, fontStyle: "italic" }, // italics
-  { tag: t.number, fontWeight: "bold" }, // boldface
-  { tag: t.regexp, fontStyle: "italic", fontWeight: "bold" }, // bold italics
+  },
   {
+    // italics
+    tag: t.string,
+    fontStyle: "italic",
+  },
+  {
+    // boldface
+    tag: t.number,
+    fontWeight: "bold",
+    // position: "relative !important",
+    // marginLeft: "0px !important",
+  },
+  {
+    // bold italics
+    tag: t.regexp,
+    fontStyle: "italic",
+    fontWeight: "bold",
+  },
+  {
+    // block text
     tag: t.blockComment,
     fontFamily: "Source Code Pro",
     color: "black",
     backgroundColor: "mintcream",
-  }, // block text
+  },
 ]);

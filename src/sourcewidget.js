@@ -51,7 +51,7 @@ function hashStringToHSL(str) {
   // we're going to derive saturation by taking the mod 100 of our h hash value
   // and pseudo-normalizing that on a scale of 50-100, and the l on a scale of  40 - 73
   s = Math.floor((h % 100) / 2 + 50);
-  l = Math.floor((h % 100) / 3 + 40);
+  l = Math.floor((h % 20) + 40);
   return `hsl(${h % 360}, ${s}%, ${l}%)`;
 }
 
