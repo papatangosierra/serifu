@@ -2,7 +2,7 @@
 
 ## What it is
 
-Serifu is a simple markup language for composing comic book scripts (in particular, translations of Japanese manga) as plain text in such a way that they may be parsed by software into a predictable and useful structure.
+Serifu is a simple markup language for composing comic book scripts as plain text in such a way that they may be parsed by software into a predictable and useful structure. It has its foundations in the concerns of Japanese-English comic translation, but is meant to be flexible enough to represent a script for most types of sequential art.
 
 There are several reasons one might want to do this:
 
