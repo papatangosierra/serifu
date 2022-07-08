@@ -280,7 +280,7 @@ with Markdown-like syntax for specifying the path to an external file to referen
 
     	+[44:1:3-44:3:2](../Maison Ikkoku vol. 3.txt)
 
-### Future-Proofing
+#### Future-Proofing
 
 Backticks (```) currently have no special meaning in Serifu. However, placing text between backticks may eventually be used as a way to mark words or phrases as special terminology—i.e., terms that the parser can identify to include on an automatically-generated style sheet. The backticks themselves would not be present in the lettered text. For future compatibility, the Serifu author recommends avoiding using backticks in scripts.
 
