@@ -1,6 +1,5 @@
-import { EditorView } from "@codemirror/view";
-import { showPanel } from "@codemirror/panel";
-import { Text } from "@codemirror/text";
+import { EditorView, showPanel } from "@codemirror/view";
+import { Text } from "@codemirror/state";
 import { parser } from "./serifu-parser/serifu-parser.js";
 
 export function pollNodeAt(curpos, view) {

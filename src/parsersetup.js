@@ -1,5 +1,7 @@
 import { parser } from "./serifu-parser/serifu-parser.js";
-import { styleTags, tags as t, HighlightStyle } from "@codemirror/highlight";
+import { styleTags, tags as t } from "@lezer/highlight";
+import { HighlightStyle } from "@codemirror/language";
+
 import {
   LRLanguage,
   LanguageSupport,
@@ -118,10 +120,10 @@ export const serifuHighlighter = HighlightStyle.define([
     tag: t.propertyName,
     color: "mediumvioletred",
   },
-  {
-    // Positioning of text outside Source and Style labels
-    tag: t.operator,
-  },
+  // {
+  //   // Positioning of text outside Source and Style labels
+  //   tag: t.operator,
+  // },
   {
     // Content of Text Lines
     tag: t.literal,
@@ -139,6 +141,7 @@ export const serifuHighlighter = HighlightStyle.define([
     // italics
     tag: t.string,
     fontStyle: "italic",
+    color: "red",
   },
   {
     // boldface

@@ -1,4 +1,3 @@
-import { Text } from "@codemirror/text";
 import {
   WidgetType,
   EditorView,
@@ -7,7 +6,12 @@ import {
   ViewPlugin,
   DecorationSet,
 } from "@codemirror/view";
-import { StateField, StateEffect, EditorSelection } from "@codemirror/state";
+import {
+  StateField,
+  StateEffect,
+  EditorSelection,
+  Text,
+} from "@codemirror/state";
 import { syntaxTree } from "@codemirror/language";
 import {
   copyLineDown,

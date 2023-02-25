@@ -1,8 +1,7 @@
-import { gutter, GutterMarker } from "@codemirror/gutter";
+import { gutter, GutterMarker } from "@codemirror/view";
 import { EditorView } from "@codemirror/view";
-import { StateField, StateEffect } from "@codemirror/state";
+import { StateField, StateEffect, RangeSet } from "@codemirror/state";
 import { syntaxTree } from "@codemirror/language";
-import { RangeSet } from "@codemirror/rangeset";
 //
 // this is a gutter marker for annotating pages
 class pageNodeMarker extends GutterMarker {

@@ -2,8 +2,8 @@ import React from "react";
 import ReactDOM from "react-dom";
 
 import { EditorView } from "@codemirror/view";
-import { showPanel } from "@codemirror/panel";
-import { Text } from "@codemirror/text";
+import { showPanel } from "@codemirror/view";
+import { Text } from "@codemirror/state";
 
 import { view, theDoc } from "../editor.js";
 import { defaultDoc } from "../default-doc.js";

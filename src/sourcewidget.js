@@ -13,7 +13,8 @@ import {
 } from "@codemirror/view";
 import { syntaxTree } from "@codemirror/language";
 
-// my silly string -> RGB hash function
+// a string -> RGB hash function that produces reasonable (?) output for character name
+// color coding
 function hashStringToRGB(str) {
   function hashChar(char) {
     let seed = char.charCodeAt(0);
@@ -33,20 +34,22 @@ function hashStringToRGB(str) {
   return rgb;
 }
 
-// a string -> HSL hash function that produces more nicely vivid output
+// a WAY BETTER string -> color hash function that uses HSL values to produce
+// consistently more vivid and colorful output than the old string -> RGB function
 function hashStringToHSL(str) {
   function hashChar(char) {
     let seed = char.charCodeAt(0);
     let xor1 = seed * Math.E * 1e11;
     let xor2 = seed * Math.PI * 1e11;
-    let munge = Math.abs(seed ^ xor1 ^ (seed ^ xor2));
-    return munge; // % 360;
+    return seed ^ xor1 ^ (seed ^ xor2);
   }
   let h = 0;
   let s = 0;
   let l = 0;
   for (let i = 0; i < str.length; i++) {
-    h = h ^ hashChar(str.charAt(i));
+    h = Math.abs(
+      h ^ hashChar(str.charAt(i)) ^ (Math.PI * 1e9 - Math.E * 1e8 * i)
+    );
   }
   // we're going to derive saturation by taking the mod 100 of our h hash value
   // and pseudo-normalizing that on a scale of 50-100, and the l on a scale of  40 - 73

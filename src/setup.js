@@ -2,36 +2,46 @@
 
 import {
   EditorView,
+  keymap,
   highlightSpecialChars,
   drawSelection,
   highlightActiveLine,
-  keymap,
+  dropCursor,
+  rectangularSelection,
+  crosshairCursor,
+  lineNumbers,
+  highlightActiveLineGutter,
 } from "@codemirror/view";
-
-// Give us tab character
-// import { indentWithTab } from "@codemirror/commands";
-
-export { EditorView }; // from "@codemirror/view";
-import { EditorState } from "@codemirror/state";
-export { EditorState }; // from "@codemirror/state";
-import { history, historyKeymap } from "@codemirror/history";
-import { foldGutter, foldKeymap } from "@codemirror/fold";
-import { indentOnInput, indentUnit } from "@codemirror/language";
-import { lineNumbers, highlightActiveLineGutter } from "@codemirror/gutter";
+import { Extension, EditorState } from "@codemirror/state";
 import {
+  defaultHighlightStyle,
+  syntaxHighlighting,
+  indentOnInput,
+  indentUnit,
+  bracketMatching,
+  foldGutter,
+  foldKeymap,
+} from "@codemirror/language";
+import { history, historyKeymap } from "@codemirror/commands";
+import { searchKeymap, highlightSelectionMatches } from "@codemirror/search";
+import {
+  autocompletion,
+  closeBrackets,
+  closeBracketsKeymap,
   startCompletion,
   closeCompletion,
   moveCompletionSelection,
   acceptCompletion,
 } from "@codemirror/autocomplete";
+import { lintKeymap } from "@codemirror/lint";
+
+// Give us tab character
+// import { indentWithTab } from "@codemirror/commands";
+
 /* ***************************** */
 /* REMEMBER: This is my edited version of the default keymap setup!!!*/
 import { defaultKeymap } from "./commands.js";
 /* ***************************** */
-import { bracketMatching } from "@codemirror/matchbrackets";
-import { searchKeymap } from "@codemirror/search";
-import { defaultHighlightStyle } from "@codemirror/highlight";
-import { lintKeymap } from "@codemirror/lint";
 
 const completionKeymap = [
   { key: "Ctrl-Space", run: startCompletion },
@@ -71,3 +81,5 @@ const basicSetup = [
 ];
 
 export { basicSetup };
+export { EditorView }; // from "@codemirror/view";
+export { EditorState }; // from "@codemirror/state";

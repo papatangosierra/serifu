@@ -7,7 +7,7 @@ import {
 import { syntaxTree, indentUnit, indentOnInput } from "@codemirror/language";
 import { Decoration, ViewUpdate, ViewPlugin } from "@codemirror/view";
 import { Compartment } from "@codemirror/state";
-import { HighlightStyle } from "@codemirror/highlight";
+import { HighlightStyle } from "@codemirror/view";
 import {
   autocompletion,
   completeFromList,
