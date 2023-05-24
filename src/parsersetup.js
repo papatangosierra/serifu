@@ -30,7 +30,7 @@ export const serifuLanguage = LRLanguage.define({
         SfxTranslation: t.atom,
         SfxSource: t.unit,
         Text: t.operator,
-        "Content!": t.literal,
+        Content: t.literal,
         Source: t.variableName,
         Style: t.propertyName,
         Note: t.comment,
@@ -53,72 +53,39 @@ const serifuHighlightStyle = HighlightStyle.define([
   {
     // Page Lines
     tag: t.heading,
-    borderRadius: "0 0 .75ex 0",
-    borderWidth: "2px",
-    borderStyle: "none solid solid none",
-    borderColor: "indianred",
-    paddingRight: ".5ex",
-    fontWeight: "bold",
-    fontStyle: "italic",
-    color: "black",
-    minWidth: "6rem",
-    display: "inline-block",
-    textAlign: "right",
-    backgroundColor: "rgba(255, 228, 225, .7)", // mistyRose
+    class: "serifu-page-token",
   },
   {
     // Panel lines
     tag: t.labelName,
-    fontWeight: "bold",
-    color: "purple",
-    borderRadius: "0 0 .75ex 0",
-    borderWidth: "2px",
-    borderStyle: "none solid solid none",
-    borderColor: "cadetBlue", // cadetBlue
-    paddingRight: ".5ex",
-    minWidth: "6rem",
-    display: "inline-block",
-    textAlign: "right",
-    backgroundColor: "rgba(220, 210, 230, .4)", // aliceBlue
+    class: "serifu-panel-token",
   },
   {
     // SFX lines
     tag: t.float,
-    fontWeight: "bold",
-    fontStyle: "italic",
-    color: "darkslategray",
+    class: "serifu-sfx-line",
   },
   {
     // SFX translations
     tag: t.atom,
-    fontWeight: "bold",
-    fontStyle: "italic",
-    color: "darkslategray",
+    class: "serifu-sfx-translation",
   },
   {
     // SFX sources
     tag: t.unit,
-    fontStyle: "italic",
-    color: "lightslategray",
+    class: "serifu-sfx-source",
   },
   {
     // text line sources
     tag: t.variableName,
-    backgroundColor: "rgba(200,200,200, .25)",
-    borderColor: "rgb(255,255,255, 0)",
-    color: "black",
-    paddingLeft: ".5ex",
-    paddingRight: ".5ex",
-    borderRadius: "0 .5ex .5ex 0",
-    minWidth: "7rem",
-    textAlign: "right",
-    margin: "auto",
-    display: "inline-block",
+
+    class: "serifu-text-origin",
   },
   {
     // text line styles
     tag: t.propertyName,
     color: "mediumvioletred",
+    class: "serifu-text-style",
   },
   // {
   //   // Positioning of text outside Source and Style labels
@@ -127,41 +94,32 @@ const serifuHighlightStyle = HighlightStyle.define([
   {
     // Content of Text Lines
     tag: t.literal,
-    // position: "absolute",
-    // left: "0",
-    // marginLeft: "12rem",
+    class: "serifu-text-content",
   },
   {
     // side notes
     tag: t.comment,
-    backgroundColor: "papayawhip",
-    fontStyle: "italic",
+    class: "serifu-note",
   },
   {
     // italics
     tag: t.string,
-    fontStyle: "italic",
-    color: "red",
+    class: "serifu-italic",
   },
   {
     // boldface
     tag: t.number,
-    fontWeight: "bold",
-    // position: "relative !important",
-    // marginLeft: "0px !important",
+    class: "serifu-bold",
   },
   {
     // bold italics
     tag: t.regexp,
-    fontStyle: "italic",
-    fontWeight: "bold",
+    class: "serifu-bold-italic",
   },
   {
     // block text
     tag: t.blockComment,
-    fontFamily: "Source Code Pro",
-    color: "black",
-    backgroundColor: "mintcream",
+    class: "serifu-block-literal",
   },
 ]);
 

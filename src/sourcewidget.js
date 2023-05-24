@@ -80,8 +80,8 @@ export class SourceWidget extends WidgetType {
     //let rgb = hashStringToRGB(this.sourceName); // compute a color hash for this Source
 
     wrap.setAttribute("aria-hidden", "true"); // hide widget from screen readers; it won't be useful to them
-    wrap.className += `cm-source-label`; // give it the generic classname
-    wrap.className += ` cm-source-label-${this.sourceName}`; // give it a predictable class name we can use elsewhere if necessary, along with the base cm-source-label class
+    //wrap.className += `cm-source-label`; // give it the generic classname
+    wrap.className += `cm-source-label cm-source-label-${this.sourceName}`; // give it a predictable class name we can use elsewhere if necessary, along with the base cm-source-label class
     //    wrap.style.backgroundColor = `rgb(${rgb[0]} ${rgb[1]} ${rgb[2]})`;
     wrap.style.backgroundColor = hashStringToHSL(this.sourceName);
 
@@ -99,16 +99,16 @@ export function sourceLabels(view) {
     syntaxTree(view.state).iterate({
       from: from,
       to: to,
-      enter: (type, from, to) => {
-        if (type.name === "Source") {
+      enter: (node) => {
+        if (node.name === "Source") {
           // when we find a Source node
-          let theName = view.state.doc.sliceString(from, to);
+          let theName = view.state.doc.sliceString(node.from, node.to);
           // console.log(`SOURCE NODE??? ${theName}`);
           let deco = Decoration.widget({
             widget: new SourceWidget(theName),
             side: 0,
           });
-          widgets.push(deco.range(from));
+          widgets.push(deco.range(node.from));
         }
       },
     });
