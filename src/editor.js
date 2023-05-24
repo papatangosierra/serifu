@@ -35,6 +35,7 @@ import { instanceWarning } from "./warning.js";
 /* React and components setup */
 import React from "react";
 import ReactDOM from "react-dom";
+
 import { insertButtons } from "./components/char-button.jsx";
 import { SourceItemGroup, StyleItemGroup } from "./components/source-list.jsx";
 import {
@@ -143,44 +144,40 @@ const updateAutoCompletion = EditorState.transactionExtender.of((tr) => {
   }
 });
 
+let myExtensions = [
+  basicSetup,
+  baseTheme,
+  serifu(),
+  serifuHighlighter,
+  sourceLabelsPlugin,
+  nodeInspector(),
+  saveSlotPanel(),
+  pageNumberGutter,
+  autocompletion({ icons: true }),
+  sourceCompletion.of(
+    serifuLanguage.data.of({
+      autocomplete: ifNotIn(
+        ["Content", "Style", "Note", "Sfx"],
+        completeFromList(theDoc.sources)
+      ),
+    })
+  ),
+  styleCompletion.of(
+    serifuLanguage.data.of({
+      autocomplete: ifNotIn(
+        ["Content", "Source", "Note", "Sfx"],
+        completeFromList(theDoc.styles)
+      ),
+    })
+  ),
+  updateAutoCompletion,
+];
+
 // initialize Editor View
 let view = new EditorView({
   state: EditorState.create({
     doc: theDoc.getText,
-    extensions: [
-      basicSetup,
-      baseTheme,
-      serifu(),
-      serifuHighlighter,
-      sourceLabelsPlugin,
-      nodeInspector(),
-      saveSlotPanel(),
-      pageNumberGutter,
-      autocompletion({ icons: true }),
-      sourceCompletion.of(
-        serifuLanguage.data.of({
-          autocomplete: ifNotIn(
-            ["Content", "Style", "Note", "Sfx"],
-            completeFromList(theDoc.sources)
-          ),
-        })
-      ),
-      styleCompletion.of(
-        serifuLanguage.data.of({
-          autocomplete: ifNotIn(
-            ["Content", "Source", "Note", "Sfx"],
-            completeFromList(theDoc.styles)
-          ),
-        })
-      ),
-      updateAutoCompletion,
-      // EditorView.updateListener.of((update) => {
-      //   // console.log("we're doing it");
-      //   if (update.docChanged) {
-      //     // theDoc.refreshParse(update.state.doc.toString());
-      //   }
-      // }),
-    ],
+    extensions: myExtensions,
   }),
   parent: document.getElementById("editor-pane"),
   lineWrapping: true,

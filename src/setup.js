@@ -67,7 +67,6 @@ const basicSetup = [
   indentUnit.of("\t"),
   EditorView.lineWrapping,
   indentOnInput(),
-  defaultHighlightStyle.fallback,
   bracketMatching(),
   highlightActiveLine(),
   keymap.of([

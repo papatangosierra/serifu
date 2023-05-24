@@ -1,6 +1,6 @@
 import { parser } from "./serifu-parser/serifu-parser.js";
 import { styleTags, tags as t } from "@lezer/highlight";
-import { HighlightStyle } from "@codemirror/language";
+import { HighlightStyle, syntaxHighlighting } from "@codemirror/language";
 
 import {
   LRLanguage,
@@ -49,7 +49,7 @@ export function serifu() {
 }
 
 // Definitions for our highlighter plugin
-export const serifuHighlighter = HighlightStyle.define([
+const serifuHighlightStyle = HighlightStyle.define([
   {
     // Page Lines
     tag: t.heading,
@@ -164,3 +164,7 @@ export const serifuHighlighter = HighlightStyle.define([
     backgroundColor: "mintcream",
   },
 ]);
+
+const serifuHighlighter = syntaxHighlighting(serifuHighlightStyle);
+
+export { serifuHighlighter };
