@@ -110,29 +110,31 @@ export function insertNewlineAndRenumberPages(view) {
     syntaxTree(view.state).iterate({
       from: 0,
       to: view.state.doc.length, // we're iterating until the end of the doc
-      enter: (type, from, to) => {
+      enter: (node) => {
         // console.log("traversing tree for page count update");
-        if (type.name === "PageToken" || type.name === "SpreadToken") {
+        if (node.name === "PageToken" || node.name === "SpreadToken") {
           // If we're on a new page or spread, reset the panel counter
           currentPanelNumber = 1;
           // when we find a PageToken node, record its range
-          if (type.name === "PageToken") {
+          if (node.name === "PageToken") {
             inSpread = false;
             // if this is a Page, build a change spec
             labelText = "# Page " + currentPageNumber.toString() + "\n";
             console.log(
-              `Recording Page: from: ${from} to: ${to} label: ${labelText}`
+              `Recording Page: from: ${node.from} to: ${node.to} label: ${labelText}`
             );
             changes.push({
-              from: from,
-              to: to,
+              from: node.from,
+              to: node.to,
               // if this is the page node that also contains the cursor, newline, otherwise no
               insert:
-                curPos >= from && curPos <= to ? labelText + "\n" : labelText,
+                curPos >= node.from && curPos <= node.to
+                  ? labelText + "\n"
+                  : labelText,
             });
             // derive new cursor position after insert
-            if (curPos >= from && curPos <= to) {
-              newCurPos = from + labelText.length;
+            if (curPos >= node.from && curPos <= node.to) {
+              newCurPos = node.from + labelText.length;
             }
             currentPageNumber++;
           } else {
@@ -144,35 +146,39 @@ export function insertNewlineAndRenumberPages(view) {
               (++currentPageNumber).toString() +
               "\n";
             console.log(
-              `Recording Spread: from: ${from} to:${to} label: ${labelText}`
+              `Recording Spread: from: ${node.from} to:${node.to} label: ${labelText}`
             );
             changes.push({
-              from: from,
-              to: to,
+              from: node.from,
+              to: node.to,
               insert:
-                curPos >= from && curPos <= to ? labelText + "\n" : labelText,
+                curPos >= node.from && curPos <= node.to
+                  ? labelText + "\n"
+                  : labelText,
             }); //
             // if our cursor is in this node, derive its new position after insert
-            if (curPos >= from && curPos <= to) {
-              newCurPos = from + labelText.length;
+            if (curPos >= node.from && curPos <= node.to) {
+              newCurPos = node.from + labelText.length;
             }
             currentPageNumber++; // we've already incremented it once, so now we do it again for
             // if this is the panel that also contains the cursor
           }
         }
-        if (type.name === "PanelToken") {
+        if (node.name === "PanelToken") {
           labelText = `- ${currentPanelNumber}\n`;
           console.log(`We're in a panel, using ${labelText}`);
           changes.push({
-            from: from,
-            to: to,
+            from: node.from,
+            to: node.to,
             // If this is the panel our cursor is currently in/on
             insert:
-              curPos >= from && curPos <= to ? (labelText += "\n") : labelText,
+              curPos >= node.from && curPos <= node.to
+                ? (labelText += "\n")
+                : labelText,
           });
-          if (curPos >= from && curPos <= to) {
+          if (curPos >= node.from && curPos <= node.to) {
             console.log("this is the panel containing the cursor");
-            newCurPos = from + labelText.length - 1; // at the end of the spaces, before the newline
+            newCurPos = node.from + labelText.length - 1; // at the end of the spaces, before the newline
           }
           currentPanelNumber++;
         }
