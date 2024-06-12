@@ -469,17 +469,17 @@ function autosaveToLocalStorage() {
     let scriptText = "";
     do {
       if (cursor.type.name === "PageToken") {
-        scriptText += `\n\n${curPg}`;
+        scriptText += `\n\nPage ${curPg}`;
         curPg++;
         curPnl = 1; // panel numbering resets every page
       }
       if (cursor.type.name === "SpreadToken") {
-        scriptText += `\n\n${curPg}-${curPg + 1}`;
+        scriptText += `\n\nPages ${curPg}-${curPg + 1}`;
         curPg += 2; // increment page number by two, since this is a spread
         curPnl = 1; // panel numbering resets every page
       }
       if (cursor.type.name === "PanelToken") {
-        scriptText += `.${curPnl}`;
+        scriptText += `.${curPnl}\n`;
         curPnl++;
       }
       if (cursor.type.name === "SfxTranslation") {
@@ -581,6 +581,9 @@ function autosaveToLocalStorage() {
         }\n${this.text.substring(cursor.from, cursor.to).trim()}\n\n`;
         curLn++;
       }
+			console.log(`Current Page: ${curPg}`);
+			console.log(`Current Node Type: ${cursor.type.name}`);
+
     } while (cursor.next());
     this.downloadAsText(`${id("docname").textContent} (Yen/Sq)`, scriptText);
   }
