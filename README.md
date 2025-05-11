@@ -84,7 +84,7 @@ Text Lines are meant to be used for any and all text in the script that's not an
 
 A Text Line is meant to represent one piece of contiguous text on the page. A single word balloon, a caption, a footnote---each of these would be represented by one Text Line.
 
-A Text Line's **Origin** is the text that precedes the colon (`:`). For a speech balloon representing spoken dialogue, the Text Line's Origin would conventionally be the name of the character speaking the line. For diegetic text, an Origin could be given as e.g. `Sign:` or `Noteboox:`.
+A Text Line's **Origin** is the text that precedes the colon (`:`). For a speech balloon representing spoken dialogue, the Text Line's Origin would conventionally be the name of the character speaking the line. For diegetic text, an Origin could be given as e.g. `Sign:` or `Notebook:`.
 
 A Text Line may be given an optional **Style**, which is indicated by a forward slash character after the Origin, before the colon:
 
