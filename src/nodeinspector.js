@@ -1,4 +1,4 @@
-import { EditorView, showPanel } from "@codemirror/view";
+import { EditorView, showPanel, Panel } from "@codemirror/view";
 import { Text } from "@codemirror/state";
 import { parser } from "./serifu-parser/serifu-parser.js";
 

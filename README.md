@@ -76,7 +76,7 @@ The expectation is that well-behaved Serifu editing software will automatically 
 
 Any line _not_ beginning with an `#`, `-`, `*`, or `!` is interpreted as a **Text Line**.
 
-A Text Line consists of a Source and Content, separated by a single colon: ":".
+A Text Line consists of an Origin and its Content, which are separated by a single colon: ":".
 
     Ayukawa: Hmm.
 
@@ -84,52 +84,52 @@ Text Lines are meant to be used for any and all text in the script that's not an
 
 A Text Line is meant to represent one piece of contiguous text on the page. A single word balloon, a caption, a footnote---each of these would be represented by one Text Line.
 
-A Text Line's **Source** (notionally, the character speaking the line) is the text that precedes the colon (`:`).
+A Text Line's **Origin** is the text that precedes the colon (`:`). For a speech balloon representing spoken dialogue, the Text Line's Origin would conventionally be the name of the character speaking the line. For diegetic text, an Origin could be given as e.g. `Sign:` or `Noteboox:`.
 
-A Text Line may be given an optional **Style**, which is indicated by a forward slash character after the Source, before the colon:
+A Text Line may be given an optional **Style**, which is indicated by a forward slash character after the Origin, before the colon:
 
     Kyosuke/Excited: A-Ayukawa...!
 
 A Text Style would typically be used to indicate an alternate font or typographical style from the way a given Text Line would normally appear.
 
-Source and Style labels may contain spaces, and can use any alphabetic or numeric characters, but the only punctuation characters permitted are `'`, `-`, and `&`.
+Origin and Style labels may contain spaces, and can use any alphabetic or numeric characters, but the only punctuation characters permitted are `'`, `-`, and `&`.
 
-Different projects have different levels of specificity they require in a script, and Serifu's Source and Style fields are meant to be freeform enough to accommodate a wide variety scenarios.
+Different projects have different levels of specificity they require in a script, and Serifu's Origin and Style fields are meant to be freeform enough to accommodate a wide variety scenarios. The examples given in this document are a fair representation of what a typical script might look like, but are not meant prescriptively.
 
-Spaces or tabs immediately before or after the colon are ignored, so the following Dialogue Lines are equivalent:
+Spaces or tabs immediately before or after the colon are ignored, so the following Text Lines are equivalent:
 
     Nanako      : Oh, no!
     Nanako:Oh, no!
     Nanako:    Oh, no!
 
-A line's content is ended by a newline character.
+A line's Content is ended by a newline character.
 
-##### Source and Style Carryover
+##### Origin and Style Carryover
 
-Comics frequently use multiple consecutive word balloons from the same speaker. For the sake of concision, once a Source has been specified, it can be omitted from subsequent lines:
+Comics frequently use multiple consecutive word balloons from the same speaker. For the sake of concision, once an Origin has been specified, it can be omitted from subsequent lines:
 
     Kaz: I can't believe this.
     : I'm in a manga, now?
     : But manga is for nerds! And nobody even liked my anime!
 
-Even though `Kaz` isn't specified in the second and third lines, Serifu will assume he's the Source for those lines.
+Even though the `Kaz` Origin isn't specified in the second and third lines, Serifu will assume `Kaz` as the Origin for those lines.
 
-You can also specify a Style without specifying a Source. In this case, the Source will be assumed from the previously named Source.
+You can also specify a Style without specifying an Origin. In this case, the Text Line's Origin will be derived from the previously named Origin.
 
     Archangelo: All the right people liked it, homie.
     /Big: And they're gonna love our kick-ass manga.
     : I guarantee it!
     /Thought: At least I hope they do.
 
-In this case, since the last three lines all omit a Source, they're attributed to `Archangelo`. The second line specifies a style of `Big`, and since the third line doesn't specify either a Source or a Style, it inherits the previous instances of each: a Source of `Archangelo`, and a Style of `Big`. The fourth line also gets the source `Archangelo`, but it specifies a new style of `Thought`.
+In this case, since the last three lines all omit an Origin, they're attributed to `Archangelo`. The second line specifies a style of `Big`, and since the third line doesn't specify either an Origin or a Style, it inherits the previous instances of each: an Origin of `Archangelo`, and a Style of `Big`. The fourth line also gets the Origin `Archangelo`, but it specifies a new style of `Thought`.
 
-**Note:** Once you've specified a Style, the only way return to default, unstyled text is to explicitly specify a Source again, with no Style. Following the previous example, to add a line where the Source `Archangelo` has no Style, you explictly specify `Archangelo:` again, e.g.:
+**Note:** Once you've specified a Style, the only way return to default, unstyled text is to explicitly specify the Origin again, with no Style. Following the previous example, to add a line where the Origin `Archangelo` has no Style, you explictly specify `Archangelo:` again, e.g.:
 
     Archangelo: Even Bergdorf's carries manga, now!
 
 This clears the Style carryover.
 
-**Note:** Source and Style carryover is not interrupted by either SFX lines or Notes, and may span both Panel and Page boundaries, so this would be legal markup:
+**Note:** Origin and Style carryover is not interrupted by either SFX lines or Notes, and may span both Panel and Page boundaries, so this would be legal markup:
 
     	# Page 44
     		- 1
@@ -225,7 +225,7 @@ It's sometimes most convenient to compose a piece of text as a multi-line sectio
 
 While Text Lines are normally ended with a newline character, **Multi-Line Text Blocks** are one of two exceptions to this rule.
 
-A Multi-Line Text Block is begun by immediately following the colon (`:`) after a Source with three equals signs (`===`) and a newline, and it is ended with three equals signs on a line by themselves:
+A Multi-Line Text Block is begun by immediately following the colon (`:`) after an Origin with three equals signs (`===`) and a newline, and it is ended with three equals signs on a line by themselves:
 
 ```
     Sensei:===
@@ -241,7 +241,7 @@ A Multi-Line Text Block is begun by immediately following the colon (`:`) after 
     ===
 ```
 
-Note that without being enclosed in `===` markers, the `Afterword: My Apologies` line would be interpreted as a Text Line with a Source of `Afterword` and a Text of `My Apologies`, and the lines beginning with asterisks, like `* I am lazy.` would be interpreted as sound effects. However, within a Multi-line Text Block, other syntax is superceded until the block is ended with a `===` marker on a line by itself.
+Note that without being enclosed in `===` markers, the `Afterword: My Apologies` line would be interpreted as a Text Line with an Origin of `Afterword` and a Text of `My Apologies`, and the lines beginning with asterisks, like `* I am lazy.` would be interpreted as sound effects. However, within a Multi-line Text Block, other syntax is superceded until the block is ended with a `===` marker on a line by itself.
 
 The `*bold*`, `_italic_`, and `**bold italic**` formatting rules work in Multi-Line Text Blocks the same way they do in Text Lines.
 
@@ -249,7 +249,7 @@ The `*bold*`, `_italic_`, and `**bold italic**` formatting rules work in Multi-L
 
 **Pre-formatted Text** is the other exception to the "one Line per line" rule.
 
-Immediately following a Text Line's Source with a forward slash and an equals sign (`/=`) begins a pre-formatted text block. This is useful for composing translations where every character must be included verbatim. An equals sign followed by a forward slash (`=/`) ends the block. For example, in the unlikely case that you needed to represent Serifu-formatted text literally on a page, something like this would work:
+Immediately following a Text Line's Origin with a forward slash and an equals sign (`/=`) begins a pre-formatted text block. This is useful for composing translations where every character must be included verbatim. An equals sign followed by a forward slash (`=/`) ends the block. For example, in the unlikely case that you needed to represent Serifu-formatted text literally on a page, something like this would work:
 
     Computer Screen: /=
     	# Page 3
@@ -284,17 +284,17 @@ with Markdown-like syntax for specifying the path to an external file to referen
 
 Backticks (```) currently have no special meaning in Serifu. However, placing text between backticks may eventually be used as a way to mark words or phrases as special terminology—i.e., terms that the parser can identify to include on an automatically-generated style sheet. The backticks themselves would not be present in the lettered text. For future compatibility, the Serifu author recommends avoiding using backticks in scripts.
 
-## The Reasoning Behind Sources and Styles
+## The Reasoning Behind Origins and Styles
 
 Serifu is a set of deliberately minimal conventions for specifying the text that is meant to appear on a page of a comic book. It has its roots in the workflow of manga translation, but its rules are general enough to be applicable to anything recognizable as a comic book.
 
 Arguably, the order of Pages, Panels, and Lines alone could be enough for a letterer to understand which pieces of text go where. Specifying which character is speaking, however, adds another piece of information that the letterer can use to infer text placement. This also makes the script considerably more readable as a standalone document.
 
-Associating lines of text with the characters speaking them also allows scripts to be treated as data in a way conventional word processing documents can't be. With Serifu, it's trivial to constrain a search to lines only spoke by a particular character, which can be very useful during the translation or editorial processes of long series. The information in a Serifu document can also easily be the beginning of an automatically generated stylesheet.
+Associating lines of text with the characters speaking them also allows scripts to be treated as data in a way conventional word processing documents can't be. With Serifu, it's possible to constrain a search to lines only spoke by a particular character, which can be very useful during the translation or editorial processes of long series. The information in a Serifu document can also easily be the beginning of an automatically generated stylesheet.
 
-A letterer's job is to place the text in art, and for every piece of text they place, a question must be answered: "Where does this text go, and what should it look like?" Serifu's Sources and Styles are meant to make it easy for the script writer or translator to answer this question ahead of time.
+A letterer's job is to place the text in art, and for every piece of text they place, a question must be answered: "Where does this text go, and what should it look like?" Serifu's Origins and Styles are meant to make it easy for the script writer or translator to answer this question ahead of time.
 
-The notional goal is this: When a letterer loads a Serifu document into their design software, they will have a way to associate Sources and Styles specified in the script with design parameters (fonts, weights, sizes, etc) appropriate for the comic's presentation. Then whenever a piece of text with a given Serifu Source or Style is placed, it will automatically be given the appropriate font, etc.
+The  goal is this: When a letterer loads a Serifu document into their design software, they will have a way to associate Origins and Styles specified in the script with design parameters (fonts, weights, sizes, etc) appropriate for the comic's presentation. Then whenever a piece of text with a given Origin or Style is placed, it will automatically be given the appropriate font, etc.
 
 This means that the Serifu Style of `/Thought` can be associated with e.g. 14pt WildWords Italics, and once this association is created, _every_ text line with a `/Thought` Style will automatically be set in 14pt WildWords Italics. This, along with the quick text placement Serifu enables, removes much of the repetitive gruntwork involved in lettering, leaving the letterer more time to focus on the aspects of their work that require human judgement and taste.
 
